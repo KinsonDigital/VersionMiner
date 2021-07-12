@@ -4,7 +4,7 @@
   "description": "vget",
   "main": "index.js",
   "scripts": {
-    "build": "ncc build index.js --license licenses.txt"
+    "build": "ncc build index.ts --license licenses.txt"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,10 @@
   "dependencies": {
     "@actions/core": "^1.4.0",
     "@actions/github": "^5.0.0",
-    "@vercel/ncc": "^0.28.6"
+    "@vercel/ncc": "^0.28.6",
+    "typescript": "^4.3.5"
+  },
+  "devDependencies": {
+    "@types/node": "12.20.16"
   }
 }
