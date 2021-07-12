@@ -1,0 +1,13 @@
+name: 'VGet'
+description: 'Gets version information from a .csproj file.'
+inputs:
+  who-to-greet:  # id of input
+    description: 'Who to greet'
+    required: true
+    default: 'World'
+outputs:
+  time: # id of output
+    description: 'The time we greeted you'
+runs:
+  using: 'node14'
+  main: 'index.js'
