@@ -4,6 +4,7 @@
         "commonjs": true,
         "es2021": true
     },
+    "ignorePatterns": "dist",
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended"
@@ -17,7 +18,6 @@
     ],
     "rules": {
         "indent": [
-            "error",
             "tab"
         ],
         "linebreak-style": [
@@ -31,6 +31,7 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-mixed-spaces-and-tabs":"off"
     }
 }

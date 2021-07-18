@@ -2,9 +2,17 @@
   "name": "vget",
   "version": "1.0.0",
   "description": "vget",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "build": "ncc build index.ts --license licenses.txt"
+    "clean:bin": "node build-process/clean \"bin\"",
+    "clean:dist": "node build-process/clean \"dist\"",
+    "clean:modules": "node build-process/clean \"modules\"",
+    "clean:project": "yarn clean:bin && yarn clean:modules",
+    "build": "node build-process/build-dev",
+    "prerebuild": "yarn clean:project",
+    "rebuild": "yarn build",
+    "run:app": "nodemon --config nodemon.json src/main.ts",
+    "publish": "node build-process/publish"
   },
   "repository": {
     "type": "git",
@@ -20,14 +28,18 @@
   "dependencies": {
     "@actions/core": "^1.4.0",
     "@actions/github": "^5.0.0",
-    "@vercel/ncc": "^0.28.6"
+    "@vercel/ncc": "^0.28.6",
+    "node": "^16.5.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/node": "^16.3.2",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "@typescript-eslint/parser": "^4.28.3",
+    "chalk": "^4.1.1",
     "eslint": "^7.30.0",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   }
 }

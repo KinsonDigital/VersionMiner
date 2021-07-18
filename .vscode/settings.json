@@ -6,8 +6,23 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/node_modules": true,
-        "**/dist": true
+        "**/dist": true,
+        "**/bin": true,
+        "**/*.log": true
     },
     "cSpell.words": [
+        "CASL",
+        "Kinson",
+        "postclean",
+        "prerebuild",
+        "repos",
+        "vercel",
+        "vget"
     ],
+	"[typescript]": {
+		"editor.insertSpaces": false,
+		"editor.detectIndentation": false,
+        "editor.autoIndent": "full",
+		"editor.tabSize": 4
+	},
 }
