@@ -2,9 +2,17 @@
   "name": "vget",
   "version": "1.0.0",
   "description": "vget",
-  "main": "index.js",
   "scripts": {
-    "build": "ncc build index.ts --license licenses.txt"
+    "lint": "eslint . --ext .ts",
+    "clean:bin": "node build-process/clean.mjs \"bin\"",
+    "clean:dist": "node build-process/clean.mjs \"dist\"",
+    "clean:modules": "node build-process/clean.mjs \"modules\"",
+    "clean:project": "if exist \\node_modules (yarn clean:bin && yarn clean:modules)",
+    "build": "node build-process/build-dev.mjs",
+    "prerebuild": "yarn clean:project",
+    "rebuild": "yarn build",
+    "run:app": "nodemon --config nodemon.json src/main.ts",
+    "publish:app": "node build-process/publish.mjs"
   },
   "repository": {
     "type": "git",
@@ -19,15 +27,21 @@
   "homepage": "https://github.com/CalvinWilkinson/vget#readme",
   "dependencies": {
     "@actions/core": "^1.4.0",
-    "@actions/github": "^5.0.0",
-    "@vercel/ncc": "^0.28.6"
+    "@vercel/ncc": "^0.28.6",
+    "axios": "^0.21.1",
+    "node": "^16.5.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/node": "^16.3.2",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "@typescript-eslint/parser": "^4.28.3",
+    "chalk": "^4.1.1",
+    "cli-progress": "^3.9.0",
     "eslint": "^7.30.0",
+    "glob": "^7.1.7",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   }
 }
