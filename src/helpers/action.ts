@@ -25,7 +25,17 @@ export class Action {
     	if (this.environment.isDevelop()) {
     		return this.environment.getVarValue(name);
 		} else if (this.environment.isProd()) {
-    		return core.getInput(name);
+			try {
+				return core.getInput(name);
+			} catch (error) {
+				const errorMsg: string = (<Error>error).message;
+
+				if (errorMsg === "Cannot read property 'getInput' of undefined") {
+					throw new Error("You are running locally with the environment set to production.\nMake sure your environment is set to development.");
+				} else {
+					throw new Error(errorMsg);
+				}
+			}
     	} else {
 			throw new Error("Unknown environment.");
 		}
@@ -40,29 +50,63 @@ export class Action {
 		if (this.environment.isDevelop()) {
 			this.devEnvOutputs[name] = value;
 		} else if (this.environment.isProd()) {
-			core.setOutput(name, value);
+			try {
+				core.setOutput(name, value);
+			} catch (error) {
+				const errorMsg: string = (<Error>error).message;
+
+				if (errorMsg === "Cannot read property 'setOutput' of undefined") {
+					throw new Error("You are running locally with the environment set to production.\nMake sure your environment is set to development.");
+				} else {
+					throw new Error(errorMsg);
+				}
+			}
 		} else {
 			throw new Error("Unknown environment.");
 		}
 	}
 
 	/**
-	 * Prints the given message to the logs.
-	 * @param message The message to show in the logs.
+	 * Writes info to log with console.log. 
+	 * @param message Info message.
 	 */
 	public info (message: string): void {
 		if (this.environment.isDevelop()) {
 			console.info(message);
 		} else if (this.environment.isProd()) {
-			core.info(message);
+			try {
+				core.info(message);
+			} catch (error) {
+				const errorMsg: string = (<Error>error).message;
+
+				if (errorMsg === "Cannot read property 'info' of undefined") {
+					throw new Error("You are running locally with the environment set to production.\nMake sure your environment is set to development.");
+				} else {
+					throw new Error(errorMsg);
+				}
+			}
 		} else {
 			throw new Error("Unknown environment.");
 		}
 	}
 
 	/**
-	 * Fails the action with the given message.
-	 * @param message The error message to fail the action with of type 'string' or 'Error'.
+	 * Adds a warning issue.
+	 * @param message Warning issue message.  Errors will be converted to string via toString().
+	 */
+	public warning (message: string): void {
+		if (this.environment.isDevelop()) {
+			console.warn(message);
+		} else if (this.environment.isProd()) {
+			core.warning(message);
+		} else {
+			throw new Error("Unknown environment");
+		}
+	}
+
+	/**
+	 * Adds and error issue.
+	 * @param message Error issue message.  Errors will be converted to string via toString().
 	 */
 	public setFailed (message: string | Error): void {
 		if (this.environment.isDevelop()) {

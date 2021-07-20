@@ -1,5 +1,5 @@
-import {FileLoader} from "./fileLoader";
-import {EnvironmentVars} from "./interfaces/envVars";
+import {FileLoader} from "../fileLoader";
+import {EnvironmentVars} from "../interfaces/envVars";
 
 /**
  * Represents the environment.
@@ -27,12 +27,14 @@ export class Environment {
      */
 	public isProd (): boolean {
 		/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+		/* eslint-disable @typescript-eslint/indent */
     	for (const [key, value, ] of Object.entries(this.vars)) {
     		if (key === "environment") {
     			switch (value.toString().toLowerCase()) {
     			case "prod":
     			case "production":
     			case "":
+				case null:
     			case undefined:
     				return true;
     			default:
@@ -43,6 +45,7 @@ export class Environment {
 
     	return false;
 		/* eslint-enable @typescript-eslint/no-unsafe-member-access */
+		/* eslint-enable @typescript-eslint/indent */
 	}
 
 	/**

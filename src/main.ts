@@ -1,5 +1,5 @@
 import {RepoFileDownloader} from "./repoFileDownloader";
-import {Action} from "./action";
+import {Action} from "./helpers/action";
 import {CSProjParser} from "./csProjParser";
 
 
