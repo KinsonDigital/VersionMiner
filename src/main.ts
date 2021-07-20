@@ -12,16 +12,22 @@ export class Application {
 		const actionInput: Action = new Action();
 		const parser: CSProjParser = new CSProjParser();
 		
-		const repoOwner: string = actionInput.getInput("repoOwner");
-		const repoName: string = actionInput.getInput("repoName");
-		const relativeFilePath: string = actionInput.getInput("relativeFilePath");
-		const userName: string = actionInput.getInput("userName");
-		const password: string = actionInput.getInput("password");
+		try {
+			const repoOwner: string = actionInput.getInput("repoOwner");
+			const repoName: string = actionInput.getInput("repoName");
+			const relativeFilePath: string = actionInput.getInput("relativeFilePath");
+			const userName: string = actionInput.getInput("userName");
+			const password: string = actionInput.getInput("password");
+			
+			const fileContent: string = await downloader.downloadFile(repoOwner, repoName, relativeFilePath, userName, password);
+			
+			const version: string = parser.getElementContent(fileContent, "<Version>", "</Version>");
+			actionInput.setOutput("version", version);
 
-		const fileContent: string = await downloader.downloadFile(repoOwner, repoName, relativeFilePath, userName, password);
-
-		const version: string = parser.getElementContent(fileContent, "<Version>", "</Version>");
-		actionInput.setOutput("version", version);
+			return await Promise.resolve();
+		} catch (error) {
+			return await Promise.reject(error);
+		}
 	}
 }
 
@@ -33,6 +39,4 @@ app.main()
 		action.info("Action Success!!");
 	}, (error: Error) => {
 		action.setFailed(error);
-
-		console.error(`Error: ${error.message}`);
 	});
