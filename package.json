@@ -2,7 +2,6 @@
   "name": "vget",
   "version": "1.0.0",
   "description": "vget",
-  "type": "module",
   "scripts": {
     "lint": "eslint . --ext .ts",
     "clean:bin": "node build-process/clean \"bin\"",
