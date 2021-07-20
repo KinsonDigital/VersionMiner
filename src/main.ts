@@ -1,37 +1,35 @@
-import { RepoFileDownloader } from "./repoFileDownloader";
-import { Action } from "./action";
-import { CSProjParser as CSProjParser } from "./csProjParser";
+import {RepoFileDownloader} from "./repoFileDownloader";
+import {Action} from "./action";
+import {CSProjParser} from "./csProjParser";
 
-export class application {
-	public async main(): Promise<void> {
-		return new Promise<void>(async (_, reject) => {
-			try {
-				const downloader: RepoFileDownloader = new RepoFileDownloader();
-				const actionInput: Action = new Action();
-				
-				const repoOwner = actionInput.getInput("repoOwner");
-				const repoName = actionInput.getInput("repoName");
-				const relativeFilePath = actionInput.getInput("relativeFilePath");
-				const userName = actionInput.getInput("userName");
-				const password = actionInput.getInput("password");
 
-				const parser: CSProjParser = new CSProjParser();
-				const fileContent: string = await downloader.downloadFile(repoOwner, repoName, relativeFilePath, userName, password);
+/**
+ * The main GitHub action.
+ */
+export class Application {
+	public async main (): Promise<void> {
+		const downloader: RepoFileDownloader = new RepoFileDownloader();
+		const actionInput: Action = new Action();
+		const parser: CSProjParser = new CSProjParser();
+		
+		const repoOwner: string = actionInput.getInput("repoOwner");
+		const repoName: string = actionInput.getInput("repoName");
+		const relativeFilePath: string = actionInput.getInput("relativeFilePath");
+		const userName: string = actionInput.getInput("userName");
+		const password: string = actionInput.getInput("password");
 
-				const version: string = parser.getElementContent(fileContent, "<Version>", "</Version>");
-				actionInput.setOutput("version", version);
-			} catch (error) {
-				reject(error);
-			}
-		});
+		const fileContent: string = await downloader.downloadFile(repoOwner, repoName, relativeFilePath, userName, password);
+
+		const version: string = parser.getElementContent(fileContent, "<Version>", "</Version>");
+		actionInput.setOutput("version", version);
 	}
 }
 
-const app: application = new application();
+const app: Application = new Application();
 const action: Action = new Action;
 
 app.main()
-	.then(_ => {
+	.then(() => {
 		action.info("Action Success!!");
 	}, (error: Error) => {
 		action.setFailed(error);

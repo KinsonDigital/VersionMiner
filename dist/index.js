@@ -4447,7 +4447,7 @@ __nccwpck_require__.r(__webpack_exports__);
 
 // EXPORTS
 __nccwpck_require__.d(__webpack_exports__, {
-  "application": () => (/* binding */ application)
+  "Application": () => (/* binding */ Application)
 });
 
 // EXTERNAL MODULE: ./node_modules/axios/index.js
@@ -4465,7 +4465,7 @@ class RepoFileDownloader {
         // https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting
         const creds = {
             username: userName,
-            password: password
+            password: password,
         };
         const config = {
             baseURL: "https://api.github.com",
@@ -4473,15 +4473,15 @@ class RepoFileDownloader {
             headers: {
                 "Accept": "application/vnd.github.v3.raw",
                 // "Authorization" : "token <token-here>"
-            }
+            },
         };
         const url = `/repos/${owner}/${repo}/contents/${relativeFilePath}`;
-        return new Promise((resolve, reject) => {
+        return await new Promise((resolve, reject) => {
             axios_default().get(url, config)
                 .then((response) => {
-                resolve(response.data);
-            }, (reason) => {
-                reject(`${reason.response.status} - ${reason.response.statusText}`);
+                resolve(response.data.toString());
+            }, (error) => {
+                reject(`${error.response?.status} - ${error.response?.statusText}`);
             });
         });
     }
@@ -4519,12 +4519,13 @@ class FileLoader {
  * Represents the environment.
  */
 class Environment {
+    /* eslint-enable @typescript-eslint/lines-between-class-members */
     /**
      * Creates a new instance of Environment.
      */
     constructor() {
         this.fileLoader = new FileLoader();
-        const fileData = this.fileLoader.loadEnvFile("./envFF.json");
+        const fileData = this.fileLoader.loadEnvFile("./env.json");
         this.vars = JSON.parse(fileData);
     }
     /**
@@ -4532,7 +4533,8 @@ class Environment {
      * @returns True if the environment is production.
      */
     isProd() {
-        for (const [key, value] of Object.entries(this.vars)) {
+        /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+        for (const [key, value,] of Object.entries(this.vars)) {
             if (key === "environment") {
                 switch (value.toString().toLowerCase()) {
                     case "prod":
@@ -4546,19 +4548,22 @@ class Environment {
             }
         }
         return false;
+        /* eslint-enable @typescript-eslint/no-unsafe-member-access */
     }
     /**
      * Returns a value indicating if in a development environment.
      * @returns True if the environment is development.
      */
     isDevelop() {
-        for (const [key, value] of Object.entries(this.vars)) {
+        /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+        for (const [key, value,] of Object.entries(this.vars)) {
             if (key === "environment") {
                 let stringValue = value.toString().toLowerCase();
                 return stringValue === "dev" || stringValue === "develop";
             }
         }
         return false;
+        /* eslint-enable @typescript-eslint/no-unsafe-member-access */
     }
     /**
      * Returns the value of a variable that matches the given name.
@@ -4566,7 +4571,7 @@ class Environment {
      * @returns The value of the given variable.
      */
     getVarValue(varName) {
-        for (const [key, value] of Object.entries(this.vars)) {
+        for (const [key, value,] of Object.entries(this.vars)) {
             if (key === varName) {
                 return value;
             }
@@ -4642,8 +4647,8 @@ class Action {
      */
     setFailed(message) {
         if (this.environment.isDevelop()) {
-            let errorMessage;
-            const paramType = typeof (message);
+            let errorMessage = "";
+            const paramType = typeof message;
             if (paramType === "string") {
                 errorMessage = message;
             }
@@ -4713,32 +4718,28 @@ class CSProjParser {
 
 
 
-class application {
+/**
+ * The main GitHub action.
+ */
+class Application {
     async main() {
-        return new Promise(async (_, reject) => {
-            try {
-                const downloader = new RepoFileDownloader();
-                const actionInput = new Action();
-                const repoOwner = actionInput.getInput("repoOwner");
-                const repoName = actionInput.getInput("repoName");
-                const relativeFilePath = actionInput.getInput("relativeFilePath");
-                const userName = actionInput.getInput("userName");
-                const password = actionInput.getInput("password");
-                const parser = new CSProjParser();
-                const fileContent = await downloader.downloadFile(repoOwner, repoName, relativeFilePath, userName, password);
-                const version = parser.getElementContent(fileContent, "<Version>", "</Version>");
-                actionInput.setOutput("version", version);
-            }
-            catch (error) {
-                reject(error);
-            }
-        });
+        const downloader = new RepoFileDownloader();
+        const actionInput = new Action();
+        const parser = new CSProjParser();
+        const repoOwner = actionInput.getInput("repoOwner");
+        const repoName = actionInput.getInput("repoName");
+        const relativeFilePath = actionInput.getInput("relativeFilePath");
+        const userName = actionInput.getInput("userName");
+        const password = actionInput.getInput("password");
+        const fileContent = await downloader.downloadFile(repoOwner, repoName, relativeFilePath, userName, password);
+        const version = parser.getElementContent(fileContent, "<Version>", "</Version>");
+        actionInput.setOutput("version", version);
     }
 }
-const app = new application();
+const app = new Application();
 const action = new Action;
 app.main()
-    .then(_ => {
+    .then(() => {
     action.info("Action Success!!");
 }, (error) => {
     action.setFailed(error);

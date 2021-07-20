@@ -9,40 +9,14 @@ let nodeModulesPath = `${process.cwd()}\\node_modules`;
 if (existsSync(nodeModulesPath) === false) {
     stdout.write("\nPulling npm packages . . . ");
 
-    execSync("yarn install", { cwd: process.cwd() },
-        (error, stdout, stderr) => {
-            if (error) {
-                console.error(error);
-                return;
-            }
-
-            if (stderr) {
-                console.error(stderr);
-                return;
-            }
-
-            console.log(stdout);
-        });
+    execSync("yarn install", { cwd: process.cwd() });
 
     stdout.write("Pull complete");
 }
 
-
 stdout.write("\nBuilding GitHub Action . . . ");
 
-execSync("tsc --outDir bin", { cwd: process.cwd() },
-    (error, stdout, stderr) => {
-        if (error) {
-            console.error(error);
-            return;
-        }
-
-        if (stderr) {
-            console.error(stderr);
-            return;
-        }
-
-        console.log(stdout);
-    });
+// Compile the typescript files to the bin folder
+execSync("tsc --outDir bin", { cwd: process.cwd() });
 
 process.stdout.write("Build Complete\n");

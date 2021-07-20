@@ -1,26 +1,27 @@
 import core from "@actions/core";
-import { Environment as Environment } from "./environment";
+import {Environment as Environment} from "./environment";
 
 /**
  * Represents different action functionality.
  */
 export class Action {
-    private environment: Environment;
+	private environment: Environment;
+
 	private devEnvOutputs: Record<string, any> = {};
 
-    /**
+	/**
      * Creates a new instance of ActionInputs
      */
-    constructor() {
+	constructor () {
     	this.environment = new Environment();
-    }
+	}
 
-    /**
+	/**
      * Returns the value of the input that matches the given input.
      * @param name The name of the input.
      * @returns The value of the given input.
      */
-    public getInput(name: string): string {
+	public getInput (name: string): string {
     	if (this.environment.isDevelop()) {
     		return this.environment.getVarValue(name);
 		} else if (this.environment.isProd()) {
@@ -28,14 +29,14 @@ export class Action {
     	} else {
 			throw new Error("Unknown environment.");
 		}
-    }
+	}
 
 	/**
 	 * Sets the value of the given output to the given value.
 	 * @param name The name of the output.
 	 * @param value The value of the output.
 	 */
-	public setOutput(name: string, value: string): void {
+	public setOutput (name: string, value: string): void {
 		if (this.environment.isDevelop()) {
 			this.devEnvOutputs[name] = value;
 		} else if (this.environment.isProd()) {
@@ -49,7 +50,7 @@ export class Action {
 	 * Prints the given message to the logs.
 	 * @param message The message to show in the logs.
 	 */
-	public info(message: string): void {
+	public info (message: string): void {
 		if (this.environment.isDevelop()) {
 			console.info(message);
 		} else if (this.environment.isProd()) {
@@ -63,10 +64,10 @@ export class Action {
 	 * Fails the action with the given message.
 	 * @param message The error message to fail the action with of type 'string' or 'Error'.
 	 */
-	public setFailed(message: string | Error) {
+	public setFailed (message: string | Error): void {
 		if (this.environment.isDevelop()) {
-			let errorMessage: string;
-			const paramType: string = typeof(message);
+			let errorMessage: string = "";
+			const paramType: string = typeof message;
 
 			if (paramType === "string") {
 				errorMessage = <string>message;
