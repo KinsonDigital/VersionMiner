@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "Build",
-            "command": "yarn build:dev",
+            "command": "yarn build",
             "type": "shell",
             "args": [],
             "problemMatcher": [
