@@ -4513,7 +4513,7 @@ class FileLoader {
     }
 }
 
-;// CONCATENATED MODULE: ./src/environment.ts
+;// CONCATENATED MODULE: ./src/helpers/environment.ts
 
 /**
  * Represents the environment.
@@ -4534,12 +4534,14 @@ class Environment {
      */
     isProd() {
         /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+        /* eslint-disable @typescript-eslint/indent */
         for (const [key, value,] of Object.entries(this.vars)) {
             if (key === "environment") {
                 switch (value.toString().toLowerCase()) {
                     case "prod":
                     case "production":
                     case "":
+                    case null:
                     case undefined:
                         return true;
                     default:
@@ -4549,6 +4551,7 @@ class Environment {
         }
         return false;
         /* eslint-enable @typescript-eslint/no-unsafe-member-access */
+        /* eslint-enable @typescript-eslint/indent */
     }
     /**
      * Returns a value indicating if in a development environment.
@@ -4580,7 +4583,7 @@ class Environment {
     }
 }
 
-;// CONCATENATED MODULE: ./src/action.ts
+;// CONCATENATED MODULE: ./src/helpers/action.ts
 
 
 /**
@@ -4604,7 +4607,18 @@ class Action {
             return this.environment.getVarValue(name);
         }
         else if (this.environment.isProd()) {
-            return core_default().getInput(name);
+            try {
+                return core_default().getInput(name);
+            }
+            catch (error) {
+                const errorMsg = error.message;
+                if (errorMsg === "Cannot read property 'getInput' of undefined") {
+                    throw new Error("You are running locally with the environment set to production.\nMake sure your environment is set to development.");
+                }
+                else {
+                    throw new Error(errorMsg);
+                }
+            }
         }
         else {
             throw new Error("Unknown environment.");
@@ -4620,30 +4634,67 @@ class Action {
             this.devEnvOutputs[name] = value;
         }
         else if (this.environment.isProd()) {
-            core_default().setOutput(name, value);
+            try {
+                core_default().setOutput(name, value);
+            }
+            catch (error) {
+                const errorMsg = error.message;
+                if (errorMsg === "Cannot read property 'setOutput' of undefined") {
+                    throw new Error("You are running locally with the environment set to production.\nMake sure your environment is set to development.");
+                }
+                else {
+                    throw new Error(errorMsg);
+                }
+            }
         }
         else {
             throw new Error("Unknown environment.");
         }
     }
     /**
-     * Prints the given message to the logs.
-     * @param message The message to show in the logs.
+     * Writes info to log with console.log.
+     * @param message Info message.
      */
     info(message) {
         if (this.environment.isDevelop()) {
             console.info(message);
         }
         else if (this.environment.isProd()) {
-            core_default().info(message);
+            try {
+                core_default().info(message);
+            }
+            catch (error) {
+                const errorMsg = error.message;
+                if (errorMsg === "Cannot read property 'info' of undefined") {
+                    throw new Error("You are running locally with the environment set to production.\nMake sure your environment is set to development.");
+                }
+                else {
+                    throw new Error(errorMsg);
+                }
+            }
         }
         else {
             throw new Error("Unknown environment.");
         }
     }
     /**
-     * Fails the action with the given message.
-     * @param message The error message to fail the action with of type 'string' or 'Error'.
+     * Adds a warning issue.
+     * @param message Warning issue message.  Errors will be converted to string via toString().
+     */
+    warning(message) {
+        if (this.environment.isDevelop()) {
+            console.warn(message);
+        }
+        else if (this.environment.isProd()) {
+            core_default().warning(message);
+        }
+        else {
+            throw new Error("Unknown environment");
+        }
+    }
+    /**
+     * Adds and error issue.
+     * @param message Error issue message.  Errors will be converted to string via toString().
      */
     setFailed(message) {
         if (this.environment.isDevelop()) {
@@ -4726,14 +4777,20 @@ class Application {
         const downloader = new RepoFileDownloader();
         const actionInput = new Action();
         const parser = new CSProjParser();
-        const repoOwner = actionInput.getInput("repoOwner");
-        const repoName = actionInput.getInput("repoName");
-        const relativeFilePath = actionInput.getInput("relativeFilePath");
-        const userName = actionInput.getInput("userName");
-        const password = actionInput.getInput("password");
-        const fileContent = await downloader.downloadFile(repoOwner, repoName, relativeFilePath, userName, password);
-        const version = parser.getElementContent(fileContent, "<Version>", "</Version>");
-        actionInput.setOutput("version", version);
+        try {
+            const repoOwner = actionInput.getInput("repoOwner");
+            const repoName = actionInput.getInput("repoName");
+            const relativeFilePath = actionInput.getInput("relativeFilePath");
+            const userName = actionInput.getInput("userName");
+            const password = actionInput.getInput("password");
+            const fileContent = await downloader.downloadFile(repoOwner, repoName, relativeFilePath, userName, password);
+            const version = parser.getElementContent(fileContent, "<Version>", "</Version>");
+            actionInput.setOutput("version", version);
+            return await Promise.resolve();
+        }
+        catch (error) {
+            return await Promise.reject(error);
+        }
     }
 }
 const app = new Application();
@@ -4743,7 +4800,6 @@ app.main()
     action.info("Action Success!!");
 }, (error) => {
     action.setFailed(error);
-    console.error(`Error: ${error.message}`);
 });
 
 })();
