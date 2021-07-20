@@ -1,5 +1,5 @@
 import {FileLoader} from "./fileLoader";
-import {EnvironmentVars} from "./envVars";
+import {EnvironmentVars} from "./interfaces/envVars";
 
 /**
  * Represents the environment.

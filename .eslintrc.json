@@ -12,7 +12,7 @@
     "plugins": [
         "@typescript-eslint"
     ],
-    "ignorePatterns": "*.js",
+    "ignorePatterns": ["*.js", "*.mjs"],
     "rules": {
         "linebreak-style": [
             "error",

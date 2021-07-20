@@ -5,11 +5,11 @@ stdout.write("\nPublishing GitHub Action . . . ");
 
 // STEP 1
 // Clean the 'dist' directory
-execSync("node build-process/clean \"dist\"", { cwd: process.cwd() });
+execSync("node build-process/clean.mjs \"dist\"", { cwd: process.cwd() });
 
 // STEP 2
 // Clean the 'node_modules' directory
-execSync("node build-process/clean \"modules\"", { cwd: process.cwd() });
+execSync("node build-process/clean.mjs \"modules\"", { cwd: process.cwd() });
 
 // STEP 3
 // Pull down npm packages
