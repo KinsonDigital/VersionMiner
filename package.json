@@ -8,7 +8,7 @@
     "clean:bin": "node build-process/clean \"bin\"",
     "clean:dist": "node build-process/clean \"dist\"",
     "clean:modules": "node build-process/clean \"modules\"",
-    "clean:project": "yarn clean:bin && yarn clean:modules",
+    "clean:project": "if exist \\node_modules (yarn clean:bin && yarn clean:modules)",
     "build": "node build-process/build-dev",
     "prerebuild": "yarn clean:project",
     "rebuild": "yarn build",
