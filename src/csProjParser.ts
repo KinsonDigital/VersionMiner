@@ -22,7 +22,7 @@ export class CSProjParser {
 	 */
 	public getElementContent (xmlContent: string, startTag: string, endTag: string): string {
 		if (xmlContent === "" || xmlContent.length === 0) {
-			throw new Error("The parameter 'htmlContent' must not be null or empty.");
+			throw new Error("The parameter 'xmlContent' must not be null or empty.");
 		}
 
 		if (startTag === "" || startTag.length === 0) {

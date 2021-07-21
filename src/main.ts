@@ -13,20 +13,21 @@ export class Application {
 		const parser: CSProjParser = new CSProjParser();
 		
 		try {
-			const repoOwner: string = actionInput.getInput("repo-owner");
-			const repoName: string = actionInput.getInput("repo-name");
+			const repoOwnerAndName: string = actionInput.getInput("repo-owner-and-name");
 			const branch: string = actionInput.getInput("branch");
 			const relativeFilePath: string = actionInput.getInput("relative-file-path");
 			const userName: string = actionInput.getInput("user-name");
 			const password: string = actionInput.getInput("password");
 			
-			const fileContent: string =
-				await downloader.downloadFile(repoOwner,
-					repoName,
-					branch,
-					relativeFilePath,
-					userName,
-					password);
+			if (!repoOwnerAndName.includes("/")) {
+				throw new Error("The 'repo-owner-and-name' format must be a repository owner separated by a repository name.\n\t Example: JohnDoe/my-repo");
+			}
+
+			let fileContent: string = await downloader.downloadFile(repoOwnerAndName,
+				branch,
+				relativeFilePath,
+				userName,
+				password);
 			
 			const version: string = parser.getElementContent(fileContent, "<Version>", "</Version>");
 			actionInput.setOutput("version", version);

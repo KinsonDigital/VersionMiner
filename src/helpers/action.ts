@@ -23,7 +23,7 @@ export class Action {
      */
 	public getInput (name: string): string {
     	if (this.environment.isDevelop()) {
-    		return this.environment.getVarValue(name);
+			return this.environment.getVarValue(name);
 		} else if (this.environment.isProd()) {
 			return getInput(name);
     	} else {

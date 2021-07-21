@@ -1,14 +1,11 @@
 name: 'VGet'
 description: 'Gets version information from a .csproj file.'
 inputs:
-  repo-owner:  # id of input
-    description: 'The repository owner.'
-    required: true
-  repo-name:
-    description: 'The name of the repository that contains the file.'
+  repo-owner-and-name:  # id of input
+    description: 'The repository owner and name separated by a forward slash.'
     required: true
   branch:
-    description: 'The name of the branch where the file belongs'
+    description: 'The name of the branch where the file lives.'
     required: true
   relative-file-path:
     description: 'The relative path based on the root of the repository to the project file.'

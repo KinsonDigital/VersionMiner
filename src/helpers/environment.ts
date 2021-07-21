@@ -82,13 +82,17 @@ export class Environment {
      * @param varName The name of the variable.
      * @returns The value of the given variable.
      */
-	public getVarValue (varName: string): string {
+	public getVarValue (varName: string, throwErrorWhenNotFound: boolean = true): string {
     	for (const [key, value, ] of Object.entries(this.vars)) {
     		if (key === varName) {
     			return value;
     		}
     	}
 
-    	throw new Error(`Could not find the environment variable '${varName}'.`);
+		if (throwErrorWhenNotFound) {
+			throw new Error(`Could not find the environment variable '${varName}'.`);
+		}
+
+		return "";
 	}
 }

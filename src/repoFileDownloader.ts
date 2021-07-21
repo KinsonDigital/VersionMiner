@@ -7,27 +7,21 @@ import axios, {AxiosBasicCredentials, AxiosRequestConfig, AxiosResponse} from "a
 export class RepoFileDownloader {
 	/**
 	 * Downloads the contents of a file.
-	 * @param owner The owner of the repository.
-	 * @param repoName The name of the repository.
+	 * @param repoOwnerAndName The owner of the repository and name of the repository separated by a forward slash.
 	 * @param branch The name of the branch.
 	 * @param relativeFilePath The path to the file to download relative to the root of the repository.
 	 * @param userName The user name to authenticate to access the repository.
 	 * @param password The password to authenticate to the repository.
 	 * @returns The string contents of the file.
 	 */
-	public async downloadFile (owner: string,
-							   repoName: string,
+	public async downloadFile (repoOwnerAndName: string,
 							   branch: string,
 							   relativeFilePath: string,
 							   userName: string,
 							   password: string): Promise<string> {
 		
-		if (this.isInvalidString(owner)) {
-			throw new Error("The 'owner' param must not be null, empty, or undefined.");
-		}
-
-		if (this.isInvalidString(repoName)) {
-			throw new Error("The 'repoName' param must not be null, empty, or undefined.");
+		if (this.isInvalidString(repoOwnerAndName)) {
+			throw new Error("The 'repoOwnerAndName' param must not be null, empty, or undefined.");
 		}
 
 		if (this.isInvalidString(branch)) {
@@ -63,7 +57,7 @@ export class RepoFileDownloader {
 			},
 		};
         
-		const url: string = `/repos/${owner}/${repoName}/contents/${relativeFilePath}?ref=${branch}`;
+		const url: string = `/repos/${repoOwnerAndName}/contents/${relativeFilePath}?ref=${branch}`;
 
 		info("URL used to download file from repository:");
 		info(`\n${url}`);
