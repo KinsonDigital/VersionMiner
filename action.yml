@@ -7,6 +7,9 @@ inputs:
   repo-name:
     description: 'The name of the repository that contains the file.'
     required: true
+  branch:
+    description: 'The name of the branch where the file belongs'
+    required: true
   relative-file-path:
     description: 'The relative path based on the root of the repository to the project file.'
     required: true

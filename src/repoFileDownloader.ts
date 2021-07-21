@@ -1,12 +1,23 @@
+import {info} from "@actions/core";
 import axios, {AxiosBasicCredentials, AxiosRequestConfig, AxiosResponse} from "axios";
 
 /**
- * "main": "index.js",
+ * Downloads the contents of a file from a branch from a repository.
  */
 export class RepoFileDownloader {
-
+	/**
+	 * Downloads the contents of a file.
+	 * @param owner The owner of the repository.
+	 * @param repoName The name of the repository.
+	 * @param branch The name of the branch.
+	 * @param relativeFilePath The path to the file to download relative to the root of the repository.
+	 * @param userName The user name to authenticate to access the repository.
+	 * @param password The password to authenticate to the repository.
+	 * @returns The string contents of the file.
+	 */
 	public async downloadFile (owner: string,
-							   repo: string,
+							   repoName: string,
+							   branch: string,
 							   relativeFilePath: string,
 							   userName: string,
 							   password: string): Promise<string> {
@@ -15,8 +26,12 @@ export class RepoFileDownloader {
 			throw new Error("The 'owner' param must not be null, empty, or undefined.");
 		}
 
-		if (this.isInvalidString(repo)) {
-			throw new Error("The 'repo' param must not be null, empty, or undefined.");
+		if (this.isInvalidString(repoName)) {
+			throw new Error("The 'repoName' param must not be null, empty, or undefined.");
+		}
+
+		if (this.isInvalidString(branch)) {
+			throw new Error("The 'branch' param must not be null, empty, or undefined.");
 		}
 
 		if (this.isInvalidString(relativeFilePath)) {
@@ -48,19 +63,21 @@ export class RepoFileDownloader {
 			},
 		};
         
-		const url: string = `/repos/${owner}/${repo}/contents/${relativeFilePath}`;
+		const url: string = `/repos/${owner}/${repoName}/contents/${relativeFilePath}?ref=${branch}`;
 
-		console.log(`URL: ${url}`);
+		info("URL used to download file from repository:");
+		info(`\n${url}`);
+
 		try {
 			const response: AxiosResponse<string> = await axios.get<string>(url, config);
 
 			return await Promise.resolve(response.data);
 		} catch (error) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+			/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 			const res: AxiosResponse = <AxiosResponse>error.response;
 
-			// console.log(res);
-			throw new Error(`${res.status} - ${res.statusText}`);
+			throw new Error(`${res.status} - ${res.statusText} - ${res.data.message}`);
+			/* eslint-enable @typescript-eslint/no-unsafe-member-access */
 		}
 	}
 

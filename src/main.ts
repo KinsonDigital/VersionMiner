@@ -15,6 +15,7 @@ export class Application {
 		try {
 			const repoOwner: string = actionInput.getInput("repo-owner");
 			const repoName: string = actionInput.getInput("repo-name");
+			const branch: string = actionInput.getInput("branch");
 			const relativeFilePath: string = actionInput.getInput("relative-file-path");
 			const userName: string = actionInput.getInput("user-name");
 			const password: string = actionInput.getInput("password");
@@ -22,6 +23,7 @@ export class Application {
 			const fileContent: string =
 				await downloader.downloadFile(repoOwner,
 					repoName,
+					branch,
 					relativeFilePath,
 					userName,
 					password);
@@ -43,5 +45,5 @@ app.main()
 	.then(() => {
 		action.info("Action Success!!");
 	}, (error: Error) => {
-		action.setFailed(error);
+		action.setFailed(error.message);
 	});

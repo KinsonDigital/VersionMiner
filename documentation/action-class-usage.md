@@ -11,16 +11,14 @@ Currently implemented functions:
 3. Use ```action.info()``` to replace ```core.info()```
 4. Use ```action.error()``` to replace ```core.error()```
 5. Use ```action.warning()``` to replace ```core.warning()```
+6. Use ```action.setFailed()``` to replace ```core.setFailed()```
 
 **Example Environment File:**
 ``` json
 {
     "environment": "",
-    "repo-owner": "",
-	"repo-name": "",
-	"relative-file-path": "",
-	"user-name": "",
-	"password": ""
+    "my-var-1": "",
+	"my-var-2": "",
 }
 ```
 
