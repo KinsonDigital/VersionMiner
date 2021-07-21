@@ -1,3 +1,4 @@
+import {existsSync} from "fs";
 import {FileLoader} from "../fileLoader";
 import {EnvironmentVars} from "../interfaces/envVars";
 
@@ -15,10 +16,21 @@ export class Environment {
      */
 	constructor () {
     	this.fileLoader = new FileLoader();
+		let fileData: string = "";
 
-    	const fileData: string = this.fileLoader.loadEnvFile("./env.json");
-
-    	this.vars = JSON.parse(fileData);
+		if (existsSync("./env.json")) {
+			fileData = this.fileLoader.loadEnvFile("./env.json");
+			this.vars = JSON.parse(fileData);
+		} else {
+			this.vars = {
+				environment: "production",
+				repoOwner: "",
+				repoName: "",
+				relativeFilePath: "",
+				userName: "",
+				password: "",
+			};
+		}
 	}
 	
 	/**

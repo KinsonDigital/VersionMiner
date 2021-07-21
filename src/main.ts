@@ -13,20 +13,25 @@ export class Application {
 		const parser: CSProjParser = new CSProjParser();
 		
 		try {
-			const repoOwner: string = actionInput.getInput("repoOwner");
-			const repoName: string = actionInput.getInput("repoName");
-			const relativeFilePath: string = actionInput.getInput("relativeFilePath");
-			const userName: string = actionInput.getInput("userName");
+			const repoOwner: string = actionInput.getInput("repo-owner");
+			const repoName: string = actionInput.getInput("repo-name");
+			const relativeFilePath: string = actionInput.getInput("relative-file-path");
+			const userName: string = actionInput.getInput("user-name");
 			const password: string = actionInput.getInput("password");
 			
-			const fileContent: string = await downloader.downloadFile(repoOwner, repoName, relativeFilePath, userName, password);
+			const fileContent: string =
+				await downloader.downloadFile(repoOwner,
+					repoName,
+					relativeFilePath,
+					userName,
+					password);
 			
 			const version: string = parser.getElementContent(fileContent, "<Version>", "</Version>");
 			actionInput.setOutput("version", version);
 
 			return await Promise.resolve();
 		} catch (error) {
-			return await Promise.reject(error);
+			throw error;
 		}
 	}
 }

@@ -21,6 +21,6 @@ execSync("yarn install", { cwd: process.cwd() });
 
 // STEP 4
 // Perform a single js library type build using the 'ncc' tool
-execSync("ncc build src/main.ts --license licenses.txt", { cwd: process.cwd() });
+execSync("ncc build src/main.ts -m --license licenses.txt", { cwd: process.cwd() });
 
 console.log("\nPublish complete.");

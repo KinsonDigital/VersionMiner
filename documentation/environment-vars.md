@@ -20,3 +20,5 @@ Since the **env.json** file is not committed to the repository and is not includ
  core.error();
  core.warning();
  ```
+
+ **NOTE:** The **nodemon** package used to watch for file changes and help debug also watches the environment file **env.json** for changes.  This means you can run the npm script **yarn run:app** and make changes to the **env.json** file and it will automatically rebuild and run the code. This is great for testing out environment and action input for validation and processing.

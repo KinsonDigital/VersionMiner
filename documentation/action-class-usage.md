@@ -16,10 +16,10 @@ Currently implemented functions:
 ``` json
 {
     "environment": "",
-    "repoOwner": "",
-	"repoName": "",
-	"relativeFilePath": "",
-	"userName": "",
+    "repo-owner": "",
+	"repo-name": "",
+	"relative-file-path": "",
+	"user-name": "",
 	"password": ""
 }
 ```
