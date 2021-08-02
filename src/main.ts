@@ -18,7 +18,8 @@ export class Application {
 			const relativeFilePath: string = actionInput.getInput("relative-file-path");
 			const userName: string = actionInput.getInput("user-name");
 			const password: string = actionInput.getInput("password");
-			
+			const contains: string = actionInput.getInput("contains");
+
 			if (!repoOwnerAndName.includes("/")) {
 				throw new Error("The 'repo-owner-and-name' format must be a repository owner separated by a repository name.\n\t Example: JohnDoe/my-repo");
 			}
@@ -31,6 +32,11 @@ export class Application {
 			
 			const version: string = parser.getElementContent(fileContent, "<Version>", "</Version>");
 			actionInput.setOutput("version", version);
+
+			// If the version string does not contain the 'contains' input value, fail the action
+			if (contains != "" && !version.includes(contains, 0)) {
+				actionInput.setFailed(`The version '${version}' must contain the string '${contains}'`);
+			}
 
 			return await Promise.resolve();
 		} catch (error) {

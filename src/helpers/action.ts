@@ -1,4 +1,4 @@
-import {getInput, setOutput, info, warning, setFailed} from "@actions/core";
+import {getInput, setOutput, info, warning, setFailed, InputOptions} from "@actions/core";
 import {Environment as Environment} from "./environment";
 
 /**
@@ -23,9 +23,23 @@ export class Action {
      */
 	public getInput (name: string): string {
     	if (this.environment.isDevelop()) {
-			return this.environment.getVarValue(name);
+			let isRequired: boolean = true;
+
+			if (name === "contains") {
+				isRequired = false;
+			}
+
+			return this.environment.getVarValue(name, isRequired);
 		} else if (this.environment.isProd()) {
-			return getInput(name);
+			let options: InputOptions = {
+				required: true,
+			};
+
+			if (name === "contains") {
+				options.required = false;
+			}
+
+			return getInput(name, options);
     	} else {
 			throw new Error("Unknown environment.");
 		}

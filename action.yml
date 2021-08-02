@@ -16,6 +16,9 @@ inputs:
   password:
     description: 'The password for authorization to the repository.'
     required: true
+  contains:
+    description: 'The string value that the version string must contain. A value of false will fail the action.  An empty value will always resolve to true.'
+    required: false
 outputs:
   version: # id of output
     description: 'The version pulled from the project file.'
