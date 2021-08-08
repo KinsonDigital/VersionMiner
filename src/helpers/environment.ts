@@ -1,6 +1,6 @@
 import {existsSync} from "fs";
 import {FileLoader} from "../fileLoader";
-import {EnvironmentVars} from "../interfaces/envVars";
+import {ActionInputs} from "../interfaces/actionInputs";
 
 /**
  * Represents the environment.
@@ -8,7 +8,7 @@ import {EnvironmentVars} from "../interfaces/envVars";
 export class Environment {
 	/* eslint-disable @typescript-eslint/lines-between-class-members */
 	private fileLoader: FileLoader;
-	private vars: EnvironmentVars;
+	private inputs: ActionInputs;
 	/* eslint-enable @typescript-eslint/lines-between-class-members */
 
 	/**
@@ -18,11 +18,15 @@ export class Environment {
     	this.fileLoader = new FileLoader();
 		let fileData: string = "";
 
+		// The env.json file will not exist in production and is not
+		// committed to the repository.		
 		if (existsSync("./env.json")) {
 			fileData = this.fileLoader.loadEnvFile("./env.json");
-			this.vars = JSON.parse(fileData);
+			this.inputs = JSON.parse(fileData);
 		} else {
-			this.vars = {
+			// This branch only runs if a production version.
+			// Set to environment value of production			
+			this.inputs = {
 				environment: "production",
 				repoOwner: "",
 				repoName: "",
@@ -40,7 +44,7 @@ export class Environment {
 	public isProd (): boolean {
 		/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 		/* eslint-disable @typescript-eslint/indent */
-    	for (const [key, value, ] of Object.entries(this.vars)) {
+    	for (const [key, value, ] of Object.entries(this.inputs)) {
     		if (key === "environment") {
     			switch (value.toString().toLowerCase()) {
     			case "prod":
@@ -66,7 +70,7 @@ export class Environment {
      */
 	public isDevelop (): boolean {
 		/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-    	for (const [key, value, ] of Object.entries(this.vars)) {
+    	for (const [key, value, ] of Object.entries(this.inputs)) {
     		if (key === "environment") {
     			let stringValue: string = value.toString().toLowerCase();
     			return stringValue === "dev" || stringValue === "develop";
@@ -83,7 +87,7 @@ export class Environment {
      * @returns The value of the given variable.
      */
 	public getVarValue (varName: string, throwErrorWhenNotFound: boolean = true): string {
-    	for (const [key, value, ] of Object.entries(this.vars)) {
+    	for (const [key, value, ] of Object.entries(this.inputs)) {
     		if (key === varName) {
     			return value;
     		}
