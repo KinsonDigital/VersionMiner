@@ -10,11 +10,8 @@ inputs:
   relative-file-path:
     description: 'The relative path based on the root of the repository to the project file.'
     required: true
-  user-name:
-    description: 'The user name for authorization to the repository.'
-    required: true
-  password:
-    description: 'The password for authorization to the repository.'
+  github-token:
+    description: 'The github token to authenticate to the repository.'
     required: true
   contains:
     description: 'The string value that the version string must contain. A value of false will fail the action.  An empty value will always resolve to true.'

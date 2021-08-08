@@ -16,8 +16,7 @@ export class Application {
 			const repoOwnerAndName: string = actionInput.getInput("repo-owner-and-name");
 			const branch: string = actionInput.getInput("branch");
 			const relativeFilePath: string = actionInput.getInput("relative-file-path");
-			const userName: string = actionInput.getInput("user-name");
-			const password: string = actionInput.getInput("password");
+			const githubToken: string = actionInput.getInput("github-token");
 			const contains: string = actionInput.getInput("contains");
 
 			if (!repoOwnerAndName.includes("/")) {
@@ -27,8 +26,7 @@ export class Application {
 			let fileContent: string = await downloader.downloadFile(repoOwnerAndName,
 				branch,
 				relativeFilePath,
-				userName,
-				password);
+				githubToken);
 			
 			const version: string = parser.getElementContent(fileContent, "<Version>", "</Version>");
 			actionInput.setOutput("version", version);

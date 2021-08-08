@@ -22,7 +22,8 @@ export class Action {
      * @returns The value of the given input.
      */
 	public getInput (name: string): string {
-    	if (this.environment.isDevelop()) {
+		// Development version pulls from the 'env.json' file for testing
+		if (this.environment.isDevelop()) {
 			let isRequired: boolean = true;
 
 			if (name === "contains") {
@@ -31,6 +32,7 @@ export class Action {
 
 			return this.environment.getVarValue(name, isRequired);
 		} else if (this.environment.isProd()) {
+			// Production version pulls the inputs from the YAML file
 			let options: InputOptions = {
 				required: true,
 			};
