@@ -31,8 +31,7 @@ export class Environment {
 				repoOwner: "",
 				repoName: "",
 				relativeFilePath: "",
-				userName: "",
-				password: "",
+				githubToken: "",
 			};
 		}
 	}

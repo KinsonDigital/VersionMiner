@@ -1,5 +1,5 @@
 import {info} from "@actions/core";
-import axios, {AxiosBasicCredentials, AxiosRequestConfig, AxiosResponse} from "axios";
+import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 
 /**
  * Downloads the contents of a file from a branch from a repository.
@@ -10,15 +10,13 @@ export class RepoFileDownloader {
 	 * @param repoOwnerAndName The owner of the repository and name of the repository separated by a forward slash.
 	 * @param branch The name of the branch.
 	 * @param relativeFilePath The path to the file to download relative to the root of the repository.
-	 * @param userName The user name to authenticate to access the repository.
-	 * @param password The password to authenticate to the repository.
+	 * @param githubToken The token  to authenticate to the repository.
 	 * @returns The string contents of the file.
 	 */
 	public async downloadFile (repoOwnerAndName: string,
 							   branch: string,
 							   relativeFilePath: string,
-							   userName: string,
-							   password: string): Promise<string> {
+							   githubToken: string): Promise<string> {
 		
 		if (this.isInvalidString(repoOwnerAndName)) {
 			throw new Error("The 'repoOwnerAndName' param must not be null, empty, or undefined.");
@@ -32,28 +30,15 @@ export class RepoFileDownloader {
 			throw new Error("The 'relativeFilePath' param must not be null, empty, or undefined.");
 		}
 
-		if (this.isInvalidString(userName)) {
-			throw new Error("The 'userName' param must not be null, empty, or undefined.");
-		}
-
-		if (this.isInvalidString(password)) {
-			throw new Error("The 'password' param must not be null, empty, or undefined.");
+		if (this.isInvalidString(githubToken)) {
+			throw new Error("The 'githubToken' param must not be null, empty, or undefined.");
 		}
 		
-		// NOTE: No authorization required due public repo, but API request
-		// limit is lower with unauthorized requests.
-		// https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting
-		const creds: AxiosBasicCredentials = {
-			username: userName,
-			password: password,
-		};
-
 		const config: AxiosRequestConfig = {
 			baseURL: "https://api.github.com",
-			auth: creds,
 			headers: {
 				"Accept": "application/vnd.github.v3.raw",
-				// "Authorization" : "token <token-here>"
+				"Authorization" : `token ${githubToken}`,
 			},
 		};
         

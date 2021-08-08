@@ -26,12 +26,7 @@ export interface ActionInputs {
 	relativeFilePath: string,
 
 	/**
-     * The user name to authenticate to the repository.
+     * The token used to authenticate to the repository.
      */
-	userName: string,
-
-	/**
-     * The password to authenticate to the repository.
-     */
-	password: string    
+	githubToken: string    
 }
