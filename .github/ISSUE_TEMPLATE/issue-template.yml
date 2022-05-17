@@ -1,0 +1,69 @@
+name: Standard Issue
+description: Create an issue for the GitHub action
+title: "✔️"
+body:
+- type: checkboxes
+  attributes:
+    label: I have done the items below . . .
+    description: Please make sure to do the items below.
+    options:
+    - label: I have created a title but left the ✔️ emoji behind.
+      required: true
+
+- type: textarea
+  attributes:
+    label: Description
+    description: |
+      A description of the task to perform.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Acceptance Criteria
+    description: |
+      The list of items that need to be finished to satisfy the definition of done.
+    value: |
+      **This issue is finished when:**
+      - [ ] Item 1
+      - [ ] Item 2
+  validations:
+    required: true
+    render: markdown
+
+- type: checkboxes
+  attributes:
+    label: ToDo Items
+    description: Complete the following items before asking for a PR review.
+    options:
+    - label: Priority label added to issue (**_low priority_**, **_medium priority_**, or **_high priority_**)
+    - label: Issue linked to the proper project
+
+- type: textarea
+  attributes:
+    label: Issue Dependencies
+    placeholder: |
+      No Issue Dependencies
+      Example:
+        - #10 Item 3
+        - #20 Item 4
+    description: |
+      A list of issues that are dependencies of this issue and need to be completed first.
+      Use the '#\<issue-number\>' syntax to link to an issue
+  validations:
+    required: false
+
+- type: textarea
+  attributes:
+    label: Related Work
+    placeholder: |
+      No Related Work Items Added
+      Example:
+        - #10 Create new class
+        - #20 Add unit tests to service
+        - #30 Cleanup code in UI
+    description: |
+      A list of issues related to this issue that is not a dependency.
+      Use the '#\<issue-number\>' syntax to link to an issue
+  validations:
+    required: false
