@@ -1,0 +1,23 @@
+name: 'Issue Scanner'
+description: 'Scans a GitHub issue for information.'
+branding:
+  icon: sliders
+  color: purple
+inputs:
+  message:
+    description: 'The message to print to the console.'
+    required: true
+# TODO: Add as many inputs as needed
+
+# TODO: Re-enable if you want to have action outputs
+#outputs:
+#  sample-output: # This is the name of the output
+#    description: 'Sample output.'
+
+# These are the arguments to pass into the console app
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args: # TODO: Add an arg for each action input
+  - '-m'
+  - ${{ inputs.message }}
