@@ -1,23 +1,71 @@
-name: 'Issue Scanner'
-description: 'Scans a GitHub issue for information.'
+name: 'Version Miner'
+description: 'Pulls versions out from various types of files.'
+author: 'Calvin Wilkinson (KinsonDigital)'
 branding:
-  icon: sliders
+  icon: settings
   color: purple
 inputs:
-  message:
-    description: 'The message to print to the console.'
+  repo-owner:
+    description: 'The owner of the repository'
     required: true
-# TODO: Add as many inputs as needed
+  repo-name:
+    description: 'The name of the repository'
+    required: true
+  branch-name:
+    description: 'The name of the branch where the file lives.'
+    required: true
+  file-format:
+    description: 'The type of file that contains the version.  Currently the only supported type is "xml" and is not case sensitive.'
+    required: true
+  file-path:
+    description: 'The path to the file relative to the root of the repository.'
+    required: true
+  version-keys:
+    description: 'The key(s) that can possibly hold the version in the file.'
+    required: true
+  case-sensitive-keys:
+    description: 'If true, then key searching will be case sensitive.'
+    required: false
+    default: 'true'
+  fail-on-missing-key:
+    description: 'If true, will fail the action if any of the keys described in the "version-keys" input do not exist.'
+    required: false
+    default: 'true'
+  fail-on-key-value-mismatch:
+    description: 'If true, will fail the action if all of the key values listed in the "version-keys" input do not match.'
+    required: false
+    default: 'false'
+  fail-with-no-version: # this input is the last input
+    description: 'If true, will fail the action if no version exists.'
+    required: false
+    default: 'true'
 
-# TODO: Re-enable if you want to have action outputs
-#outputs:
-#  sample-output: # This is the name of the output
-#    description: 'Sample output.'
+outputs:
+  version:
+    description: 'The version pulled from a file.'
 
-# These are the arguments to pass into the console app
+# These are the arguments that are passed into the console app
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args: # TODO: Add an arg for each action input
-  - '-m'
-  - ${{ inputs.message }}
+  args:
+  - '--repo-owner'
+  - ${{ inputs.repo-owner }}
+  - '--repo-name'
+  - ${{ inputs.repo-name }}
+  - '--branch-name'
+  - ${{ inputs.branch-name }}
+  - '--file-format'
+  - ${{ inputs.file-format }}
+  - '--file-path'
+  - ${{ inputs.file-path }}
+  - '--version-keys'
+  - ${{ inputs.version-keys }}
+  - '--case-sensitive-keys'
+  - ${{ inputs.case-sensitive-keys }}
+  - '--fail-on-missing-key'
+  - ${{ inputs.fail-on-missing-key }}
+  - '--fail-on-key-value-mismatch'
+  - ${{ inputs.fail-on-key-value-mismatch }}
+  - '--fail-with-no-version'
+  - ${{ inputs.fail-with-no-version }}

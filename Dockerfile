@@ -11,7 +11,7 @@ LABEL repository="https://github.com/KinsonDigital/VersionMiner"
 LABEL homepage="https://github.com/KinsonDigital/VersionMiner"
 
 # Label as GitHub action
-LABEL com.github.actions.name="Issue Scanner"
+LABEL com.github.actions.name="Version Minor"
 
 # Relayer the .NET SDK, anew with the build output
 FROM mcr.microsoft.com/dotnet/sdk:6.0

@@ -36,4 +36,31 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="TestData\ProjFileTestSample.csproj.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="TestData\OnlyVersionTag.csproj">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="TestData\ProjFileTestSample.csproj">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="TestData\SampleXMLData.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="TestData\OnlyVersionTag.csproj.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\VersionMiner\VersionMiner.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="stylecop.json" />
+      <AdditionalFiles Include="stylecop.json" />
+    </ItemGroup>
+
 </Project>
