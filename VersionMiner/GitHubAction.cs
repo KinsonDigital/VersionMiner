@@ -120,6 +120,7 @@ public class GitHubAction : IGitHubAction
                     : string.Empty;
                 keyValues.Add(keyValue);
             }
+
             _gitHubConsoleService.Write("version pulled from file.", true);
             _gitHubConsoleService.BlankLine();
 

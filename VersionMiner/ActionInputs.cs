@@ -9,8 +9,6 @@ namespace VersionMiner;
 /// </summary>
 public class ActionInputs
 {
-    private string[] _versionKeys = Array.Empty<string>();
-
     /// <summary>
     /// Gets or sets the owner of the repository.
     /// </summary>

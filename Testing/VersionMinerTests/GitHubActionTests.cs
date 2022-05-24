@@ -262,7 +262,6 @@ public class GitHubActionTests
     public async void Run_WithVersionKeysParsed_ThrowsException(string versionKeys)
     {
         // Arrange
-        var keys = versionKeys.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         const string testData = "test-data"; // TODO: Remove
         _mockDataService.Setup(m => m.GetFileData())
             .ReturnsAsync(testData);
