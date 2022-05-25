@@ -3,7 +3,6 @@ name: ✔Build Status Check
 
 on:
   pull_request:
-    types: [ synchronize ]
     paths:
       - ".github/**"
       - "Documentation/**"
