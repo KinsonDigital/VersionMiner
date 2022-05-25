@@ -203,8 +203,7 @@ public class GitHubActionTests
         _mockXMLParserService.Setup(m => m.GetKeyValue(testData, XMLFileVersionTagName, true))
             .Returns("3.2.1");
 
-        var inputs = CreateInputs("Version,FileVersion",
-            failOnMissingKey: false);
+        var inputs = CreateInputs("Version,FileVersion");
         var action = CreateAction();
 
         // Act
@@ -221,38 +220,6 @@ public class GitHubActionTests
         _mockActionOutputService.VerifyNever(m => m.SetOutputValue(It.IsAny<string>(), It.IsAny<string>()));
     }
 
-    [Fact]
-    public async void Run_WithMissingKeyAndFailOnMissingKeySetToTrue_ThrowsException()
-    {
-        // Arrange
-        var expectedExceptionMsg = "The key 'FileVersion' is missing.";
-        expectedExceptionMsg += $"{Environment.NewLine}This failure only occurs if the 'fail-on-missing-key' action input is set to 'true'.";
-
-        const string testData = "test-data";
-        _mockDataService.Setup(m => m.GetFileData())
-            .ReturnsAsync(testData);
-        _mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), XMLVersionTagName, true))
-            .Returns(true);
-        _mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), XMLFileVersionTagName, true))
-            .Returns(false);
-        _mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), XMLVersionTagName, true))
-            .Returns("1.2.3");
-
-        var inputs = CreateInputs("Version,FileVersion");
-        var action = CreateAction();
-
-        // Act
-        var act = () => action.Run(inputs, () => { }, e => throw e);
-
-        // Assert
-        await act.Should()
-            .ThrowAsync<MissingKeyException>()
-            .WithMessage(expectedExceptionMsg);
-        _mockActionOutputService.VerifyNever(m => m.SetOutputValue(It.IsAny<string>(), It.IsAny<string>()));
-        _mockXMLParserService.VerifyOnce(m => m.KeyExists(testData, XMLVersionTagName, true));
-        _mockXMLParserService.VerifyOnce(m => m.KeyExists(testData, XMLFileVersionTagName, true));
-    }
-
     [Theory]
     [InlineData("")]
     [InlineData(",")]
@@ -267,7 +234,6 @@ public class GitHubActionTests
             .ReturnsAsync(testData);
 
         var inputs = CreateInputs(versionKeys,
-            failOnMissingKey: false,
             failOnKeyValueMismatch: false,
             failWhenVersionNotFound: false);
         var action = CreateAction();
@@ -299,7 +265,6 @@ public class GitHubActionTests
             .ReturnsAsync(testData);
 
         var inputs = CreateInputs(versionKeys,
-            failOnMissingKey: false,
             failOnKeyValueMismatch: false,
             failWhenVersionNotFound: false);
         var action = CreateAction();
@@ -330,7 +295,6 @@ public class GitHubActionTests
             .Returns(expectedVersion);
 
         var inputs = CreateInputs("Version,FileVersion",
-            failOnMissingKey: false,
             failOnKeyValueMismatch: false);
         var action = CreateAction();
 
@@ -379,7 +343,6 @@ public class GitHubActionTests
         _mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), XMLVersionTagName, true)).Returns(true);
         _mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), XMLVersionTagName, true)).Returns(string.Empty);
         var inputs = CreateInputs("Version",
-            failOnMissingKey: false,
             failWhenVersionNotFound: true);
         var action = CreateAction();
 
@@ -403,7 +366,6 @@ public class GitHubActionTests
 
         var inputs = CreateInputs("Version,FileVersion,AssemblyVersion",
             failOnKeyValueMismatch: true,
-            failOnMissingKey: false,
             failWhenVersionNotFound: false);
         var action = CreateAction();
 
@@ -420,7 +382,6 @@ public class GitHubActionTests
     /// </summary>
     /// <returns>The instance to test.</returns>
     private static ActionInputs CreateInputs(string versionKeys,
-        bool failOnMissingKey = true,
         bool failOnKeyValueMismatch = true,
         bool failWhenVersionNotFound = true) => new ()
     {
@@ -430,7 +391,6 @@ public class GitHubActionTests
         FilePath = "test-path",
         FileFormat = XMLFileType,
         VersionKeys = versionKeys,
-        FailOnMissingKey = failOnMissingKey,
         FailOnKeyValueMismatch = failOnKeyValueMismatch,
         FailWhenVersionNotFound = failWhenVersionNotFound,
     };

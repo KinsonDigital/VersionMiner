@@ -60,11 +60,6 @@ public class ActionInputTests
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.CaseSensitiveKeys))
             .AssertOptionAttrProps("case-sensitive-keys", false, "If true, then the key searching will be case sensitive.");
 
-        inputs.FailOnMissingKey.Should().BeTrue();
-        typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailOnMissingKey)).Should().BeDecoratedWith<OptionAttribute>();
-        inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailOnMissingKey))
-            .AssertOptionAttrProps("fail-on-missing-key", false, "If true, will fail if any of the keys described in the list of 'version-keys' are missing.");
-
         inputs.FailOnKeyValueMismatch.Should().BeFalse();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailOnKeyValueMismatch)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailOnKeyValueMismatch))
@@ -170,21 +165,6 @@ public class ActionInputTests
         // Act
         inputs.CaseSensitiveKeys = expectedValue;
         var actual = inputs.CaseSensitiveKeys;
-
-        // Assert
-        actual.Should().Be(expectedValue);
-    }
-
-    [Fact]
-    public void FailOnMissingKey_WhenSettingValue_ReturnsCorrectResult()
-    {
-        // Arrange
-        var inputs = new ActionInputs();
-        var expectedValue = !inputs.FailOnMissingKey;
-
-        // Act
-        inputs.FailOnMissingKey = expectedValue;
-        var actual = inputs.FailOnMissingKey;
 
         // Assert
         actual.Should().Be(expectedValue);

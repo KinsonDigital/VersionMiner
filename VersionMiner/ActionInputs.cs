@@ -83,17 +83,6 @@ public class ActionInputs
     public bool CaseSensitiveKeys { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not the GitHub action should fail if any of the keys
-    /// described in the list of <see cref="VersionKeys"/> are missing.
-    /// </summary>
-    [Option(
-        "fail-on-missing-key",
-        Required = false,
-        Default = true,
-        HelpText = "If true, will fail if any of the keys described in the list of 'version-keys' are missing.")]
-    public bool FailOnMissingKey { get; set; } = true;
-
-    /// <summary>
     /// Gets or sets a value indicating whether or not the GitHub action should fail if all of the key values
     /// described in the list of <see cref="VersionKeys"/> do not match.
     /// </summary>

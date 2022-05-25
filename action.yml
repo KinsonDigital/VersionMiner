@@ -24,11 +24,7 @@ inputs:
     description: 'The key(s) that can possibly hold the version in the file.'
     required: true
   case-sensitive-keys:
-    description: 'If true, then key searching will be case sensitive.'
-    required: false
-    default: 'true'
-  fail-on-missing-key:
-    description: 'If true, will fail the action if any of the keys described in the "version-keys" input do not exist in the file.'
+    description: 'If true, key searching will be case sensitive.'
     required: false
     default: 'true'
   fail-on-key-value-mismatch:
@@ -63,8 +59,6 @@ runs:
   - ${{ inputs.version-keys }}
   - '--case-sensitive-keys'
   - ${{ inputs.case-sensitive-keys }}
-  - '--fail-on-missing-key'
-  - ${{ inputs.fail-on-missing-key }}
   - '--fail-on-key-value-mismatch'
   - ${{ inputs.fail-on-key-value-mismatch }}
   - '--fail-when-version-not-found'

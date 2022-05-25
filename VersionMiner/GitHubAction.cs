@@ -106,15 +106,6 @@ public class GitHubAction : IGitHubAction
             {
                 var keyExists = _xmlParserService.KeyExists(xmlData, versionKey, inputs.CaseSensitiveKeys);
 
-                // If the action is set to fail on a missing key, check if the key exists and fail if it does not
-                if (inputs.FailOnMissingKey && keyExists is false)
-                {
-                    var exceptionMsg = $"The key '{versionKey}' is missing.";
-                    exceptionMsg += $"{Environment.NewLine}This failure only occurs if the 'fail-on-missing-key' action input is set to 'true'.";
-
-                    throw new MissingKeyException(exceptionMsg);
-                }
-
                 var keyValue = keyExists
                     ? _xmlParserService.GetKeyValue(xmlData, versionKey)
                     : string.Empty;
