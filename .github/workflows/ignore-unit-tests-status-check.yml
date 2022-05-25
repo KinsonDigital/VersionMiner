@@ -6,6 +6,7 @@ on:
     types: [ synchronize ]
     paths:
       - ".github/**"
+      - "Documentation/**"
       - '.editorconfig'
       - '*.runsettings'
       - '.gitattributes'
