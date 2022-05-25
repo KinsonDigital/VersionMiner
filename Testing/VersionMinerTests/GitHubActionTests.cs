@@ -269,7 +269,7 @@ public class GitHubActionTests
         var inputs = CreateInputs(versionKeys,
             failOnMissingKey: false,
             failOnKeyValueMismatch: false,
-            failWithNoVersion: false);
+            failWhenVersionNotFound: false);
         var action = CreateAction();
 
         // Act
@@ -301,7 +301,7 @@ public class GitHubActionTests
         var inputs = CreateInputs(versionKeys,
             failOnMissingKey: false,
             failOnKeyValueMismatch: false,
-            failWithNoVersion: false);
+            failWhenVersionNotFound: false);
         var action = CreateAction();
 
         // Act
@@ -369,18 +369,18 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WhenNoVersionIsFoundForFailWithNoVersionInputAndIsSetToTrue_ThrowsException()
+    public async void Run_WhenNoVersionIsFoundForFailWhenVersionNotFoundInputAndIsSetToTrue_ThrowsException()
     {
         // Arrange
         var expectedExceptionMsg = "No version value was found.";
         expectedExceptionMsg += $"{Environment.NewLine}If you do not want the GitHub action to fail when no version is found,";
-        expectedExceptionMsg += "set the 'fail-with-no-version' input to a value of 'false'.";
+        expectedExceptionMsg += "set the 'fail-when-version-not-found' input to a value of 'false'.";
 
         _mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), XMLVersionTagName, true)).Returns(true);
         _mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), XMLVersionTagName, true)).Returns(string.Empty);
         var inputs = CreateInputs("Version",
             failOnMissingKey: false,
-            failWithNoVersion: true);
+            failWhenVersionNotFound: true);
         var action = CreateAction();
 
         // Act
@@ -404,7 +404,7 @@ public class GitHubActionTests
         var inputs = CreateInputs("Version,FileVersion,AssemblyVersion",
             failOnKeyValueMismatch: true,
             failOnMissingKey: false,
-            failWithNoVersion: false);
+            failWhenVersionNotFound: false);
         var action = CreateAction();
 
         // Act
@@ -422,7 +422,7 @@ public class GitHubActionTests
     private static ActionInputs CreateInputs(string versionKeys,
         bool failOnMissingKey = true,
         bool failOnKeyValueMismatch = true,
-        bool failWithNoVersion = true) => new ()
+        bool failWhenVersionNotFound = true) => new ()
     {
         RepoOwner = "test-owner",
         RepoName = "test-name",
@@ -432,7 +432,7 @@ public class GitHubActionTests
         VersionKeys = versionKeys,
         FailOnMissingKey = failOnMissingKey,
         FailOnKeyValueMismatch = failOnKeyValueMismatch,
-        FailWithNoVersion = failWithNoVersion,
+        FailWhenVersionNotFound = failWhenVersionNotFound,
     };
 
     /// <summary>

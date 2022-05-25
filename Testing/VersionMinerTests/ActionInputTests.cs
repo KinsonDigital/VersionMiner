@@ -70,10 +70,10 @@ public class ActionInputTests
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailOnKeyValueMismatch))
             .AssertOptionAttrProps("fail-on-key-value-mismatch", false, "If true, will fail the action if all of the key values listed in the 'version-keys' input do not match.");
 
-        inputs.FailWithNoVersion.Should().BeTrue();
-        typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailWithNoVersion)).Should().BeDecoratedWith<OptionAttribute>();
-        inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailWithNoVersion))
-            .AssertOptionAttrProps("fail-with-no-version", false, "If true, the action will fail if no version exists.");
+        inputs.FailWhenVersionNotFound.Should().BeTrue();
+        typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailWhenVersionNotFound)).Should().BeDecoratedWith<OptionAttribute>();
+        inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailWhenVersionNotFound))
+            .AssertOptionAttrProps("fail-when-version-not-found", false, "If true, the action will fail if the version is not found.");
     }
 
     [Fact]
@@ -206,15 +206,15 @@ public class ActionInputTests
     }
 
     [Fact]
-    public void FailWithNoVersion_WhenSettingValue_ReturnsCorrectResult()
+    public void FailWhenVersionNotFound_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
         var inputs = new ActionInputs();
-        var expectedValue = !inputs.FailWithNoVersion;
+        var expectedValue = !inputs.FailWhenVersionNotFound;
 
         // Act
-        inputs.FailWithNoVersion = expectedValue;
-        var actual = inputs.FailWithNoVersion;
+        inputs.FailWhenVersionNotFound = expectedValue;
+        var actual = inputs.FailWhenVersionNotFound;
 
         // Assert
         actual.Should().Be(expectedValue);

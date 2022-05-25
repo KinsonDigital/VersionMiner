@@ -108,9 +108,9 @@ public class ActionInputs
     /// Gets or sets a value indicating whether or not the GitHub action should fail if no version exists.
     /// </summary>
     [Option(
-        "fail-with-no-version",
+        "fail-when-version-not-found",
         Required = false,
         Default = true,
-        HelpText = "If true, the action will fail if no version exists.")]
-    public bool FailWithNoVersion { get; set; } = true;
+        HelpText = "If true, the action will fail if the version is not found.")]
+    public bool FailWhenVersionNotFound { get; set; } = true;
 }

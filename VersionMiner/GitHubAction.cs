@@ -141,11 +141,11 @@ public class GitHubAction : IGitHubAction
             // Just get the first value that is not empty
             var version = keyValues.Find(v => !string.IsNullOrEmpty(v)) ?? string.Empty;
 
-            if (inputs.FailWithNoVersion && string.IsNullOrEmpty(version))
+            if (inputs.FailWhenVersionNotFound && string.IsNullOrEmpty(version))
             {
                 var exceptionMsg = "No version value was found.";
                 exceptionMsg += $"{Environment.NewLine}If you do not want the GitHub action to fail when no version is found,";
-                exceptionMsg += "set the 'fail-with-no-version' input to a value of 'false'.";
+                exceptionMsg += "set the 'fail-when-version-not-found' input to a value of 'false'.";
 
                 throw new NoVersionFoundException(exceptionMsg);
             }
