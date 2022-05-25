@@ -2,7 +2,7 @@ name: ✔Build Status Check
 
 
 env:
-  PROJECT_NAME: VersionMinor
+  PROJECT_NAME: VersionMiner
   NET_SDK_VERSION: 6.0.300
 
 
