@@ -36,8 +36,22 @@ This GitHub action is built using C#/NET and runs in a docker container.  This m
 - Status check workflows to verify that the version has been updated before a pull request to perform a major release is completed.
 - Whatever your imagination comes up with!!
 
+---
 
-**Quick Example:**
+<div align="center"><h2 style="font-weight:bold">What does it do?</h2></div>
+
+In a nutshell, this pulls versions out of XML data files for use in workflows.
+Just tell the action which repo, branch, and file contains the version, and it will search through the file for the `version-keys` and pull out the value of that key. This value is used as the value of the action's output,
+which has the name `version`, so you can use it in the rest of your workflow.
+
+The `version-keys` input is just a comma delimited list of XML keys to search for in the XML file.  
+Example:  
+If the value of the `version-keys` input was ***"Version,FileVersion"***, than it would search
+the XML for any XML elements that match the name ***"Version"*** or ***"FileVersion"***.  The first element that has a value will be the value returned.  So if the XML element ***"Version"*** had a value of ***1.2.3***, than it would simply return the value of the ***"Version"*** element and stop looking for values in any other XML elements.
+
+---
+
+<div align="center"><h3 style="font-weight:bold">Quick Example</h3></div>
 
 ```yaml
 name: Get Version Example
@@ -80,19 +94,6 @@ So if the C# project file had the contents below, the workflow above would print
 <div align="left">
 <a href="#examples">More Examples Below!! 👇🏼</a>
 </div>
-
----
-
-<div align="center"><h2 style="font-weight:bold">What does it do?</h2></div>
-
-In a nutshell, this pulls versions out of XML data files for use in workflows.
-Just tell the action which repo, branch, and file contains the version, and it will search through the file for the `version-keys` and pull out the value of that key. This value is used as the value of the action's output,
-which has the name `version`, so you can use it in the rest of your workflow.
-
-The `version-keys` input is just a comma delimited list of XML keys to search for in the XML file.  
-Example:  
-If the value of the `version-keys` input was ***"Version,FileVersion"***, than it would search
-the XML for any XML elements that match the name ***"Version"*** or ***"FileVersion"***.  The first element that has a value will be the value returned.  So if the XML element ***"Version"*** had a value of ***1.2.3***, than it would simply return the value of the ***"Version"*** element and stop looking for values in any other XML elements.
 
 ---
 
@@ -236,7 +237,7 @@ Result:
 <div align="left">
 
 ### License
-- [MIT License - KinsonDigital/VersionMiner](https://github.com/KinsonDigital/VersionMiner/blob/preview/v1.0.0-preview.1/LICENSE)
+- [MIT License - VersionMiner](https://github.com/KinsonDigital/VersionMiner/blob/preview/v1.0.0-preview.1/LICENSE)
 </div>
 
 <div align="left">
