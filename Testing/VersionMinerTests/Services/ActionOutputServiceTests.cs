@@ -19,6 +19,23 @@ public class ActionOutputServiceTests
     /// </summary>
     public ActionOutputServiceTests() => _mockConsoleService = new Mock<IGitHubConsoleService>();
 
+    #region Constructor Tests
+    [Fact]
+    public void Ctor_WithNullGitHubConsoleServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new ActionOutputService(null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'gitHubConsoleService')");
+    }
+    #endregion
+
     #region Method Tests
     [Fact]
     public void SetOutputValue_WhenInvoked_SetsOutputValue()

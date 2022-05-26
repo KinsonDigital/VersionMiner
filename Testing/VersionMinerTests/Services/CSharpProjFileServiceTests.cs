@@ -20,6 +20,23 @@ public class CSharpProjFileServiceTests
     /// </summary>
     public CSharpProjFileServiceTests() => _mockXMLParserService = new Mock<IDataParserService>();
 
+    #region Constructor Tests
+    [Fact]
+    public void Ctor_WithNullXMLParserServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new CSharpProjFileService(null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'xmlParserService')");
+    }
+    #endregion
+
     #region Method Tests
     [Theory]
     [InlineData(true, "1.2.3")]

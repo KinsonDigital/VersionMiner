@@ -3,6 +3,7 @@
 // </copyright>
 
 using VersionMiner.Exceptions;
+using VersionMiner.Guards;
 
 namespace VersionMiner.Services;
 
@@ -15,7 +16,11 @@ public class ActionOutputService : IActionOutputService
     /// Initializes a new instance of the <see cref="ActionOutputService"/> class.
     /// </summary>
     /// <param name="gitHubConsoleService">Writes to the console.</param>
-    public ActionOutputService(IGitHubConsoleService gitHubConsoleService) => _gitHubConsoleService = gitHubConsoleService;
+    public ActionOutputService(IGitHubConsoleService gitHubConsoleService)
+    {
+        EnsureThat.CtorParamIsNotNull(gitHubConsoleService);
+        _gitHubConsoleService = gitHubConsoleService;
+    }
 
     /// <inheritdoc/>
     public void SetOutputValue(string name, string value)

@@ -2,6 +2,8 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using VersionMiner.Guards;
+
 namespace VersionMiner.Services;
 
 /// <summary>
@@ -18,7 +20,11 @@ public class CSharpProjFileService
     /// Initializes a new instance of the <see cref="CSharpProjFileService"/> class.
     /// </summary>
     /// <param name="xmlParserService">Parses XML data in csharp project files.</param>
-    public CSharpProjFileService(IDataParserService xmlParserService) => _xmlParserService = xmlParserService;
+    public CSharpProjFileService(IDataParserService xmlParserService)
+    {
+        EnsureThat.CtorParamIsNotNull(xmlParserService);
+        _xmlParserService = xmlParserService;
+    }
 
     /// <summary>
     /// Gets the version from the <i><c>Version</c></i> element.

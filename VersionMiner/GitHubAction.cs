@@ -3,6 +3,7 @@
 // </copyright>
 
 using VersionMiner.Exceptions;
+using VersionMiner.Guards;
 using VersionMiner.Services;
 
 namespace VersionMiner;
@@ -31,6 +32,11 @@ public sealed class GitHubAction : IGitHubAction
         IDataParserService xmlParserService,
         IActionOutputService actionOutputService)
     {
+        EnsureThat.CtorParamIsNotNull(gitHubConsoleService);
+        EnsureThat.CtorParamIsNotNull(gitHubDataService);
+        EnsureThat.CtorParamIsNotNull(xmlParserService);
+        EnsureThat.CtorParamIsNotNull(actionOutputService);
+
         _gitHubConsoleService = gitHubConsoleService;
         _gitHubDataService = gitHubDataService;
         _xmlParserService = xmlParserService;

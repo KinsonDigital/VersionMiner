@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
+using VersionMiner.Guards;
 
 namespace VersionMiner.Services;
 
@@ -16,7 +17,11 @@ public class AppService : IAppService
     /// Initializes a new instance of the <see cref="AppService"/> class.
     /// </summary>
     /// <param name="gitHubConsoleService">Writes to the console.</param>
-    public AppService(IGitHubConsoleService gitHubConsoleService) => _gitHubConsoleService = gitHubConsoleService;
+    public AppService(IGitHubConsoleService gitHubConsoleService)
+    {
+        EnsureThat.CtorParamIsNotNull(gitHubConsoleService);
+        _gitHubConsoleService = gitHubConsoleService;
+    }
 
     /// <inheritdoc/>
     public void Exit(int code)

@@ -11,6 +11,9 @@ using VersionMinerTests.Helpers;
 
 namespace VersionMinerTests;
 
+/// <summary>
+/// Tests the <see cref="GitHubAction"/> class.
+/// </summary>
 public class GitHubActionTests
 {
     private const string VersionOutputName = "version";
@@ -22,6 +25,9 @@ public class GitHubActionTests
     private readonly Mock<IDataParserService> _mockXMLParserService;
     private readonly Mock<IActionOutputService> _mockActionOutputService;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GitHubActionTests"/> class.
+    /// </summary>
     public GitHubActionTests()
     {
         _mockConsoleService = new Mock<IGitHubConsoleService>();
@@ -39,6 +45,84 @@ public class GitHubActionTests
         _mockXMLParserService = new Mock<IDataParserService>();
         _mockActionOutputService = new Mock<IActionOutputService>();
     }
+
+    #region Constructor Tests
+    [Fact]
+    public void Ctor_WithNullGitHubConsoleServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GitHubAction(
+                null,
+                _mockDataService.Object,
+                _mockXMLParserService.Object,
+                _mockActionOutputService.Object);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'gitHubConsoleService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullGitHubDataServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GitHubAction(
+                _mockConsoleService.Object,
+                null,
+                _mockXMLParserService.Object,
+                _mockActionOutputService.Object);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'gitHubDataService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullXMLParserServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GitHubAction(
+                _mockConsoleService.Object,
+                _mockDataService.Object,
+                null,
+                _mockActionOutputService.Object);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'xmlParserService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullActionOutputServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GitHubAction(
+                _mockConsoleService.Object,
+                _mockDataService.Object,
+                _mockXMLParserService.Object,
+                null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'actionOutputService')");
+    }
+    #endregion
 
     #region Method Tests
     [Fact]
