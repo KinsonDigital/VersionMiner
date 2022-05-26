@@ -9,13 +9,11 @@ using VersionMiner.Models;
 
 namespace VersionMiner.Services;
 
-// TODO: Need to look into using GITHUB_TOKEN for repo access.  Example: private repos
-
 /// <summary>
 /// <inheritdoc/>
 /// </summary>
 [ExcludeFromCodeCoverage]
-public class GitHubDataService : IGitHubDataService
+public sealed class GitHubDataService : IGitHubDataService
 {
     private const string BaseUrl = "https://api.github.com";
     private readonly RestClient _client;
