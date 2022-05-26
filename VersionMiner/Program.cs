@@ -33,95 +33,45 @@ public static class Program
                 services.AddSingleton<IGitHubDataService, GitHubDataService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
                 services.AddSingleton<IDataParserService, XMLParserService>();
+                services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
                 services.AddSingleton<IGitHubAction, GitHubAction>();
             }).Build();
 
-        IAppService appService = null!;
-        IGitHubAction gitHubAction = null!;
-
-        try
-        {
-            appService = _host.Services.GetRequiredService<IAppService>();
-            gitHubAction = _host.Services.GetRequiredService<IGitHubAction>();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"::error::{e.Message}");
-#if DEBUG
-            Console.ReadLine();
-#endif
-            Environment.Exit(80);
-        }
-
-        try
-        {
-            var parser = Default.ParseArguments(() => new ActionInputs(), args);
-
-            // Display and log any errors with the action inputs(arguments).
-            parser.WithNotParsed(ProcessInputErrors);
-
-            // If the command line values were successfully parsed, continue running
-            await parser.WithParsedAsync(
-                inputs => gitHubAction.Run(
-                inputs,
-                () =>
-                {
-                    _host.Dispose();
-                    Default.Dispose();
-                    gitHubAction.Dispose();
-                    appService.Exit(0);
-                },
-                (e) =>
-                {
-                    _host.Dispose();
-                    Default.Dispose();
-                    gitHubAction.Dispose();
-                    appService.ExitWithException(e);
-                }));
-        }
-        catch (Exception e)
-        {
-            appService.ExitWithException(e);
-        }
-    }
-
-    /// <summary>
-    /// Processes any errors related to the action inputs.
-    /// </summary>
-    /// <param name="errors">The list of input errors.</param>
-    /// <exception cref="NullReferenceException">
-    ///     Thrown if the <see cref="IGitHubConsoleService"/> is null.
-    /// </exception>
-    private static void ProcessInputErrors(IEnumerable<Error> errors)
-    {
         var appService = _host.Services.GetRequiredService<IAppService>();
+        var gitHubAction = _host.Services.GetRequiredService<IGitHubAction>();
         var consoleService = _host.Services.GetRequiredService<IGitHubConsoleService>();
 
-        foreach (var error in errors)
-        {
-            if (error is UnknownOptionError unknownOptionError)
-            {
-                consoleService.WriteError($"Unknown action input with the name '{unknownOptionError.Token}'");
-            }
-            else if (error is MissingRequiredOptionError requiredOptionError)
-            {
-                consoleService.WriteError($"Missing action input '{requiredOptionError.NameInfo.LongName}'.  This input is required.");
-            }
-            else if (error is MissingValueOptionError missingValueOptionError)
-            {
-                consoleService.WriteError($"The action input '{missingValueOptionError.NameInfo.LongName}' has no value.");
-            }
-            else
-            {
-                consoleService.WriteError($"An action input error has occurred.{Environment.NewLine}{error}");
-            }
-        }
+        var argParsingService = _host.Services.GetRequiredService<IArgParsingService<ActionInputs>>();
 
-#if DEBUG
-        Console.ReadLine();
-#endif
+        await argParsingService.ParseArguments(
+            new ActionInputs(),
+            args,
+            async inputs =>
+            {
+                await gitHubAction.Run(
+                    inputs,
+                    () =>
+                    {
+                        _host.Dispose();
+                        Default.Dispose();
+                        gitHubAction.Dispose();
+                        appService.Exit(0);
+                    },
+                    (e) =>
+                    {
+                        _host.Dispose();
+                        Default.Dispose();
+                        gitHubAction.Dispose();
+                        appService.ExitWithException(e);
+                    });
+            }, errors =>
+            {
+                foreach (var error in errors)
+                {
+                    consoleService.WriteLine(error);
+                }
 
-        _host.Dispose();
-        appService.Exit(90);
+                appService.ExitWithException(new Exception($"There were {errors.Length} errors.  Refer to the logs for more information."));
+            });
     }
 }
