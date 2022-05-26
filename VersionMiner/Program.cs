@@ -67,11 +67,13 @@ public static class Program
                 () =>
                 {
                     _host.Dispose();
+                    gitHubAction.Dispose();
                     appService.Exit(0);
                 },
                 (e) =>
                 {
                     _host.Dispose();
+                    gitHubAction.Dispose();
                     appService.ExitWithException(e);
                 }));
         }

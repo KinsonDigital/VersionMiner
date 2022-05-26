@@ -375,6 +375,20 @@ public class GitHubActionTests
         // Assert
         await act.Should().NotThrowAsync("all requested versions that are empty still match.");
     }
+
+    [Fact]
+    public void Dispose_WhenInvoked_DisposesOfAction()
+    {
+        // Arrange
+        var action = CreateAction();
+
+        // Act
+        action.Dispose();
+        action.Dispose();
+
+        // Assert
+        _mockDataService.VerifyOnce(m => m.Dispose());
+    }
     #endregion
 
     /// <summary>

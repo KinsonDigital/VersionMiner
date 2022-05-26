@@ -8,7 +8,7 @@ using VersionMiner.Services;
 namespace VersionMiner;
 
 /// <inheritdoc/>
-public class GitHubAction : IGitHubAction
+public sealed class GitHubAction : IGitHubAction
 {
     private const string VersionOutputName = "version";
     private const string XMLFileFormat = "xml";
@@ -16,6 +16,7 @@ public class GitHubAction : IGitHubAction
     private readonly IGitHubDataService _gitHubDataService;
     private readonly IDataParserService _xmlParserService;
     private readonly IActionOutputService _actionOutputService;
+    private bool _isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GitHubAction"/> class.
@@ -154,6 +155,28 @@ public class GitHubAction : IGitHubAction
         }
 
         onCompleted();
+    }
+
+    /// <inheritdoc/>
+    public void Dispose() => Dispose(true);
+
+    /// <summary>
+    /// <inheritdoc cref="IDisposable.Dispose"/>
+    /// </summary>
+    /// <param name="disposing">True to dispose of managed resources.</param>
+    private void Dispose(bool disposing)
+    {
+        if (_isDisposed)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            _gitHubDataService.Dispose();
+        }
+
+        _isDisposed = true;
     }
 
     /// <summary>

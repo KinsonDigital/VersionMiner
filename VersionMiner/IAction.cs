@@ -7,7 +7,7 @@ namespace VersionMiner;
 /// <summary>
 /// The main action behavior.
 /// </summary>
-public interface IGitHubAction
+public interface IGitHubAction : IDisposable
 {
     /// <summary>
     /// Runs the action.
