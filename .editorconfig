@@ -171,3 +171,6 @@ dotnet_diagnostic.SA1011.severity = none
 
 # SA0001: XML comment analysis is disabled due to project configuration
 dotnet_diagnostic.SA0001.severity = none
+
+# SA1200: A C# using directive is placed outside of a namespace element
+dotnet_diagnostic.SA1200.severity = none

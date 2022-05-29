@@ -5,7 +5,7 @@
 namespace VersionMiner.Services;
 
 /// <summary>
-/// Parses arguments and responds based on successful or unsuccessful parsing.
+/// Parses arguments and responds with success or failure.
 /// </summary>
 /// <typeparam name="T">The object holding the action input data.</typeparam>
 public interface IArgParsingService<T> : IDisposable

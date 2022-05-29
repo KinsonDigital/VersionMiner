@@ -18,7 +18,7 @@ public interface IDataParserService
     /// <param name="isKeyCaseSensitive">True if the key name is case sensitive.</param>
     /// <returns>The value of the key.</returns>
     /// <remarks>
-    ///     This could be just simply text or more structured data.
+    ///     This can be text or more structured data.
     /// </remarks>
     string GetKeyValue(string data, string keyName, bool isKeyCaseSensitive = true);
 

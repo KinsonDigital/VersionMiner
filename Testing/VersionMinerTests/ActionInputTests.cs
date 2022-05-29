@@ -58,12 +58,12 @@ public class ActionInputTests
         inputs.CaseSensitiveKeys.Should().BeTrue();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.CaseSensitiveKeys)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.CaseSensitiveKeys))
-            .AssertOptionAttrProps("case-sensitive-keys", false, "If true, then the key searching will be case sensitive.");
+            .AssertOptionAttrProps("case-sensitive-keys", false, "If true, the key search will be case sensitive.");
 
         inputs.FailOnKeyValueMismatch.Should().BeFalse();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailOnKeyValueMismatch)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailOnKeyValueMismatch))
-            .AssertOptionAttrProps("fail-on-key-value-mismatch", false, "If true, will fail the action if all of the key values listed in the 'version-keys' input do not match.");
+            .AssertOptionAttrProps("fail-on-key-value-mismatch", false, "If true, the action will fail if all of the keys listed in the 'version-keys' input do not match.");
 
         inputs.FailWhenVersionNotFound.Should().BeTrue();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailWhenVersionNotFound)).Should().BeDecoratedWith<OptionAttribute>();
@@ -128,7 +128,7 @@ public class ActionInputTests
     }
 
     [Fact]
-    public void FileType_WhenSettingValue_ReturnsCorrectResult()
+    public void FileFormat_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
         var inputs = new ActionInputs();

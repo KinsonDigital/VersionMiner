@@ -24,14 +24,14 @@ inputs:
     description: 'The key(s) that can possibly hold the version in the file.'
     required: true
   case-sensitive-keys:
-    description: 'If true, key searching will be case sensitive.'
+    description: 'If true, the key search will be case sensitive.'
     required: false
     default: 'true'
   fail-on-key-value-mismatch:
-    description: 'If true, will fail the action if all of the key values listed in the "version-keys" input do not match.'
+    description: 'If true, the action will fail if all of the key values listed in the "version-keys" input do not match.'
     required: false
     default: 'false'
-  fail-when-version-not-found: # this input is the last input
+  fail-when-version-not-found:
     description: 'If true, will fail the action if the version is not found.'
     required: false
     default: 'true'

@@ -73,24 +73,24 @@ public class ActionInputs
     public string VersionKeys { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not searching for keys will be case sensitive.
+    /// Gets or sets a value indicating whether or not the key search will be case sensitive.
     /// </summary>
     [Option(
         "case-sensitive-keys",
         Required = false,
         Default = true,
-        HelpText = "If true, then the key searching will be case sensitive.")]
+        HelpText = "If true, the key search will be case sensitive.")]
     public bool CaseSensitiveKeys { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not the GitHub action should fail if all of the key values
-    /// described in the list of <see cref="VersionKeys"/> do not match.
+    /// in the list of <see cref="VersionKeys"/> do not match.
     /// </summary>
     [Option(
         "fail-on-key-value-mismatch",
         Required = false,
         Default = false,
-        HelpText = "If true, will fail the action if all of the key values listed in the 'version-keys' input do not match.")]
+        HelpText = "If true, the action will fail if all of the keys listed in the 'version-keys' input do not match.")]
     public bool FailOnKeyValueMismatch { get; set; }
 
     /// <summary>

@@ -22,18 +22,18 @@ This can be used in your workflows for other uses such as version validation, ve
 
 <div align="center"><h3 style="font-weight:bold">⚠️Quick Note⚠️</h3></div>
 
-This GitHub action is built using C#/NET and runs in a docker container.  This means that this action can only be run on Linux.  Running in ***Windows*** is not supported.  If you need to use steps on ***Windows*** AND ***Ubuntu***, then you can split up your workflow so that this action is in an isolated job that runs on ***Ubuntu*** while the rest of the workflow can be executed in ***Windows***.
+This GitHub action is built using C#/NET and runs in a docker container.  This means that the action can only be run on Linux.  Running in ***Windows*** is not supported.  If you need to use steps on ***Windows*** AND ***Ubuntu***, then you can split up your workflow so that this action is in an isolated job that runs on ***Ubuntu***, while the rest of the workflow can be executed in ***Windows***.
 
 <div align="center"><h3 style="font-weight:bold">Usage Examples</h3></div>
 
-- Automatically create tags with the version during the release process.
+- Create tags automatically with the version during the release process.
 - Validate the version syntax to help enforce version syntax.
-  - Example: semantic version vs a date-based version.
-- Managing release note file names by having the version embedded in the file name.
-- Using the version in the title of a GitHub release.
+  - Example: Semantic version vs a date-based version.
+- Manage release note file names by having the version embedded in the file name.
+- Use the version in the title of a GitHub release.
 - Release announcements.
-  - Example: Using the version in a release announcement on Twitter.
-- Status check workflows to verify that the version has been updated before a pull request to perform a major release is completed.
+  - Example: Use the version in a release announcement on Twitter.
+- Use status check workflows to verify versions before a pull request can be completed.
 - Whatever your imagination comes up with!!
 
 ---
@@ -46,8 +46,8 @@ which has the name `version`, so you can use it in the rest of your workflow.
 
 The `version-keys` input is just a comma delimited list of XML keys to search for in the XML file.  
 Example:  
-If the value of the `version-keys` input was ***"Version,FileVersion"***, than it would search
-the XML for any XML elements that match the name ***"Version"*** or ***"FileVersion"***.  The first element that has a value will be the value returned.  So if the XML element ***"Version"*** had a value of ***1.2.3***, than it would simply return the value of the ***"Version"*** element and stop looking for values in any other XML elements.
+If the value of the `version-keys` input was ***"Version,FileVersion"***, then it would search
+the XML for any XML elements that match the name ***"Version"*** or ***"FileVersion"***.  The first element that has a value will be the value returned.  So if the XML element ***"Version"*** had a value of ***1.2.3***, then it would simply return the value of the ***"Version"*** element and stop looking for values in any other XML elements.
 
 ---
 
@@ -111,8 +111,8 @@ So if the C# project file had the contents below, the workflow above would print
 | `file-path` | The path to the file relative to the root of the repository. | yes | N/A |
 | `version-keys` | The key(s) that can hold the version in the file. | yes | N/A |
 | `case-sensitive-keys` | If true, key searching will be case-sensitive. | no | `true` |
-| `fail-on-key-value-mismatch` | If true, will fail the action if all of the key values listed in the `version-keys` input do not match.  Other failure inputs will not affect this input. | no | `false` |
-| `fail-when-version-not-found` | If true, will fail the action if no version exists.   Other failure inputs will not affect this input. | no | `true` |
+| `fail-on-key-value-mismatch` | If true, the action will fail, if all of the key values listed in the `version-keys` input do not match.  Other failure inputs will not affect this input. | no | `false` |
+| `fail-when-version-not-found` | If true, the action will fail, if no version exists.   Other failure inputs will not affect this input. | no | `true` |
 
 ---
 
@@ -129,7 +129,7 @@ So if the C# project file had the contents below, the workflow above would print
 Requirements:
 - Search for a version but do not fail the workflow if no version is found
 
-⚠️The action input `fail-when-version-not-found` is not required and has a default value of `true`.  If you do not want the action to fail whe the version is not found, you must explicitly use the input.
+⚠️The action input `fail-when-version-not-found` is not required and has a default value of `true`.  If you do not want the action to fail when the version is not found, you must explicitly use the input.
 
 ``` yml
 #Example 1 Workflow
@@ -214,7 +214,7 @@ Result:
         branch-name: master
         file-type: xml
         file-path: MyProject/MyProject.csproj
-        version-keys: VeRSion
+        version-keys: VeRSion 👈🏼 # Different casing as XML key below
 ```
 ``` xml
 <!--Example 3 C# Project File-->
@@ -223,7 +223,7 @@ Result:
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>10.0</LangVersion>
-    <version>1.2.3</version>👈🏼Same element name but is lower case.  Still finds the element.
+    <version>1.2.3</version> 👈🏼 <!--Spelling matches "VeRSion" but still is found as a version key.-->
 </Project>
 ```
 

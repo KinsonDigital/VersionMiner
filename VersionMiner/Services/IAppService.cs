@@ -16,7 +16,7 @@ public interface IAppService
     void Exit(int code);
 
     /// <summary>
-    /// Exits the application with the no error code of 0.
+    /// Exits the application with no error code.
     /// </summary>
     void ExitWithNoError();
 

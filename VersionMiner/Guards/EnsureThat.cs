@@ -6,9 +6,9 @@ using System.Runtime.CompilerServices;
 
 namespace VersionMiner.Guards;
 
- /// <summary>
-/// Performs analysis on particular values to ensure that a value meets a criteria,
-/// then invokes behavior based on result.
+/// <summary>
+/// Performs analysis on particular values to ensure that they meet a criteria,
+/// then invokes behavior based on a result.
 /// </summary>
 internal static class EnsureThat
 {

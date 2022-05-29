@@ -68,7 +68,7 @@ public static class ExtensionMethodsForTesting
     }
 
     /// <summary>
-    /// Asserts the properties below.
+    /// Asserts the properties below:
     /// <list type="bullet">
     ///     <item><see cref="OptionAttribute"/>.<see cref="OptionAttribute.LongName"/></item>
     ///     <item><see cref="OptionAttribute"/>.<see cref="BaseAttribute.Required"/></item>
@@ -80,7 +80,7 @@ public static class ExtensionMethodsForTesting
     /// <param name="requiredExpected">The expected value of the <see cref="OptionAttribute.Required"/> property.</param>
     /// <param name="helpTextExpected">The expected value of the <see cref="OptionAttribute.HelpText"/> property.</param>
     /// <exception cref="AssertActualExpectedException">
-    ///     Thrown if the any of the properties are not the correct values.
+    ///     Thrown if any of the properties are not the correct values.
     /// </exception>
     public static void AssertOptionAttrProps(this OptionAttribute value,
         string longNameExpected,
@@ -113,7 +113,7 @@ public static class ExtensionMethodsForTesting
     }
 
     /// <summary>
-    /// Asserts the properties below.
+    /// Asserts the properties below:
     /// <list type="bullet">
     ///     <item><see cref="OptionAttribute"/>.<see cref="OptionAttribute.LongName"/></item>
     ///     <item><see cref="OptionAttribute"/>.<see cref="BaseAttribute.Required"/></item>

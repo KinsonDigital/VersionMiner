@@ -5,7 +5,7 @@
 namespace VersionMiner.Exceptions;
 
 /// <summary>
-/// Thrown if a XML element does not contain a value.
+/// Thrown if an XML element does not contain a value.
 /// </summary>
 public class NoXMLElementException : Exception
 {

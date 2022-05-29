@@ -5,7 +5,7 @@
 namespace VersionMiner;
 
 /// <summary>
-/// Provides extensions to various things.
+/// Provides extensions.
 /// </summary>
 public static class ExtensionMethods
 {
@@ -18,7 +18,7 @@ public static class ExtensionMethods
     };
 
     /// <summary>
-    /// Returns a value indicating if the given <b>string</b> <paramref name="value"/>
+    /// Returns a value indicating whether or not the given <b>string</b> <paramref name="value"/>
     /// contains a drive letter with other required syntax.
     /// </summary>
     /// <param name="value">The value that might be a path.</param>

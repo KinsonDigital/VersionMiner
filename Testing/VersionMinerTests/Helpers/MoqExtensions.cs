@@ -22,7 +22,7 @@ public static class MoqExtensions
     /// <param name="expression">Expression to verify.</param>
     /// <typeparam name="T">Type to mock, which can be an interface, a class, or a delegate.</typeparam>
     /// <exception cref="MockException">
-    ///   The invocation was called when it was expected to never be called.
+    ///   The invocation was called when it was not expected to be called.
     /// </exception>
     public static void VerifyOnce<T>(this Mock<T> mock, Expression<Action<T>> expression)
         where T : class
@@ -64,7 +64,7 @@ public static class MoqExtensions
     /// <param name="expression">Expression to verify.</param>
     /// <typeparam name="T">Type to mock, which can be an interface, a class, or a delegate.</typeparam>
     /// <exception cref="MockException">
-    ///   The invocation was called when it was expected to never be called.
+    ///   The invocation was called when it was not expected to be called.
     /// </exception>
     public static void VerifyNever<T>(this Mock<T> mock, Expression<Action<T>> expression)
         where T : class

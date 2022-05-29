@@ -7,7 +7,7 @@ using VersionMiner.Exceptions;
 namespace VersionMiner.Services;
 
 /// <summary>
-/// Provides the ability to set the github action output.
+/// Provides the ability to set the GitHub action output.
 /// </summary>
 public interface IActionOutputService
 {
