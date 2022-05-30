@@ -16,7 +16,7 @@ namespace VersionMiner;
 [ExcludeFromCodeCoverage]
 public static class Program
 {
-    private static IHost _host = null!;
+    private static IHost host = null!;
 
     /// <summary>
     /// The main entry point of the GitHub action.
@@ -25,7 +25,7 @@ public static class Program
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     public static async Task Main(string[] args)
     {
-        _host = Host.CreateDefaultBuilder(args)
+        host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((_, services) =>
             {
                 services.AddSingleton<IAppService, AppService>();
@@ -37,11 +37,11 @@ public static class Program
                 services.AddSingleton<IGitHubAction, GitHubAction>();
             }).Build();
 
-        var appService = _host.Services.GetRequiredService<IAppService>();
-        var gitHubAction = _host.Services.GetRequiredService<IGitHubAction>();
-        var consoleService = _host.Services.GetRequiredService<IGitHubConsoleService>();
+        var appService = host.Services.GetRequiredService<IAppService>();
+        var gitHubAction = host.Services.GetRequiredService<IGitHubAction>();
+        var consoleService = host.Services.GetRequiredService<IGitHubConsoleService>();
 
-        var argParsingService = _host.Services.GetRequiredService<IArgParsingService<ActionInputs>>();
+        var argParsingService = host.Services.GetRequiredService<IArgParsingService<ActionInputs>>();
 
         await argParsingService.ParseArguments(
             new ActionInputs(),
@@ -52,14 +52,14 @@ public static class Program
                     inputs,
                     () =>
                     {
-                        _host.Dispose();
+                        host.Dispose();
                         Default.Dispose();
                         gitHubAction.Dispose();
                         appService.Exit(0);
                     },
                     (e) =>
                     {
-                        _host.Dispose();
+                        host.Dispose();
                         Default.Dispose();
                         gitHubAction.Dispose();
                         appService.ExitWithException(e);

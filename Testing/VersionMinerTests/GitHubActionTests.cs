@@ -20,30 +20,30 @@ public class GitHubActionTests
     private const string XMLVersionTagName = "Version";
     private const string XMLFileVersionTagName = "FileVersion";
     private const string XMLFileType = "xml";
-    private readonly Mock<IGitHubConsoleService> _mockConsoleService;
-    private readonly Mock<IGitHubDataService> _mockDataService;
-    private readonly Mock<IDataParserService> _mockXMLParserService;
-    private readonly Mock<IActionOutputService> _mockActionOutputService;
+    private readonly Mock<IGitHubConsoleService> mockConsoleService;
+    private readonly Mock<IGitHubDataService> mockDataService;
+    private readonly Mock<IDataParserService> mockXMLParserService;
+    private readonly Mock<IActionOutputService> mockActionOutputService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GitHubActionTests"/> class.
     /// </summary>
     public GitHubActionTests()
     {
-        _mockConsoleService = new Mock<IGitHubConsoleService>();
+        this.mockConsoleService = new Mock<IGitHubConsoleService>();
 
-        _mockDataService = new Mock<IGitHubDataService>();
-        _mockDataService.Setup(m => m.OwnerExists())
+        this.mockDataService = new Mock<IGitHubDataService>();
+        this.mockDataService.Setup(m => m.OwnerExists())
             .ReturnsAsync(() => true);
-        _mockDataService.Setup(m => m.RepoExists())
+        this.mockDataService.Setup(m => m.RepoExists())
             .ReturnsAsync(() => true);
-        _mockDataService.Setup(m => m.BranchExists())
+        this.mockDataService.Setup(m => m.BranchExists())
             .ReturnsAsync(() => true);
-        _mockDataService.Setup(m => m.GetFileData())
+        this.mockDataService.Setup(m => m.GetFileData())
             .ReturnsAsync(() => string.Empty);
 
-        _mockXMLParserService = new Mock<IDataParserService>();
-        _mockActionOutputService = new Mock<IActionOutputService>();
+        this.mockXMLParserService = new Mock<IDataParserService>();
+        this.mockActionOutputService = new Mock<IActionOutputService>();
     }
 
     #region Constructor Tests
@@ -54,10 +54,7 @@ public class GitHubActionTests
         var act = () =>
         {
             _ = new GitHubAction(
-                null,
-                _mockDataService.Object,
-                _mockXMLParserService.Object,
-                _mockActionOutputService.Object);
+                null, this.mockDataService.Object, this.mockXMLParserService.Object, this.mockActionOutputService.Object);
         };
 
         // Assert
@@ -73,10 +70,10 @@ public class GitHubActionTests
         var act = () =>
         {
             _ = new GitHubAction(
-                _mockConsoleService.Object,
+                this.mockConsoleService.Object,
                 null,
-                _mockXMLParserService.Object,
-                _mockActionOutputService.Object);
+                this.mockXMLParserService.Object,
+                this.mockActionOutputService.Object);
         };
 
         // Assert
@@ -92,10 +89,10 @@ public class GitHubActionTests
         var act = () =>
         {
             _ = new GitHubAction(
-                _mockConsoleService.Object,
-                _mockDataService.Object,
+                this.mockConsoleService.Object,
+                this.mockDataService.Object,
                 null,
-                _mockActionOutputService.Object);
+                this.mockActionOutputService.Object);
         };
 
         // Assert
@@ -111,9 +108,9 @@ public class GitHubActionTests
         var act = () =>
         {
             _ = new GitHubAction(
-                _mockConsoleService.Object,
-                _mockDataService.Object,
-                _mockXMLParserService.Object,
+                this.mockConsoleService.Object,
+                this.mockDataService.Object,
+                this.mockXMLParserService.Object,
                 null);
         };
 
@@ -137,8 +134,8 @@ public class GitHubActionTests
         await action.Run(inputs, () => { }, _ => { });
 
         // Assert
-        _mockConsoleService.VerifyOnce(m => m.WriteLine("Welcome to Version Miner!! 🪨⛏️"));
-        _mockConsoleService.VerifyOnce(m => m.WriteLine("A GitHub action for pulling versions out of various types of files!!"));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Welcome to Version Miner!! 🪨⛏️"));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("A GitHub action for pulling versions out of various types of files!!"));
     }
 
     [Fact]
@@ -155,13 +152,13 @@ public class GitHubActionTests
         var actualExecutionOrder = new List<string>();
         var inputs = CreateInputs("Version");
 
-        _mockConsoleService.Setup(m => m.WriteLine(It.IsAny<string>()))
+        this.mockConsoleService.Setup(m => m.WriteLine(It.IsAny<string>()))
             .Callback<string>(value => actualExecutionOrder.Add($"{nameof(IGitHubConsoleService.WriteLine)}|{value}"));
-        _mockConsoleService.Setup(m => m.BlankLine())
+        this.mockConsoleService.Setup(m => m.BlankLine())
             .Callback(() => actualExecutionOrder.Add($"{nameof(IGitHubConsoleService.BlankLine)}"));
-        _mockConsoleService.Setup(m => m.StartGroup(It.IsAny<string>()))
+        this.mockConsoleService.Setup(m => m.StartGroup(It.IsAny<string>()))
             .Callback<string>(value => actualExecutionOrder.Add($"{nameof(IGitHubConsoleService.StartGroup)}|{value}"));
-        _mockConsoleService.Setup(m => m.EndGroup())
+        this.mockConsoleService.Setup(m => m.EndGroup())
             .Callback(() => actualExecutionOrder.Add($"{nameof(IGitHubConsoleService.EndGroup)}"));
 
         var action = CreateAction();
@@ -178,10 +175,10 @@ public class GitHubActionTests
     public async void Run_WhenInvoked_SetsDataServiceProps()
     {
         // Arrange
-        _mockDataService.SetupSet(p => p.RepoOwner = It.IsAny<string>());
-        _mockDataService.SetupSet(p => p.RepoName = It.IsAny<string>());
-        _mockDataService.SetupSet(p => p.BranchName = It.IsAny<string>());
-        _mockDataService.SetupSet(p => p.FilePath = It.IsAny<string>());
+        this.mockDataService.SetupSet(p => p.RepoOwner = It.IsAny<string>());
+        this.mockDataService.SetupSet(p => p.RepoName = It.IsAny<string>());
+        this.mockDataService.SetupSet(p => p.BranchName = It.IsAny<string>());
+        this.mockDataService.SetupSet(p => p.FilePath = It.IsAny<string>());
         var inputs = CreateInputs("Version");
         var action = CreateAction();
 
@@ -189,10 +186,10 @@ public class GitHubActionTests
         await action.Run(inputs, () => { }, _ => { });
 
         // Assert
-        _mockDataService.VerifySetOnce(p => p.RepoOwner = "test-owner");
-        _mockDataService.VerifySetOnce(p => p.RepoName = "test-name");
-        _mockDataService.VerifySetOnce(p => p.BranchName = "test-branch");
-        _mockDataService.VerifySetOnce(p => p.FilePath = "test-path");
+        this.mockDataService.VerifySetOnce(p => p.RepoOwner = "test-owner");
+        this.mockDataService.VerifySetOnce(p => p.RepoName = "test-name");
+        this.mockDataService.VerifySetOnce(p => p.BranchName = "test-branch");
+        this.mockDataService.VerifySetOnce(p => p.FilePath = "test-path");
     }
 
     [Fact]
@@ -220,7 +217,7 @@ public class GitHubActionTests
     public async void Run_WhenRepoOwnerDoesNotExist_ThrowsException()
     {
         // Arrange
-        _mockDataService.Setup(m => m.OwnerExists()).ReturnsAsync(false);
+        this.mockDataService.Setup(m => m.OwnerExists()).ReturnsAsync(false);
 
         var inputs = CreateInputs(It.IsAny<string>());
         var action = CreateAction();
@@ -238,7 +235,7 @@ public class GitHubActionTests
     public async void Run_WhenRepoNameDoesNotExist_ThrowsException()
     {
         // Arrange
-        _mockDataService.Setup(m => m.RepoExists()).ReturnsAsync(false);
+        this.mockDataService.Setup(m => m.RepoExists()).ReturnsAsync(false);
 
         var inputs = CreateInputs(It.IsAny<string>());
         var action = CreateAction();
@@ -256,7 +253,7 @@ public class GitHubActionTests
     public async void Run_WhenBranchNameDoesNotExist_ThrowsException()
     {
         // Arrange
-        _mockDataService.Setup(m => m.BranchExists()).ReturnsAsync(false);
+        this.mockDataService.Setup(m => m.BranchExists()).ReturnsAsync(false);
 
         var inputs = CreateInputs(It.IsAny<string>());
         var action = CreateAction();
@@ -278,13 +275,13 @@ public class GitHubActionTests
         expectedExceptionMsg += "This failure only occurs if the 'fail-on-key-value-mismatch' action input is set to 'true'.";
 
         const string testData = "test-data";
-        _mockDataService.Setup(m => m.GetFileData())
+        this.mockDataService.Setup(m => m.GetFileData())
             .ReturnsAsync(testData);
-        _mockXMLParserService.Setup(m => m.KeyExists(testData, XMLVersionTagName, true)).Returns(true);
-        _mockXMLParserService.Setup(m => m.KeyExists(testData, XMLFileVersionTagName, true)).Returns(true);
-        _mockXMLParserService.Setup(m => m.GetKeyValue(testData, XMLVersionTagName, true))
+        this.mockXMLParserService.Setup(m => m.KeyExists(testData, XMLVersionTagName, true)).Returns(true);
+        this.mockXMLParserService.Setup(m => m.KeyExists(testData, XMLFileVersionTagName, true)).Returns(true);
+        this.mockXMLParserService.Setup(m => m.GetKeyValue(testData, XMLVersionTagName, true))
             .Returns("1.2.3");
-        _mockXMLParserService.Setup(m => m.GetKeyValue(testData, XMLFileVersionTagName, true))
+        this.mockXMLParserService.Setup(m => m.GetKeyValue(testData, XMLFileVersionTagName, true))
             .Returns("3.2.1");
 
         var inputs = CreateInputs("Version,FileVersion");
@@ -297,11 +294,11 @@ public class GitHubActionTests
         await act.Should()
             .ThrowAsync<ValuesMismatchException>()
             .WithMessage(expectedExceptionMsg);
-        _mockXMLParserService.VerifyOnce(m => m.KeyExists(testData, XMLVersionTagName, true));
-        _mockXMLParserService.VerifyOnce(m => m.KeyExists(testData, XMLFileVersionTagName, true));
-        _mockXMLParserService.VerifyOnce(m => m.GetKeyValue(testData, XMLVersionTagName, true));
-        _mockXMLParserService.VerifyOnce(m => m.GetKeyValue(testData, XMLFileVersionTagName, true));
-        _mockActionOutputService.VerifyNever(m => m.SetOutputValue(It.IsAny<string>(), It.IsAny<string>()));
+        this.mockXMLParserService.VerifyOnce(m => m.KeyExists(testData, XMLVersionTagName, true));
+        this.mockXMLParserService.VerifyOnce(m => m.KeyExists(testData, XMLFileVersionTagName, true));
+        this.mockXMLParserService.VerifyOnce(m => m.GetKeyValue(testData, XMLVersionTagName, true));
+        this.mockXMLParserService.VerifyOnce(m => m.GetKeyValue(testData, XMLFileVersionTagName, true));
+        this.mockActionOutputService.VerifyNever(m => m.SetOutputValue(It.IsAny<string>(), It.IsAny<string>()));
     }
 
     [Theory]
@@ -314,7 +311,7 @@ public class GitHubActionTests
     {
         // Arrange
         const string testData = "test-data"; // TODO: Remove
-        _mockDataService.Setup(m => m.GetFileData())
+        this.mockDataService.Setup(m => m.GetFileData())
             .ReturnsAsync(testData);
 
         var inputs = CreateInputs(versionKeys,
@@ -345,7 +342,7 @@ public class GitHubActionTests
         // Arrange
         var keys = versionKeys.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         const string testData = "test-data"; // TODO: Remove
-        _mockDataService.Setup(m => m.GetFileData())
+        this.mockDataService.Setup(m => m.GetFileData())
             .ReturnsAsync(testData);
 
         var inputs = CreateInputs(versionKeys,
@@ -359,7 +356,7 @@ public class GitHubActionTests
         // Assert
         Assert.All(keys, key =>
         {
-            _mockXMLParserService.VerifyOnce(m => m.KeyExists(It.IsAny<string>(), key, true));
+            this.mockXMLParserService.VerifyOnce(m => m.KeyExists(It.IsAny<string>(), key, true));
         });
     }
 
@@ -369,13 +366,13 @@ public class GitHubActionTests
         // Arrange
         const string expectedVersion = "1.2.3";
         const string testData = "test-data";
-        _mockDataService.Setup(m => m.GetFileData())
+        this.mockDataService.Setup(m => m.GetFileData())
             .ReturnsAsync(testData);
-        _mockXMLParserService.Setup(m => m.KeyExists(testData, XMLVersionTagName, true)).Returns(true);
-        _mockXMLParserService.Setup(m => m.KeyExists(testData, XMLFileVersionTagName, true)).Returns(true);
-        _mockXMLParserService.Setup(m => m.GetKeyValue(testData, XMLVersionTagName, true))
+        this.mockXMLParserService.Setup(m => m.KeyExists(testData, XMLVersionTagName, true)).Returns(true);
+        this.mockXMLParserService.Setup(m => m.KeyExists(testData, XMLFileVersionTagName, true)).Returns(true);
+        this.mockXMLParserService.Setup(m => m.GetKeyValue(testData, XMLVersionTagName, true))
             .Returns(string.Empty);
-        _mockXMLParserService.Setup(m => m.GetKeyValue(testData, XMLFileVersionTagName, true))
+        this.mockXMLParserService.Setup(m => m.GetKeyValue(testData, XMLFileVersionTagName, true))
             .Returns(expectedVersion);
 
         var inputs = CreateInputs("Version,FileVersion",
@@ -386,34 +383,34 @@ public class GitHubActionTests
         await action.Run(inputs, () => { }, _ => { });
 
         // Assert
-        _mockXMLParserService.VerifyOnce(m => m.KeyExists(testData, XMLVersionTagName, true));
-        _mockXMLParserService.VerifyOnce(m => m.KeyExists(testData, XMLFileVersionTagName, true));
-        _mockXMLParserService.VerifyOnce(m => m.GetKeyValue(testData, XMLVersionTagName, true));
-        _mockXMLParserService.VerifyOnce(m => m.GetKeyValue(testData, XMLFileVersionTagName, true));
-        _mockActionOutputService.VerifyOnce(m => m.SetOutputValue(VersionOutputName, expectedVersion));
-        _mockConsoleService.VerifyOnce(m => m.StartGroup("Version Miner Outputs"));
-        _mockConsoleService.VerifyOnce(m => m.WriteLine($"version: {expectedVersion}"));
-        _mockConsoleService.VerifyOnce(m => m.EndGroup());
+        this.mockXMLParserService.VerifyOnce(m => m.KeyExists(testData, XMLVersionTagName, true));
+        this.mockXMLParserService.VerifyOnce(m => m.KeyExists(testData, XMLFileVersionTagName, true));
+        this.mockXMLParserService.VerifyOnce(m => m.GetKeyValue(testData, XMLVersionTagName, true));
+        this.mockXMLParserService.VerifyOnce(m => m.GetKeyValue(testData, XMLFileVersionTagName, true));
+        this.mockActionOutputService.VerifyOnce(m => m.SetOutputValue(VersionOutputName, expectedVersion));
+        this.mockConsoleService.VerifyOnce(m => m.StartGroup("Version Miner Outputs"));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine($"version: {expectedVersion}"));
+        this.mockConsoleService.VerifyOnce(m => m.EndGroup());
 
-        _mockConsoleService.VerifyOnce(m => m.Write($"✔️️Verifying if the repository owner '{inputs.RepoOwner}' exists . . . ", false));
-        _mockConsoleService.VerifyOnce(m => m.Write("the owner exists.", true));
+        this.mockConsoleService.VerifyOnce(m => m.Write($"✔️️Verifying if the repository owner '{inputs.RepoOwner}' exists . . . ", false));
+        this.mockConsoleService.VerifyOnce(m => m.Write("the owner exists.", true));
 
-        _mockConsoleService.VerifyOnce(m => m.Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ", false));
-        _mockConsoleService.VerifyOnce(m => m.Write("the repository exists.", true));
+        this.mockConsoleService.VerifyOnce(m => m.Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ", false));
+        this.mockConsoleService.VerifyOnce(m => m.Write("the repository exists.", true));
 
-        _mockConsoleService.VerifyOnce(m => m.Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ", false));
-        _mockConsoleService.VerifyOnce(m => m.Write("the branch exists.", true));
+        this.mockConsoleService.VerifyOnce(m => m.Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ", false));
+        this.mockConsoleService.VerifyOnce(m => m.Write("the branch exists.", true));
 
-        _mockConsoleService.VerifyOnce(m => m.Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ", false));
-        _mockConsoleService.VerifyOnce(m => m.Write("data retrieved", true));
+        this.mockConsoleService.VerifyOnce(m => m.Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ", false));
+        this.mockConsoleService.VerifyOnce(m => m.Write("data retrieved", true));
 
-        _mockConsoleService.VerifyOnce(m => m.Write("✔️️Validating version keys . . . ", false));
-        _mockConsoleService.VerifyOnce(m => m.Write("version keys validated.", true));
+        this.mockConsoleService.VerifyOnce(m => m.Write("✔️️Validating version keys . . . ", false));
+        this.mockConsoleService.VerifyOnce(m => m.Write("version keys validated.", true));
 
-        _mockConsoleService.VerifyOnce(m => m.Write("✔️️Pulling version from file . . . ", false));
-        _mockConsoleService.VerifyOnce(m => m.Write("version pulled from file.", true));
+        this.mockConsoleService.VerifyOnce(m => m.Write("✔️️Pulling version from file . . . ", false));
+        this.mockConsoleService.VerifyOnce(m => m.Write("version pulled from file.", true));
 
-        _mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(9));
+        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(9));
     }
 
     [Fact]
@@ -424,8 +421,8 @@ public class GitHubActionTests
         expectedExceptionMsg += $"{Environment.NewLine}If you do not want the GitHub action to fail when no version is found,";
         expectedExceptionMsg += "set the 'fail-when-version-not-found' input to a value of 'false'.";
 
-        _mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), XMLVersionTagName, true)).Returns(true);
-        _mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), XMLVersionTagName, true)).Returns(string.Empty);
+        this.mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), XMLVersionTagName, true)).Returns(true);
+        this.mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), XMLVersionTagName, true)).Returns(string.Empty);
         var inputs = CreateInputs("Version",
             failWhenVersionNotFound: true);
         var action = CreateAction();
@@ -443,9 +440,9 @@ public class GitHubActionTests
     public async void Run_WhenAllKeysExistButAreEmptyForOnKeyValueMismatchInput_DoesNotFail()
     {
         // Arrange
-        _mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+        this.mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
             .Returns(true);
-        _mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+        this.mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
             .Returns(string.Empty);
 
         var inputs = CreateInputs("Version,FileVersion,AssemblyVersion",
@@ -471,7 +468,7 @@ public class GitHubActionTests
         action.Dispose();
 
         // Assert
-        _mockDataService.VerifyOnce(m => m.Dispose());
+        this.mockDataService.VerifyOnce(m => m.Dispose());
     }
     #endregion
 
@@ -498,9 +495,5 @@ public class GitHubActionTests
     /// </summary>
     /// <returns>The instance to test.</returns>
     private GitHubAction CreateAction()
-        => new (
-            _mockConsoleService.Object,
-            _mockDataService.Object,
-            _mockXMLParserService.Object,
-            _mockActionOutputService.Object);
+        => new (this.mockConsoleService.Object, this.mockDataService.Object, this.mockXMLParserService.Object, this.mockActionOutputService.Object);
 }

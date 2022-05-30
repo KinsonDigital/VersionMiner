@@ -14,7 +14,7 @@ public class CSharpProjFileService
     private const string VersionElementName = "Version";
     private const string FileVersionElementName = "FileVersion";
     private const string AssemblyVersionElementName = "AssemblyVersion";
-    private readonly IDataParserService _xmlParserService;
+    private readonly IDataParserService xmlParserService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CSharpProjFileService"/> class.
@@ -23,7 +23,7 @@ public class CSharpProjFileService
     public CSharpProjFileService(IDataParserService xmlParserService)
     {
         EnsureThat.CtorParamIsNotNull(xmlParserService);
-        _xmlParserService = xmlParserService;
+        this.xmlParserService = xmlParserService;
     }
 
     /// <summary>
@@ -37,14 +37,14 @@ public class CSharpProjFileService
     /// </returns>
     public (bool exists, string version) GetVersion(string projFileData)
     {
-        var keyExists = _xmlParserService.KeyExists(projFileData, VersionElementName);
+        var keyExists = this.xmlParserService.KeyExists(projFileData, VersionElementName);
 
         if (keyExists is false)
         {
             return (false, string.Empty);
         }
 
-        var version = _xmlParserService.GetKeyValue(projFileData, VersionElementName);
+        var version = this.xmlParserService.GetKeyValue(projFileData, VersionElementName);
 
         return (true, version);
     }
@@ -60,14 +60,14 @@ public class CSharpProjFileService
     /// </returns>
     public (bool exists, string version) GetFileVersion(string projFileData)
     {
-        var keyExists = _xmlParserService.KeyExists(projFileData, FileVersionElementName);
+        var keyExists = this.xmlParserService.KeyExists(projFileData, FileVersionElementName);
 
         if (keyExists is false)
         {
             return (false, string.Empty);
         }
 
-        var version = _xmlParserService.GetKeyValue(projFileData, FileVersionElementName);
+        var version = this.xmlParserService.GetKeyValue(projFileData, FileVersionElementName);
 
         return (true, version);
     }
@@ -83,14 +83,14 @@ public class CSharpProjFileService
     /// </returns>
     public (bool exists, string version) GetAssemblyVersion(string projFileData)
     {
-        var keyExists = _xmlParserService.KeyExists(projFileData, AssemblyVersionElementName);
+        var keyExists = this.xmlParserService.KeyExists(projFileData, AssemblyVersionElementName);
 
         if (keyExists is false)
         {
             return (false, string.Empty);
         }
 
-        var version = _xmlParserService.GetKeyValue(projFileData, AssemblyVersionElementName);
+        var version = this.xmlParserService.GetKeyValue(projFileData, AssemblyVersionElementName);
 
         return (keyExists, version);
     }

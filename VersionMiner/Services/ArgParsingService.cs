@@ -10,7 +10,7 @@ namespace VersionMiner.Services;
 [ExcludeFromCodeCoverage]
 public sealed class ArgParsingService : IArgParsingService<ActionInputs>
 {
-    private bool _isDisposed;
+    private bool isDisposed;
 
     /// <inheritdoc/>
     public async Task ParseArguments(
@@ -19,13 +19,13 @@ public sealed class ArgParsingService : IArgParsingService<ActionInputs>
         Func<ActionInputs, Task> onSuccess,
         Action<string[]> onFailure)
     {
-        var parser = Default.ParseArguments(() => inputs, args);
+        ParserResult<ActionInputs>? parser = Default.ParseArguments(() => inputs, args);
 
         parser.WithNotParsed(errors =>
         {
             var result = new List<string>();
 
-            foreach (var error in errors)
+            foreach (Error? error in errors)
             {
                 if (error is UnknownOptionError unknownOptionError)
                 {
@@ -54,13 +54,13 @@ public sealed class ArgParsingService : IArgParsingService<ActionInputs>
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (_isDisposed)
+        if (this.isDisposed)
         {
             return;
         }
 
         Default.Dispose();
 
-        _isDisposed = true;
+        this.isDisposed = true;
     }
 }

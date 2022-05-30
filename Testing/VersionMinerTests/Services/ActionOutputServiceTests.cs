@@ -12,12 +12,12 @@ namespace VersionMinerTests.Services;
 
 public class ActionOutputServiceTests
 {
-    private readonly Mock<IGitHubConsoleService> _mockConsoleService;
+    private readonly Mock<IGitHubConsoleService> mockConsoleService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ActionOutputServiceTests"/> class.
     /// </summary>
-    public ActionOutputServiceTests() => _mockConsoleService = new Mock<IGitHubConsoleService>();
+    public ActionOutputServiceTests() => this.mockConsoleService = new Mock<IGitHubConsoleService>();
 
     #region Constructor Tests
     [Fact]
@@ -47,7 +47,7 @@ public class ActionOutputServiceTests
         service.SetOutputValue("my-output", "my-value");
 
         // Assert
-        _mockConsoleService.VerifyOnce(m => m.WriteLine("::set-output name=my-output::my-value"));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("::set-output name=my-output::my-value"));
     }
 
     [Fact]
@@ -70,5 +70,5 @@ public class ActionOutputServiceTests
     /// Creates a new instance of <see cref="ActionOutputService"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private ActionOutputService CreateService() => new ActionOutputService(_mockConsoleService.Object);
+    private ActionOutputService CreateService() => new ActionOutputService(this.mockConsoleService.Object);
 }

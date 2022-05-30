@@ -10,7 +10,7 @@ namespace VersionMiner.Services;
 /// <inheritdoc/>
 public class ActionOutputService : IActionOutputService
 {
-    private readonly IGitHubConsoleService _gitHubConsoleService;
+    private readonly IGitHubConsoleService gitHubConsoleService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ActionOutputService"/> class.
@@ -19,7 +19,7 @@ public class ActionOutputService : IActionOutputService
     public ActionOutputService(IGitHubConsoleService gitHubConsoleService)
     {
         EnsureThat.CtorParamIsNotNull(gitHubConsoleService);
-        _gitHubConsoleService = gitHubConsoleService;
+        this.gitHubConsoleService = gitHubConsoleService;
     }
 
     /// <inheritdoc/>
@@ -30,6 +30,6 @@ public class ActionOutputService : IActionOutputService
             throw new NullOrEmptyStringException($"The parameter '{nameof(name)}' must not be null or empty.");
         }
 
-        _gitHubConsoleService.WriteLine($"::set-output name={name}::{value}");
+        this.gitHubConsoleService.WriteLine($"::set-output name={name}::{value}");
     }
 }

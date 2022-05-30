@@ -13,12 +13,12 @@ namespace VersionMinerTests.Services;
 /// </summary>
 public class CSharpProjFileServiceTests
 {
-    private readonly Mock<IDataParserService> _mockXMLParserService;
+    private readonly Mock<IDataParserService> mockXMLParserService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CSharpProjFileServiceTests"/> class.
     /// </summary>
-    public CSharpProjFileServiceTests() => _mockXMLParserService = new Mock<IDataParserService>();
+    public CSharpProjFileServiceTests() => this.mockXMLParserService = new Mock<IDataParserService>();
 
     #region Constructor Tests
     [Fact]
@@ -47,10 +47,10 @@ public class CSharpProjFileServiceTests
     {
         // Arrange
         var expectedValue = keyExists ? keyValue : string.Empty;
-        _mockXMLParserService.Setup(m
+        this.mockXMLParserService.Setup(m
                 => m.KeyExists("sample-data", "Version", true))
                     .Returns(keyExists);
-        _mockXMLParserService.Setup(m
+        this.mockXMLParserService.Setup(m
                 => m.GetKeyValue("sample-data", "Version", true))
             .Returns(keyValue);
 
@@ -73,10 +73,10 @@ public class CSharpProjFileServiceTests
     {
         // Arrange
         var expectedValue = keyExists ? keyValue : string.Empty;
-        _mockXMLParserService.Setup(m
+        this.mockXMLParserService.Setup(m
                 => m.KeyExists("sample-data", "FileVersion", true))
             .Returns(keyExists);
-        _mockXMLParserService.Setup(m
+        this.mockXMLParserService.Setup(m
                 => m.GetKeyValue("sample-data", "FileVersion", true))
             .Returns(keyValue);
 
@@ -99,10 +99,10 @@ public class CSharpProjFileServiceTests
     {
         // Arrange
         var expectedValue = keyExists ? keyValue : string.Empty;
-        _mockXMLParserService.Setup(m
+        this.mockXMLParserService.Setup(m
                 => m.KeyExists("sample-data", "AssemblyVersion", true))
             .Returns(keyExists);
-        _mockXMLParserService.Setup(m
+        this.mockXMLParserService.Setup(m
                 => m.GetKeyValue("sample-data", "AssemblyVersion", true))
             .Returns(keyValue);
 
@@ -121,5 +121,5 @@ public class CSharpProjFileServiceTests
     /// Creates a new instance of <see cref="CSharpProjFileService"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private CSharpProjFileService CreateService() => new (_mockXMLParserService.Object);
+    private CSharpProjFileService CreateService() => new (this.mockXMLParserService.Object);
 }

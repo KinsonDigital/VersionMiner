@@ -13,11 +13,11 @@ public sealed class GitHubAction : IGitHubAction
 {
     private const string VersionOutputName = "version";
     private const string XMLFileFormat = "xml";
-    private readonly IGitHubConsoleService _gitHubConsoleService;
-    private readonly IGitHubDataService _gitHubDataService;
-    private readonly IDataParserService _xmlParserService;
-    private readonly IActionOutputService _actionOutputService;
-    private bool _isDisposed;
+    private readonly IGitHubConsoleService gitHubConsoleService;
+    private readonly IGitHubDataService gitHubDataService;
+    private readonly IDataParserService xmlParserService;
+    private readonly IActionOutputService actionOutputService;
+    private bool isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GitHubAction"/> class.
@@ -37,10 +37,10 @@ public sealed class GitHubAction : IGitHubAction
         EnsureThat.CtorParamIsNotNull(xmlParserService);
         EnsureThat.CtorParamIsNotNull(actionOutputService);
 
-        _gitHubConsoleService = gitHubConsoleService;
-        _gitHubDataService = gitHubDataService;
-        _xmlParserService = xmlParserService;
-        _actionOutputService = actionOutputService;
+        this.gitHubConsoleService = gitHubConsoleService;
+        this.gitHubDataService = gitHubDataService;
+        this.xmlParserService = xmlParserService;
+        this.actionOutputService = actionOutputService;
     }
 
     /// <inheritdoc/>
@@ -48,10 +48,10 @@ public sealed class GitHubAction : IGitHubAction
     {
         ShowWelcomeMessage();
 
-        _gitHubDataService.RepoOwner = inputs.RepoOwner;
-        _gitHubDataService.RepoName = inputs.RepoName;
-        _gitHubDataService.BranchName = inputs.BranchName;
-        _gitHubDataService.FilePath = inputs.FilePath;
+        this.gitHubDataService.RepoOwner = inputs.RepoOwner;
+        this.gitHubDataService.RepoName = inputs.RepoName;
+        this.gitHubDataService.BranchName = inputs.BranchName;
+        this.gitHubDataService.FilePath = inputs.FilePath;
 
         try
         {
@@ -62,42 +62,42 @@ public sealed class GitHubAction : IGitHubAction
                 throw new InvalidFileTypeException(exMsg);
             }
 
-            _gitHubConsoleService.Write($"✔️️Verifying if the repository owner '{inputs.RepoOwner}' exists . . . ");
-            var ownerExists = await _gitHubDataService.OwnerExists();
+            this.gitHubConsoleService.Write($"✔️️Verifying if the repository owner '{inputs.RepoOwner}' exists . . . ");
+            var ownerExists = await this.gitHubDataService.OwnerExists();
             if (ownerExists is false)
             {
                 throw new OwnerDoesNotExistException($"The repository owner '{inputs.RepoOwner}' does not exist.");
             }
 
-            _gitHubConsoleService.Write("the owner exists.", true);
-            _gitHubConsoleService.BlankLine();
+            this.gitHubConsoleService.Write("the owner exists.", true);
+            this.gitHubConsoleService.BlankLine();
 
-            _gitHubConsoleService.Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ");
-            var repoExists = await _gitHubDataService.RepoExists();
+            this.gitHubConsoleService.Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ");
+            var repoExists = await this.gitHubDataService.RepoExists();
             if (repoExists is false)
             {
                 throw new RepoDoesNotExistException($"The repository '{inputs.RepoName}' does not exist.");
             }
 
-            _gitHubConsoleService.Write("the repository exists.", true);
-            _gitHubConsoleService.BlankLine();
+            this.gitHubConsoleService.Write("the repository exists.", true);
+            this.gitHubConsoleService.BlankLine();
 
-            _gitHubConsoleService.Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ");
-            var branchExists = await _gitHubDataService.BranchExists();
+            this.gitHubConsoleService.Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ");
+            var branchExists = await this.gitHubDataService.BranchExists();
             if (branchExists is false)
             {
                 throw new BranchDoesNotExistException($"The repository branch '{inputs.BranchName}' does not exist.");
             }
 
-            _gitHubConsoleService.Write("the branch exists.", true);
-            _gitHubConsoleService.BlankLine();
+            this.gitHubConsoleService.Write("the branch exists.", true);
+            this.gitHubConsoleService.BlankLine();
 
-            _gitHubConsoleService.Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ");
-            var xmlData = await _gitHubDataService.GetFileData();
-            _gitHubConsoleService.Write("data retrieved", true);
-            _gitHubConsoleService.BlankLine();
+            this.gitHubConsoleService.Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ");
+            var xmlData = await this.gitHubDataService.GetFileData();
+            this.gitHubConsoleService.Write("data retrieved", true);
+            this.gitHubConsoleService.BlankLine();
 
-            _gitHubConsoleService.Write("✔️️Validating version keys . . . ");
+            this.gitHubConsoleService.Write("✔️️Validating version keys . . . ");
             var keyValues = new List<string>();
             var versionKeys = inputs.VersionKeys.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
             if (versionKeys.Length <= 0)
@@ -105,22 +105,22 @@ public sealed class GitHubAction : IGitHubAction
                 throw new NoVersionFoundException("No version keys supplied for the 'version-keys' input.");
             }
 
-            _gitHubConsoleService.Write("version keys validated.", true);
-            _gitHubConsoleService.BlankLine();
+            this.gitHubConsoleService.Write("version keys validated.", true);
+            this.gitHubConsoleService.BlankLine();
 
-            _gitHubConsoleService.Write("✔️️Pulling version from file . . . ");
+            this.gitHubConsoleService.Write("✔️️Pulling version from file . . . ");
             foreach (var versionKey in versionKeys)
             {
-                var keyExists = _xmlParserService.KeyExists(xmlData, versionKey, inputs.CaseSensitiveKeys);
+                var keyExists = this.xmlParserService.KeyExists(xmlData, versionKey, inputs.CaseSensitiveKeys);
 
                 var keyValue = keyExists
-                    ? _xmlParserService.GetKeyValue(xmlData, versionKey)
+                    ? this.xmlParserService.GetKeyValue(xmlData, versionKey)
                     : string.Empty;
                 keyValues.Add(keyValue);
             }
 
-            _gitHubConsoleService.Write("version pulled from file.", true);
-            _gitHubConsoleService.BlankLine();
+            this.gitHubConsoleService.Write("version pulled from file.", true);
+            this.gitHubConsoleService.BlankLine();
 
             /* If the action should fail on key value mismatch,
              * collect all of the values for comparison.
@@ -148,12 +148,12 @@ public sealed class GitHubAction : IGitHubAction
                 throw new NoVersionFoundException(exceptionMsg);
             }
 
-            _gitHubConsoleService.StartGroup("Version Miner Outputs");
-            _gitHubConsoleService.WriteLine($"version: {version}");
-            _gitHubConsoleService.EndGroup();
-            _gitHubConsoleService.BlankLine();
+            this.gitHubConsoleService.StartGroup("Version Miner Outputs");
+            this.gitHubConsoleService.WriteLine($"version: {version}");
+            this.gitHubConsoleService.EndGroup();
+            this.gitHubConsoleService.BlankLine();
 
-            _actionOutputService.SetOutputValue(VersionOutputName, version);
+            this.actionOutputService.SetOutputValue(VersionOutputName, version);
         }
         catch (Exception e)
         {
@@ -172,17 +172,17 @@ public sealed class GitHubAction : IGitHubAction
     /// <param name="disposing">True to dispose of managed resources.</param>
     private void Dispose(bool disposing)
     {
-        if (_isDisposed)
+        if (this.isDisposed)
         {
             return;
         }
 
         if (disposing)
         {
-            _gitHubDataService.Dispose();
+            this.gitHubDataService.Dispose();
         }
 
-        _isDisposed = true;
+        this.isDisposed = true;
     }
 
     /// <summary>
@@ -190,9 +190,9 @@ public sealed class GitHubAction : IGitHubAction
     /// </summary>
     private void ShowWelcomeMessage()
     {
-        _gitHubConsoleService.WriteLine("Welcome to Version Miner!! 🪨⛏️");
-        _gitHubConsoleService.WriteLine("A GitHub action for pulling versions out of various types of files!!");
-        _gitHubConsoleService.BlankLine();
-        _gitHubConsoleService.BlankLine();
+        this.gitHubConsoleService.WriteLine("Welcome to Version Miner!! 🪨⛏️");
+        this.gitHubConsoleService.WriteLine("A GitHub action for pulling versions out of various types of files!!");
+        this.gitHubConsoleService.BlankLine();
+        this.gitHubConsoleService.BlankLine();
     }
 }

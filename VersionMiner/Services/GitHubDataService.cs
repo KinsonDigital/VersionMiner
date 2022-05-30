@@ -16,13 +16,13 @@ namespace VersionMiner.Services;
 public sealed class GitHubDataService : IGitHubDataService
 {
     private const string BaseUrl = "https://api.github.com";
-    private readonly RestClient _client;
-    private bool _isDisposed;
+    private readonly RestClient client;
+    private bool isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GitHubDataService"/> class.
     /// </summary>
-    public GitHubDataService() => _client = new RestClient(BaseUrl);
+    public GitHubDataService() => this.client = new RestClient(BaseUrl);
 
     /// <inheritdoc/>
     public string RepoOwner { get; set; } = string.Empty;
@@ -50,13 +50,13 @@ public sealed class GitHubDataService : IGitHubDataService
             throw new InvalidOperationException($"The '{nameof(RepoOwner)}' value cannot be null or empty.");
         }
 
-        _client.AcceptedContentTypes = new[] { "application/vnd.github.v3+json" };
+        this.client.AcceptedContentTypes = new[] { "application/vnd.github.v3+json" };
 
         const string resourceUrl = "users";
         var fullUrl = $"{BaseUrl}/{resourceUrl}/{RepoOwner}";
         var request = new RestRequest(fullUrl);
 
-        var response = await _client.ExecuteAsync<OwnerInfoModel>(request, Method.Get);
+        var response = await this.client.ExecuteAsync<OwnerInfoModel>(request, Method.Get);
 
         return response.StatusCode == HttpStatusCode.OK &&
             response.Data is not null &&
@@ -82,12 +82,12 @@ public sealed class GitHubDataService : IGitHubDataService
             throw new InvalidOperationException($"The '{nameof(RepoName)}' value cannot be null or empty.");
         }
 
-        _client.AcceptedContentTypes = new[] { "application/vnd.github.v3+json" };
+        this.client.AcceptedContentTypes = new[] { "application/vnd.github.v3+json" };
 
         var fullUrl = $"{BaseUrl}/repos/{RepoOwner}/{RepoName}";
         var request = new RestRequest(fullUrl);
 
-        var response = await _client.ExecuteAsync<RepoModel>(request, Method.Get);
+        var response = await this.client.ExecuteAsync<RepoModel>(request, Method.Get);
 
         return response.StatusCode == HttpStatusCode.OK &&
                response.Data is not null &&
@@ -120,12 +120,12 @@ public sealed class GitHubDataService : IGitHubDataService
             throw new InvalidOperationException($"The '{nameof(BranchName)}' value cannot be null or empty.");
         }
 
-        _client.AcceptedContentTypes = new[] { "application/vnd.github.v3+json" };
+        this.client.AcceptedContentTypes = new[] { "application/vnd.github.v3+json" };
 
         var fullUrl = $"{BaseUrl}/repos/{RepoOwner}/{RepoName}/branches";
         var request = new RestRequest(fullUrl);
 
-        var response = await _client.ExecuteAsync<BranchModel[]>(request, Method.Get);
+        var response = await this.client.ExecuteAsync<BranchModel[]>(request, Method.Get);
 
         return response.StatusCode == HttpStatusCode.OK &&
                response.Data is not null &&
@@ -167,13 +167,13 @@ public sealed class GitHubDataService : IGitHubDataService
             throw new InvalidOperationException($"The '{nameof(FilePath)}' value cannot be null or empty.");
         }
 
-        _client.AcceptedContentTypes = new[] { "application/vnd.github.v3.raw" };
+        this.client.AcceptedContentTypes = new[] { "application/vnd.github.v3.raw" };
 
         var queryString = $"?ref={BranchName}";
         var repoResourceUrl = $@"/repos/{RepoOwner}/{RepoName}/contents/{FilePath}{queryString}";
 
         var request = new RestRequest(repoResourceUrl);
-        var response = await _client.GetAsync(request);
+        var response = await this.client.GetAsync(request);
 
         switch (response.StatusCode)
         {
@@ -188,12 +188,12 @@ public sealed class GitHubDataService : IGitHubDataService
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (_isDisposed)
+        if (this.isDisposed)
         {
             return;
         }
 
-        _client.Dispose();
-        _isDisposed = true;
+        this.client.Dispose();
+        this.isDisposed = true;
     }
 }
