@@ -59,6 +59,8 @@ public class GitHubConsoleService : IGitHubConsoleService
         Console.ForegroundColor = currentClr;
     }
 
+#if DEBUG
     /// <inheritdoc/>
     public void PauseConsole() => Console.ReadKey();
+#endif
 }

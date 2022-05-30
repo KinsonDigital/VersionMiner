@@ -55,8 +55,10 @@ public interface IGitHubConsoleService
     /// <param name="value">The value to write.</param>
     void WriteError(string value);
 
+#if DEBUG
     /// <summary>
     /// Pauses the console.
     /// </summary>
     void PauseConsole();
+#endif
 }
