@@ -5,7 +5,7 @@
 namespace VersionMiner;
 
 /// <summary>
-/// Holds all of the GitHub actions inputs.
+/// Holds all of the action inputs.
 /// </summary>
 public class ActionInputs
 {
@@ -64,12 +64,12 @@ public class ActionInputs
     public string FileFormat { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the list of keys that could possibly hold the version in the file.
+    /// Gets or sets the list of keys that can hold the version in the file.
     /// </summary>
     [Option(
         "version-keys",
         Required = true,
-        HelpText = "The key(s) that can possibly hold the version in the file.")]
+        HelpText = "The key(s) that can hold the version in the file.")]
     public string VersionKeys { get; set; } = string.Empty;
 
     /// <summary>
@@ -83,18 +83,18 @@ public class ActionInputs
     public bool CaseSensitiveKeys { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not the GitHub action should fail if all of the key values
+    /// Gets or sets a value indicating whether or not the action will fail if all of the key values
     /// in the list of <see cref="VersionKeys"/> do not match.
     /// </summary>
     [Option(
         "fail-on-key-value-mismatch",
         Required = false,
         Default = false,
-        HelpText = "If true, the action will fail if all of the keys listed in the 'version-keys' input do not match.")]
+        HelpText = "If true, the action will fail if all of the key values in the list of 'version-keys' do not match.")]
     public bool FailOnKeyValueMismatch { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not the GitHub action should fail if no version exists.
+    /// Gets or sets a value indicating whether or not the action should fail if no version exists.
     /// </summary>
     [Option(
         "fail-when-version-not-found",

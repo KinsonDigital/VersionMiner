@@ -53,7 +53,7 @@ public class ActionInputTests
         inputs.VersionKeys.Should().BeEmpty();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.VersionKeys)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.VersionKeys))
-            .AssertOptionAttrProps("version-keys", "The key(s) that can possibly hold the version in the file.");
+            .AssertOptionAttrProps("version-keys", "The key(s) that can hold the version in the file.");
 
         inputs.CaseSensitiveKeys.Should().BeTrue();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.CaseSensitiveKeys)).Should().BeDecoratedWith<OptionAttribute>();

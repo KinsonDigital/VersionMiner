@@ -169,7 +169,7 @@ public sealed class GitHubAction : IGitHubAction
     /// <summary>
     /// <inheritdoc cref="IDisposable.Dispose"/>
     /// </summary>
-    /// <param name="disposing">True to dispose of managed resources.</param>
+    /// <param name="disposing">Disposes managed resources when <c>true</c>.</param>
     private void Dispose(bool disposing)
     {
         if (this.isDisposed)
@@ -191,7 +191,7 @@ public sealed class GitHubAction : IGitHubAction
     private void ShowWelcomeMessage()
     {
         this.gitHubConsoleService.WriteLine("Welcome to Version Miner!! 🪨⛏️");
-        this.gitHubConsoleService.WriteLine("A GitHub action for pulling versions out of various types of files!!");
+        this.gitHubConsoleService.WriteLine("A GitHub action for pulling versions out of various types of files.");
         this.gitHubConsoleService.BlankLine();
         this.gitHubConsoleService.BlankLine();
     }

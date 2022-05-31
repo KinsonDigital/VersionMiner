@@ -26,7 +26,7 @@ This GitHub action is built using C#/NET and runs in a docker container.  This m
 
 <div align="center"><h3 style="font-weight:bold">Usage Examples</h3></div>
 
-- Create tags automatically with the version during the release process.
+- Create tags automatically with the version, during the release process.
 - Validate the version syntax to help enforce version syntax.
   - Example: Semantic version vs. a date-based version.
 - Manage release note file names by having the version embedded in the file name.
@@ -104,8 +104,8 @@ So if the C# project file had the contents below, the workflow above would print
 
 | Input Name | Description | Required | Default Value |
 |---|:----|:---:|---|
-| `repo-owner` | The owner of the repository | yes | N/A |
-| `repo-name` | The name of the repository | yes | N/A |
+| `repo-owner` | The owner of the repository. | yes | N/A |
+| `repo-name` | The name of the repository. | yes | N/A |
 | `branch-name` | The name of the branch where the file lives. | yes | N/A |
 | `file-format` | The type of file that contains the version. Currently, the only supported value is `xml`. | yes | N/A |
 | `file-path` | The path to the file relative to the root of the repository. | yes | N/A |
@@ -161,13 +161,13 @@ Requirements:
 </div>
 
 Requirements:
-- Search multiple keys for the version.
-- Fail the workflow if no version are found in the keys.
+- Searches multiple keys for the version.
+- The job fails if no version is found in the keys.
 
 Result:  
 - The example below will use the value of ***4.5.6*** as the action output.
 
-⚠️Since the `fail-when-version-not-found` input is not explicitly used in the YAML, the default value of `true` will be used and the workflow will fail if the version was not found.
+⚠️Since the `fail-when-version-not-found` input is not explicitly used in the YAML, the default value of `true` will be used and the job will fail if the version was not found.
 
 ``` yml
 #Example 2 Workflow
@@ -214,7 +214,8 @@ Result:
         branch-name: master
         file-type: xml
         file-path: MyProject/MyProject.csproj
-        version-keys: VeRSion 👈🏼 # Different casing as XML key below
+        version-keys: VeRSion 👈🏼 # Different casing as the XML key below.
+        case-sensitive-keys: false 👈🏼 # Not required and has a default value of true.
 ```
 ``` xml
 <!--Example 3 C# Project File-->
@@ -223,7 +224,7 @@ Result:
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>10.0</LangVersion>
-    <version>1.2.3</version> 👈🏼 <!--Spelling matches "VeRSion" but still is found as a version key.-->
+    <version>1.2.3</version> 👈🏼 <!--Spelling matches "VeRSion" but is still found as a version key.-->
 </Project>
 ```
 
