@@ -28,7 +28,7 @@ This GitHub action is built using C#/NET and runs in a docker container.  This m
 
 - Create tags automatically with the version during the release process.
 - Validate the version syntax to help enforce version syntax.
-  - Example: Semantic version vs a date-based version.
+  - Example: Semantic version vs. a date-based version.
 - Manage release note file names by having the version embedded in the file name.
 - Use the version in the title of a GitHub release.
 - Release announcements.
