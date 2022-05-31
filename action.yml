@@ -1,24 +1,65 @@
-name: 'VGet'
-description: 'Gets version information from a .csproj file.'
+name: 'Version Miner'
+description: 'Pulls versions out from various types of files.'
+author: 'Calvin Wilkinson (KinsonDigital)'
+branding:
+  icon: settings
+  color: purple
 inputs:
-  repo-owner-and-name:  # id of input
-    description: 'The repository owner and name separated by a forward slash.'
+  repo-owner:
+    description: 'The owner of the repository'
     required: true
-  branch:
+  repo-name:
+    description: 'The name of the repository'
+    required: true
+  branch-name:
     description: 'The name of the branch where the file lives.'
     required: true
-  relative-file-path:
-    description: 'The relative path based on the root of the repository to the project file.'
+  file-format:
+    description: 'The type of file that contains the version.  Currently the only supported type value is "xml".'
     required: true
-  github-token:
-    description: 'The github token to authenticate to the repository.'
+  file-path:
+    description: 'The path to the file relative to the root of the repository.'
     required: true
-  contains:
-    description: 'The string value that the version string must contain. A value of false will fail the action.  An empty value will always resolve to true.'
+  version-keys:
+    description: 'The key(s) that can possibly hold the version in the file.'
+    required: true
+  case-sensitive-keys:
+    description: 'If true, the key search will be case sensitive.'
     required: false
+    default: 'true'
+  fail-on-key-value-mismatch:
+    description: 'If true, the action will fail if all of the key values listed in the "version-keys" input do not match.'
+    required: false
+    default: 'false'
+  fail-when-version-not-found:
+    description: 'If true, will fail the action if the version is not found.'
+    required: false
+    default: 'true'
+
 outputs:
-  version: # id of output
-    description: 'The version pulled from the project file.'
+  version:
+    description: 'The version pulled from a file.'
+
+# These are the arguments that are passed into the console app
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+  - '--repo-owner'
+  - ${{ inputs.repo-owner }}
+  - '--repo-name'
+  - ${{ inputs.repo-name }}
+  - '--branch-name'
+  - ${{ inputs.branch-name }}
+  - '--file-format'
+  - ${{ inputs.file-format }}
+  - '--file-path'
+  - ${{ inputs.file-path }}
+  - '--version-keys'
+  - ${{ inputs.version-keys }}
+  - '--case-sensitive-keys'
+  - ${{ inputs.case-sensitive-keys }}
+  - '--fail-on-key-value-mismatch'
+  - ${{ inputs.fail-on-key-value-mismatch }}
+  - '--fail-when-version-not-found'
+  - ${{ inputs.fail-when-version-not-found }}

@@ -1,0 +1,25 @@
+name: ✔Build Status Check
+
+
+on:
+  pull_request:
+    paths:
+      - ".github/**"
+      - "Documentation/**"
+      - '.editorconfig'
+      - '*.runsettings'
+      - '.gitattributes'
+      - '.gitignore'
+      - '*.md'
+      - '*.yml'
+      - '.vscode/**'
+      - '*.sln'
+
+
+jobs:
+  Build_Status_Check:
+    name: Build Status Check
+    runs-on: windows-latest
+    steps:
+    - name: Build Project
+      run: 'Write-Host "No build required."'
