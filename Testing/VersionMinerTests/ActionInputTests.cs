@@ -58,17 +58,17 @@ public class ActionInputTests
         inputs.CaseSensitiveKeys.Should().BeTrue();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.CaseSensitiveKeys)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.CaseSensitiveKeys))
-            .AssertOptionAttrProps("case-sensitive-keys", false, "If true, the key search will be case sensitive.");
+            .AssertOptionAttrProps("case-sensitive-keys", false, true, "If true, the key search will be case sensitive.");
 
         inputs.FailOnKeyValueMismatch.Should().BeFalse();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailOnKeyValueMismatch)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailOnKeyValueMismatch))
-            .AssertOptionAttrProps("fail-on-key-value-mismatch", false, "If true, the action will fail if all of the keys listed in the 'version-keys' input do not match.");
+            .AssertOptionAttrProps("fail-on-key-value-mismatch", false, false, "If true, the action will fail if all of the key values in the list of 'version-keys' do not match.");
 
         inputs.FailWhenVersionNotFound.Should().BeTrue();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailWhenVersionNotFound)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailWhenVersionNotFound))
-            .AssertOptionAttrProps("fail-when-version-not-found", false, "If true, the action will fail if the version is not found.");
+            .AssertOptionAttrProps("fail-when-version-not-found", false, true, "If true, the action will fail if the version is not found.");
     }
 
     [Fact]
@@ -155,49 +155,55 @@ public class ActionInputTests
         actual.Should().Be("Version,FileVersion");
     }
 
-    [Fact]
-    public void CaseSensitiveKeys_WhenSettingValue_ReturnsCorrectResult()
+    [Theory]
+    [InlineData(true, true)]
+    [InlineData(false, false)]
+    [InlineData(null, null)]
+    public void CaseSensitiveKeys_WhenSettingValue_ReturnsCorrectResult(bool? value, bool? expected)
     {
         // Arrange
         var inputs = new ActionInputs();
-        var expectedValue = !inputs.CaseSensitiveKeys;
 
         // Act
-        inputs.CaseSensitiveKeys = expectedValue;
+        inputs.CaseSensitiveKeys = value;
         var actual = inputs.CaseSensitiveKeys;
 
         // Assert
-        actual.Should().Be(expectedValue);
+        actual.Should().Be(expected);
     }
 
-    [Fact]
-    public void FailOnKeyValueMismatch_WhenSettingValue_ReturnsCorrectResult()
+    [Theory]
+    [InlineData(true, true)]
+    [InlineData(false, false)]
+    [InlineData(null, null)]
+    public void FailOnKeyValueMismatch_WhenSettingValue_ReturnsCorrectResult(bool? value, bool? expected)
     {
         // Arrange
         var inputs = new ActionInputs();
-        var expectedValue = !inputs.FailOnKeyValueMismatch;
 
         // Act
-        inputs.FailOnKeyValueMismatch = expectedValue;
+        inputs.FailOnKeyValueMismatch = value;
         var actual = inputs.FailOnKeyValueMismatch;
 
         // Assert
-        actual.Should().Be(expectedValue);
+        actual.Should().Be(expected);
     }
 
-    [Fact]
-    public void FailWhenVersionNotFound_WhenSettingValue_ReturnsCorrectResult()
+    [Theory]
+    [InlineData(true, true)]
+    [InlineData(false, false)]
+    [InlineData(null, null)]
+    public void FailWhenVersionNotFound_WhenSettingValue_ReturnsCorrectResult(bool? value, bool? expected)
     {
         // Arrange
         var inputs = new ActionInputs();
-        var expectedValue = !inputs.FailWhenVersionNotFound;
 
         // Act
-        inputs.FailWhenVersionNotFound = expectedValue;
+        inputs.FailWhenVersionNotFound = value;
         var actual = inputs.FailWhenVersionNotFound;
 
         // Assert
-        actual.Should().Be(expectedValue);
+        actual.Should().Be(expected);
     }
     #endregion
 }

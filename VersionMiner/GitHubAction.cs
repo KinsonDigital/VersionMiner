@@ -111,7 +111,7 @@ public sealed class GitHubAction : IGitHubAction
             this.gitHubConsoleService.Write("✔️️Pulling version from file . . . ");
             foreach (var versionKey in versionKeys)
             {
-                var keyExists = this.xmlParserService.KeyExists(xmlData, versionKey, inputs.CaseSensitiveKeys);
+                var keyExists = this.xmlParserService.KeyExists(xmlData, versionKey, inputs.CaseSensitiveKeys ?? false);
 
                 var keyValue = keyExists
                     ? this.xmlParserService.GetKeyValue(xmlData, versionKey)
@@ -125,7 +125,7 @@ public sealed class GitHubAction : IGitHubAction
             /* If the action should fail on key value mismatch,
              * collect all of the values for comparison.
             */
-            if (inputs.FailOnKeyValueMismatch)
+            if (inputs.FailOnKeyValueMismatch ?? false)
             {
                 if (keyValues.TrueForAll(v => v == keyValues[0]) is false)
                 {
@@ -139,7 +139,7 @@ public sealed class GitHubAction : IGitHubAction
             // Just get the first value that is not empty
             var version = keyValues.Find(v => !string.IsNullOrEmpty(v)) ?? string.Empty;
 
-            if (inputs.FailWhenVersionNotFound && string.IsNullOrEmpty(version))
+            if ((inputs.FailWhenVersionNotFound ?? false) && string.IsNullOrEmpty(version))
             {
                 var exceptionMsg = "No version value was found.";
                 exceptionMsg += $"{Environment.NewLine}If you do not want the GitHub action to fail when no version is found,";
