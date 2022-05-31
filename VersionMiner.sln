@@ -26,8 +26,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{5010ECCD-3BCC-475D-87EE-31E289E24571}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build-status-check.yml = .github\workflows\build-status-check.yml
-		.github\workflows\ignore-build-status-check.yml = .github\workflows\ignore-build-status-check.yml
-		.github\workflows\ignore-unit-tests-status-check.yml = .github\workflows\ignore-unit-tests-status-check.yml
 		.github\workflows\unit-tests-status-check.yml = .github\workflows\unit-tests-status-check.yml
 	EndProjectSection
 EndProject
