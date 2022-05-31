@@ -135,7 +135,7 @@ public class GitHubActionTests
 
         // Assert
         this.mockConsoleService.VerifyOnce(m => m.WriteLine("Welcome to Version Miner!! 🪨⛏️"));
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine("A GitHub action for pulling versions out of various types of files!!"));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("A GitHub action for pulling versions out of various types of files."));
     }
 
     [Fact]
@@ -145,7 +145,7 @@ public class GitHubActionTests
         var expectedOrder = new List<string>()
         {
             $"{nameof(IGitHubConsoleService.WriteLine)}|Welcome to Version Miner!! 🪨⛏️",
-            $"{nameof(IGitHubConsoleService.WriteLine)}|A GitHub action for pulling versions out of various types of files!!",
+            $"{nameof(IGitHubConsoleService.WriteLine)}|A GitHub action for pulling versions out of various types of files.",
             nameof(IGitHubConsoleService.BlankLine),
             nameof(IGitHubConsoleService.BlankLine),
         };
@@ -167,8 +167,7 @@ public class GitHubActionTests
         await action.Run(inputs, () => { }, _ => { });
 
         // Assert
-        actualExecutionOrder.Should()
-            .ContainInOrder(expectedOrder);
+        actualExecutionOrder.Should().ContainInOrder(expectedOrder);
     }
 
     [Fact]
@@ -302,12 +301,28 @@ public class GitHubActionTests
     }
 
     [Theory]
+    [InlineData(false)]
+    [InlineData(null)]
+    public async void Run_WhenInputFailOnKeyValueMisMatchIsFalseOrNull_DoesNotThrowException(bool? failOnKeyValueMismatch)
+    {
+        // Arrange
+        var inputs = CreateInputs("Version,FileVersion", failOnKeyValueMismatch: failOnKeyValueMismatch);
+        var action = CreateAction();
+
+        // Act
+        var act = () => action.Run(inputs, () => { }, _ => { });
+
+        // Assert
+        await act.Should().NotThrowAsync<ValuesMismatchException>();
+    }
+
+    [Theory]
     [InlineData("")]
     [InlineData(",")]
     [InlineData(" ,")]
     [InlineData(", ")]
     [InlineData("  ")]
-    public async void Run_WithVersionKeysParsed_ThrowsException(string versionKeys)
+    public async void Run_WhenNoVersionKeysParsed_ThrowsException(string versionKeys)
     {
         // Arrange
         const string testData = "test-data"; // TODO: Remove
@@ -329,25 +344,27 @@ public class GitHubActionTests
     }
 
     [Theory]
-    [InlineData("Version,FileVersion")]
-    [InlineData("Version, FileVersion")]
-    [InlineData("Version ,FileVersion")]
-    [InlineData("Version , FileVersion")]
-    [InlineData("Version   ,      FileVersion")]
-    [InlineData("Version   ,")]
-    [InlineData(", FileVersion")]
-    [InlineData("Version")]
-    public async void Run_WithDifferentVersionKeys_ProperlyParsesKeys(string versionKeys)
+    [InlineData("Version,FileVersion", true)]
+    [InlineData("Version, FileVersion", true)]
+    [InlineData("Version ,FileVersion", true)]
+    [InlineData("Version , FileVersion", true)]
+    [InlineData("Version   ,      FileVersion", true)]
+    [InlineData("Version   ,", true)]
+    [InlineData(", FileVersion", true)]
+    [InlineData("Version", true)]
+    [InlineData("version", false)]
+    [InlineData("version", null)]
+    public async void Run_WithDifferentVersionKeys_ProperlyParsesKeys(
+        string versionKeys,
+        bool? isCaseSensitive)
     {
         // Arrange
         var keys = versionKeys.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-        const string testData = "test-data"; // TODO: Remove
-        this.mockDataService.Setup(m => m.GetFileData())
-            .ReturnsAsync(testData);
 
         var inputs = CreateInputs(versionKeys,
             failOnKeyValueMismatch: false,
-            failWhenVersionNotFound: false);
+            failWhenVersionNotFound: false,
+            caseSensitiveKeys: isCaseSensitive ?? false);
         var action = CreateAction();
 
         // Act
@@ -356,7 +373,7 @@ public class GitHubActionTests
         // Assert
         Assert.All(keys, key =>
         {
-            this.mockXMLParserService.VerifyOnce(m => m.KeyExists(It.IsAny<string>(), key, true));
+            this.mockXMLParserService.VerifyOnce(m => m.KeyExists(It.IsAny<string>(), key, isCaseSensitive ?? false));
         });
     }
 
@@ -414,15 +431,17 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WhenNoVersionIsFoundForFailWhenVersionNotFoundInputAndIsSetToTrue_ThrowsException()
+    public async void Run_WhenNoVersionExists_AND_WhenInputFailWhenVersionNotFoundIsSetToTrue_ThrowsException()
     {
         // Arrange
         var expectedExceptionMsg = "No version value was found.";
         expectedExceptionMsg += $"{Environment.NewLine}If you do not want the GitHub action to fail when no version is found,";
         expectedExceptionMsg += "set the 'fail-when-version-not-found' input to a value of 'false'.";
 
-        this.mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), XMLVersionTagName, true)).Returns(true);
-        this.mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), XMLVersionTagName, true)).Returns(string.Empty);
+        this.mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), XMLVersionTagName, true))
+            .Returns(true);
+        this.mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), XMLVersionTagName, true))
+            .Returns(string.Empty);
         var inputs = CreateInputs("Version",
             failWhenVersionNotFound: true);
         var action = CreateAction();
@@ -434,6 +453,29 @@ public class GitHubActionTests
         await act.Should()
             .ThrowAsync<NoVersionFoundException>()
             .WithMessage(expectedExceptionMsg);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(null)]
+    public async void Run_WhenNoVersionExists_AND_WhenInputFailWhenVersionNotFoundIsSetToNullOrFalse_DoesNotThrowException(
+        bool? failWhenVersionNotFoundInput)
+    {
+        // Arrange
+        this.mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), XMLVersionTagName, true))
+            .Returns(true);
+        this.mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), XMLVersionTagName, true))
+            .Returns(string.Empty);
+        var inputs = CreateInputs("Version",
+            failWhenVersionNotFound: failWhenVersionNotFoundInput);
+        var action = CreateAction();
+
+        // Act
+        var act = () => action.Run(inputs, () => { }, _ => { });
+
+        // Assert
+        await act.Should()
+            .NotThrowAsync<NoVersionFoundException>();
     }
 
     [Fact]
@@ -477,8 +519,9 @@ public class GitHubActionTests
     /// </summary>
     /// <returns>The instance to test.</returns>
     private static ActionInputs CreateInputs(string versionKeys,
-        bool failOnKeyValueMismatch = true,
-        bool failWhenVersionNotFound = true) => new ()
+        bool? failOnKeyValueMismatch = true,
+        bool? failWhenVersionNotFound = true,
+        bool caseSensitiveKeys = true) => new ()
     {
         RepoOwner = "test-owner",
         RepoName = "test-name",
@@ -486,6 +529,7 @@ public class GitHubActionTests
         FilePath = "test-path",
         FileFormat = XMLFileType,
         VersionKeys = versionKeys,
+        CaseSensitiveKeys = caseSensitiveKeys,
         FailOnKeyValueMismatch = failOnKeyValueMismatch,
         FailWhenVersionNotFound = failWhenVersionNotFound,
     };

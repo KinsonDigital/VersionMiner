@@ -80,7 +80,7 @@ public class ActionInputs
         Required = false,
         Default = true,
         HelpText = "If true, the key search will be case sensitive.")]
-    public bool CaseSensitiveKeys { get; set; } = true;
+    public bool? CaseSensitiveKeys { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not the action will fail if all of the key values
@@ -91,7 +91,7 @@ public class ActionInputs
         Required = false,
         Default = false,
         HelpText = "If true, the action will fail if all of the key values in the list of 'version-keys' do not match.")]
-    public bool FailOnKeyValueMismatch { get; set; }
+    public bool? FailOnKeyValueMismatch { get; set; } = false;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not the action should fail if no version exists.
@@ -101,5 +101,5 @@ public class ActionInputs
         Required = false,
         Default = true,
         HelpText = "If true, the action will fail if the version is not found.")]
-    public bool FailWhenVersionNotFound { get; set; } = true;
+    public bool? FailWhenVersionNotFound { get; set; } = true;
 }
