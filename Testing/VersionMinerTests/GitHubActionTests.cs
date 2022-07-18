@@ -126,6 +126,7 @@ public class GitHubActionTests
     public async void Run_WhenInvoked_ShowsWelcomeMessage()
     {
         // Arrange
+        var expectedUrl = "https://github.com/KinsonDigital/VersionMiner/issues/new/choose";
         var inputs = CreateInputs("Version");
 
         var action = CreateAction();
@@ -136,6 +137,7 @@ public class GitHubActionTests
         // Assert
         this.mockConsoleService.VerifyOnce(m => m.WriteLine("Welcome to Version Miner!! 🪨⛏️"));
         this.mockConsoleService.VerifyOnce(m => m.WriteLine("A GitHub action for pulling versions out of various types of files."));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine($"To open an issue, click here 👉🏼 {expectedUrl}"));
     }
 
     [Fact]
