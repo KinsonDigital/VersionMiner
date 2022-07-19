@@ -48,7 +48,7 @@ jobs:
         run: Write-Host "::set-output name=sdk-version::${{ env.NET_SDK_VERSION }}";
 
   # Build Main Projects
-  build_versionminer_validator:
+  build_versionminer:
     name: Build VersionMiner Project
     needs: [determine_build_config, get_sdk_version]
     uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
@@ -61,7 +61,7 @@ jobs:
     name: Build VersionMinerTests Project
     needs: [determine_build_config,
             get_sdk_version,
-            build_versionminer_validator]
+            build_versionminer]
     uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
     with:
       project-name: VersionMinerTests
