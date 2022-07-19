@@ -16,8 +16,6 @@
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kinsondigital/VersionMiner/%E2%9C%94Unit%20Testing%20Status%20Check?color=%23238636&label=Unit%20Tests)
 ![GitHub issues by-label](https://img.shields.io/github/issues/kinsondigital/VersionMiner/good%20first%20issue?color=%23238636&label=Good%20First%20Issues)
-<!-- TODO: Get this working and move up one spot -->
-<!-- ![](https://img.shields.io/codecov/c/github/KinsonDigital/VersionMiner/master?label=Code%20Coverage&logo=CodeCov&style=flat) -->
 </div>
 
 <div align="center">
