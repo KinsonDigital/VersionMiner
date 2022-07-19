@@ -173,6 +173,29 @@ public class GitHubActionTests
     }
 
     [Fact]
+    public async void Run_WithTrimStartFromBranchSetToValue_TrimsBranchName()
+    {
+        // Arrange
+        const string branchBeforeTrim = "refs/heads/test-branch";
+        const string branchAfterTrim = "test-branch";
+        var inputs = CreateInputs(
+            "Version",
+            branchName: branchBeforeTrim,
+            trimStartFromBranch: "refs/heads/");
+        var action = CreateAction();
+
+        // Act
+        await action.Run(inputs, () => { }, _ => { });
+
+        // Assert
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine($"Branch Before Trimming: {branchBeforeTrim}"));
+        this.mockConsoleService.VerifyOnce(m
+            => m.WriteLine($"The text '{inputs.TrimStartFromBranch}' has been trimmed from the branch name."));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine($"Branch After Trimming: {branchAfterTrim}"));
+        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(9));
+    }
+
+    [Fact]
     public async void Run_WhenInvoked_SetsDataServiceProps()
     {
         // Arrange
@@ -520,18 +543,22 @@ public class GitHubActionTests
     /// Creates a new instance of <see cref="ActionInputs"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private static ActionInputs CreateInputs(string versionKeys,
+    private static ActionInputs CreateInputs(
+        string versionKeys,
+        string branchName = "test-branch",
         bool? failOnKeyValueMismatch = true,
         bool? failWhenVersionNotFound = true,
-        bool caseSensitiveKeys = true) => new ()
+        bool caseSensitiveKeys = true,
+        string trimStartFromBranch = "") => new ()
     {
         RepoOwner = "test-owner",
         RepoName = "test-name",
-        BranchName = "test-branch",
+        BranchName = branchName,
         FilePath = "test-path",
         FileFormat = XMLFileType,
         VersionKeys = versionKeys,
         CaseSensitiveKeys = caseSensitiveKeys,
+        TrimStartFromBranch = trimStartFromBranch,
         FailOnKeyValueMismatch = failOnKeyValueMismatch,
         FailWhenVersionNotFound = failWhenVersionNotFound,
     };

@@ -1,4 +1,4 @@
-// <copyright file="GitHubAction.cs" company="KinsonDigital">
+﻿// <copyright file="GitHubAction.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -52,6 +52,20 @@ public sealed class GitHubAction : IGitHubAction
         this.gitHubDataService.RepoName = inputs.RepoName;
         this.gitHubDataService.BranchName = inputs.BranchName;
         this.gitHubDataService.FilePath = inputs.FilePath;
+
+        var branchNeedsTrimming = string.IsNullOrEmpty(inputs.TrimStartFromBranch) is false &&
+                                  inputs.BranchName.ToLower().StartsWith(inputs.TrimStartFromBranch.ToLower());
+
+        if (branchNeedsTrimming)
+        {
+            this.consoleService.WriteLine($"Branch Before Trimming: {inputs.BranchName}");
+
+            inputs.BranchName = inputs.BranchName.TrimStart(inputs.TrimStartFromBranch);
+
+            this.consoleService.WriteLine($"The text '{inputs.TrimStartFromBranch}' has been trimmed from the branch name.");
+            this.consoleService.WriteLine($"Branch After Trimming: {inputs.BranchName}");
+            this.consoleService.BlankLine();
+        }
 
         try
         {
