@@ -85,7 +85,7 @@ jobs:
       repo-owner: JohnDoe
       repo-name: MyRepo
       branch-name: master
-      file-type: xml
+      file-format: xml
       file-path: MyProject/MyProject.csproj
       version-keys: Version
 
@@ -155,7 +155,7 @@ Requirements:
         repo-owner: JohnDoe
         repo-name: MyRepo
         branch-name: master
-        file-type: xml
+        file-format: xml
         file-path: MyProject/MyProject.csproj
         version-keys: Version
         fail-when-version-not-found: false
@@ -193,7 +193,7 @@ Result:
         repo-owner: JohnDoe
         repo-name: MyRepo
         branch-name: master
-        file-type: xml
+        file-format: xml
         file-path: MyProject/MyProject.csproj
         version-keys: Version,FileVersion
 ```
@@ -228,7 +228,7 @@ Result:
         repo-owner: JohnDoe
         repo-name: MyRepo
         branch-name: master
-        file-type: xml
+        file-format: xml
         file-path: MyProject/MyProject.csproj
         version-keys: VeRSion 👈🏼 # Different casing as the XML key below.
         case-sensitive-keys: false 👈🏼 # Not required and has a default value of true.
