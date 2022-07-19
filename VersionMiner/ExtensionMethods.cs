@@ -2,6 +2,8 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Text;
+
 namespace VersionMiner;
 
 /// <summary>
@@ -43,5 +45,44 @@ public static class ExtensionMethods
         var thirdCharIsSlash = value[2] == '\\' || value[2] == '/';
 
         return startsWithLetter && secondCharIsColon && thirdCharIsSlash;
+    }
+
+    /// <summary>
+    /// Removes the given <c>string</c> <paramref name="value"/> from the beginning
+    /// of this string.
+    /// </summary>
+    /// <param name="thisStr">The <c>string</c> value to trim.</param>
+    /// <param name="value">The value to trim from the beginning of this <c>string</c>.</param>
+    /// <returns>The trimmed <c>string</c>.</returns>
+    /// <remarks>
+    ///     This is not case sensitive.
+    /// </remarks>
+    public static string TrimStart(this string thisStr, string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return thisStr;
+        }
+
+        var valueIndex = thisStr.ToLower().IndexOf(value.ToLower(), StringComparison.Ordinal);
+
+        if (valueIndex != 0)
+        {
+            return thisStr;
+        }
+
+        var result = new StringBuilder();
+
+        for (var i = 0; i < thisStr.Length; i++)
+        {
+            if (i >= valueIndex && i <= valueIndex + value.Length - 1)
+            {
+                continue;
+            }
+
+            result.Append(thisStr[i]);
+        }
+
+        return result.ToString();
     }
 }
