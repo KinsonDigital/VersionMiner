@@ -4,10 +4,24 @@
 </h1>
 
 <div align="center">
-<h3>GitHub Action for pulling out versions from XML files.</h3>
+  <h3>GitHub Action for pulling out versions from files.</h3>
+</div>
 
-<div hidden>TODO: ADD BADGES HERE</div>
+<div align="center">
 
+![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/KinsonDigital/VersionMiner?color=%23318A42&include_prereleases&label=Latest%20Release&logo=github)
+</div>
+
+<div align="center">
+
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kinsondigital/VersionMiner/%E2%9C%94Unit%20Testing%20Status%20Check?color=%23238636&label=Unit%20Tests)
+![GitHub issues by-label](https://img.shields.io/github/issues/kinsondigital/VersionMiner/good%20first%20issue?color=%23238636&label=Good%20First%20Issues)
+</div>
+
+<div align="center">
+
+![Discord](https://img.shields.io/discord/481597721199902720?color=%23575CCB&label=discord&logo=discord&logoColor=white)
+![Twitter URL](https://img.shields.io/twitter/url?color=%235c5c5c&label=Follow%20%40KDCoder&logo=twitter&url=https%3A%2F%2Ftwitter.com%2FKDCoder)
 </div>
 
 
