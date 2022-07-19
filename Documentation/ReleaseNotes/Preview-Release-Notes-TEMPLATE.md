@@ -6,8 +6,8 @@ VersionMiner Release Notes - [add-prev-release-here]
 
 <div algn="center">
 
-As with all software, there is always a chance for issues and bugs, especially for preview releases.  
-Which is why your input is greatly appreciated. 🙏🏼
+As with all software, there is always a chance for issues and bugs, especially for preview releases,  
+which is why your input is greatly appreciated. 🙏🏼
 </div>
 
 ---
