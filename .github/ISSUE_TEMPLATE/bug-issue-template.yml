@@ -47,8 +47,8 @@ body:
 
 - type: textarea
   attributes:
-    label: If you know what version of _**ubuntu**_ the action is running on, enter it here.
-    description: Enter ubuntu operating system version here
+    label: If you know what version of _**Ubuntu**_ the action is running on, enter it here.
+    description: Enter Ubuntu operating system version here
     placeholder: |
       Examples: `ubuntu-latest` or `ubuntu-20.04`
       If you do not know what version it is due to using the value `ubuntu-latest`, this can be found in the

@@ -2,7 +2,7 @@ name: 'Version Miner'
 description: 'Pulls versions out from various types of files.'
 author: 'Calvin Wilkinson (KinsonDigital)'
 branding:
-  icon: settings
+  icon: search
   color: purple
 inputs:
   repo-owner:
