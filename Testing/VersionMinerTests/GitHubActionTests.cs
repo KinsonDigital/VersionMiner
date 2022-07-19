@@ -48,7 +48,7 @@ public class GitHubActionTests
 
     #region Constructor Tests
     [Fact]
-    public void Ctor_WithNullGitHubConsoleServiceParam_ThrowsException()
+    public void Ctor_WithNullConsoleServiceParam_ThrowsException()
     {
         // Arrange & Act
         var act = () =>
@@ -60,7 +60,7 @@ public class GitHubActionTests
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'gitHubConsoleService')");
+            .WithMessage("The parameter must not be null. (Parameter 'consoleService')");
     }
 
     [Fact]
