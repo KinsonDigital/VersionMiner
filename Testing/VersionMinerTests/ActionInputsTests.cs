@@ -60,6 +60,11 @@ public class ActionInputsTests
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.CaseSensitiveKeys))
             .AssertOptionAttrProps("case-sensitive-keys", false, true, "If true, the key search will be case sensitive.");
 
+        inputs.TrimStartFromBranch.Should().BeEmpty();
+        typeof(ActionInputs).GetProperty(nameof(ActionInputs.TrimStartFromBranch)).Should().BeDecoratedWith<OptionAttribute>();
+        inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.TrimStartFromBranch))
+            .AssertOptionAttrProps("trim-start-from-branch", false, "Trims the start from the 'branch-name' value.");
+
         inputs.FailOnKeyValueMismatch.Should().BeFalse();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailOnKeyValueMismatch)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailOnKeyValueMismatch))
@@ -170,6 +175,19 @@ public class ActionInputsTests
 
         // Assert
         actual.Should().Be(expected);
+    }
+
+    [Fact]
+    public void TrimStartFromBranch_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var inputs = new ActionInputs();
+
+        // Act
+        inputs.TrimStartFromBranch = "test-value";
+
+        // Assert
+        inputs.TrimStartFromBranch.Should().Be("test-value");
     }
 
     [Theory]

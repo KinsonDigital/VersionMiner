@@ -27,6 +27,10 @@ inputs:
     description: 'If true, the key search will be case sensitive.'
     required: false
     default: true
+  trim-start-from-branch:
+    description: 'Trims the start from the ''branch-name'' value.'
+    required: false
+    default: ''
   fail-on-key-value-mismatch:
     description: 'If true, the action will fail if all of the key values listed in the "version-keys" input do not match.'
     required: false
@@ -59,6 +63,8 @@ runs:
   - ${{ inputs.version-keys }}
   - '--case-sensitive-keys'
   - ${{ inputs.case-sensitive-keys }}
+  - 'trim-start-from-branch'
+  - ${{ inputs.trim-start-from-branch }}
   - '--fail-on-key-value-mismatch'
   - ${{ inputs.fail-on-key-value-mismatch }}
   - '--fail-when-version-not-found'
