@@ -71,8 +71,8 @@ public sealed class GitHubAction : IGitHubAction
         {
             if (inputs.FileFormat != XMLFileFormat)
             {
-                var exMsg = $"The file type value of '{inputs.FileFormat}' is invalid.";
-                exMsg += $"{Environment.NewLine}The only file type currently supported are csproj files.";
+                var exMsg = $"The 'file-format' value of '{inputs.FileFormat}' is invalid.";
+                exMsg += $"{Environment.NewLine}The only file format currently supported is XML.";
                 throw new InvalidFileTypeException(exMsg);
             }
 
