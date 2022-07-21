@@ -217,15 +217,15 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WithInvalidFileType_ThrowsException()
+    public async void Run_WithInvalidFileFormat_ThrowsException()
     {
         // Arrange
         var inputs = CreateInputs("Version");
         inputs.FileFormat = "wrong-type";
         var action = CreateAction();
 
-        var expectedMsg = $"The file type value of '{inputs.FileFormat}' is invalid.";
-        expectedMsg += $"{Environment.NewLine}The only file type currently supported are csproj files.";
+        var expectedMsg = $"The 'file-format' value of '{inputs.FileFormat}' is invalid.";
+        expectedMsg += $"{Environment.NewLine}The only file format currently supported is XML.";
 
         // Act & Assert
         void Assert(Exception e)
