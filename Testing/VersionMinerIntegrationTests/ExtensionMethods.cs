@@ -18,11 +18,11 @@ public static class ExtensionMethods
     /// </summary>
     /// <param name="obj">The object that contains the property to set.</param>
     /// <param name="propName">The name of the property to look for on the object.</param>
-    /// <param name="propValue">The value to set the property value to.</param>
+    /// <param name="propValue">The value to set the property value.</param>
     /// <typeparam name="TObj">The type of object.</typeparam>
     /// <typeparam name="TPropValue">The type of property value.</typeparam>
     /// <exception cref="AssertActualExpectedException">
-    ///     Thrown if the following occur:
+    ///     Thrown if the following occurs:
     /// <list type="bullet">
     ///     <item>The <paramref name="obj"/> is null.</item>
     ///     <item>The <paramref name="propName"/> is null or empty.</item>

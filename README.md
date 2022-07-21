@@ -93,7 +93,7 @@ jobs:
       run: echo "${{ steps.get-version.outputs.version }}"
 ```
 
-So if the XML file had the contents below, the workflow above would print the value ***1.2.3*** to the GitHub console.
+If the XML file had the contents below, the workflow above would print the value ***1.2.3*** to the GitHub console.
 
 ``` xml
 <!--Quick Example - C# Project File-->
@@ -125,7 +125,7 @@ So if the XML file had the contents below, the workflow above would print the va
 | `branch-name` | The name of the branch where the file lives. | yes | N/A |
 | `file-format` | The data format of the file that contains the version. Currently, the only supported value is `xml` for a file format.  Not case sensitive. | yes | N/A |
 | `file-path` | The path to the file relative to the root of the repository. | yes | N/A |
-| `version-keys` | A comma delimited list of keys possibly hold the version value. Spaces around commas are ignored.  Must be wrapped with single or double quotes to be processed properly if more than one key exists. | yes | N/A |
+| `version-keys` | A comma delimited list of keys that hold the version value. Spaces around commas are ignored.  Keys must be wrapped with single or double quotes to be processed properly if more than one key exists. | yes | N/A |
 | `case-sensitive-keys` | If true, key searching will be case-sensitive. | no | `true` |
 | `trim-start-from-branch` | Will trim the given value from the beginning of the `branch-name` input. | no | empty |
 | `fail-on-key-value-mismatch` | If true, the action will fail, if all of the key values listed in the `version-keys` input do not match.  Other failure inputs will not affect this input. | no | `false` |
@@ -144,7 +144,7 @@ So if the XML file had the contents below, the workflow above would print the va
 </div>
 
 Requirements:
-- Search for a version but do not fail the workflow if no version is found
+- Searches for a version but does not fail the workflow if no version is found.
 
 📒Quick Note: The action input `fail-when-version-not-found` is not required and has a default value of `true`.  If you do not want the action to fail when the version is not found, you must explicitly use the input with a value of `false`.
 
