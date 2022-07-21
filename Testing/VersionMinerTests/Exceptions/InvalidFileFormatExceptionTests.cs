@@ -1,4 +1,4 @@
-// <copyright file="InvalidFileTypeExceptionTests.cs" company="KinsonDigital">
+// <copyright file="InvalidFileFormatExceptionTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -8,26 +8,26 @@ using VersionMiner.Exceptions;
 namespace VersionMinerTests.Exceptions;
 
 /// <summary>
-/// Tests the <see cref="InvalidFileTypeException"/> class.
+/// Tests the <see cref="InvalidFileFormatException"/> class.
 /// </summary>
-public class InvalidFileTypeExceptionTests
+public class InvalidFileFormatExceptionTests
 {
     #region Constructor Tests
     [Fact]
     public void Ctor_WithNoParam_CorrectlySetsExceptionMessage()
     {
         // Act
-        var exception = new InvalidFileTypeException();
+        var exception = new InvalidFileFormatException();
 
         // Assert
-        exception.Message.Should().Be("The file type is invalid.");
+        exception.Message.Should().Be("The file format is invalid.");
     }
 
     [Fact]
     public void Ctor_WhenInvokedWithSingleMessageParam_CorrectlySetsMessage()
     {
         // Act
-        var exception = new InvalidFileTypeException("test-message");
+        var exception = new InvalidFileFormatException("test-message");
 
         // Assert
         exception.Message.Should().Be("test-message");
@@ -40,7 +40,7 @@ public class InvalidFileTypeExceptionTests
         var innerException = new Exception("inner-exception");
 
         // Act
-        var deviceException = new InvalidFileTypeException("test-exception", innerException);
+        var deviceException = new InvalidFileFormatException("test-exception", innerException);
 
         // Assert
         deviceException.InnerException.Message.Should().Be("inner-exception");

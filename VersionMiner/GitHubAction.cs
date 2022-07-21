@@ -73,7 +73,7 @@ public sealed class GitHubAction : IGitHubAction
             {
                 var exMsg = $"The 'file-format' value of '{inputs.FileFormat}' is invalid.";
                 exMsg += $"{Environment.NewLine}The only file format currently supported is XML.";
-                throw new InvalidFileTypeException(exMsg);
+                throw new InvalidFileFormatException(exMsg);
             }
 
             this.consoleService.Write($"✔️️Verifying if the repository owner '{inputs.RepoOwner}' exists . . . ");

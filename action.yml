@@ -63,7 +63,7 @@ runs:
   - ${{ inputs.version-keys }}
   - '--case-sensitive-keys'
   - ${{ inputs.case-sensitive-keys }}
-  - 'trim-start-from-branch'
+  - '--trim-start-from-branch'
   - ${{ inputs.trim-start-from-branch }}
   - '--fail-on-key-value-mismatch'
   - ${{ inputs.fail-on-key-value-mismatch }}

@@ -19,7 +19,7 @@ public class GitHubActionTests
     private const string VersionOutputName = "version";
     private const string XMLVersionTagName = "Version";
     private const string XMLFileVersionTagName = "FileVersion";
-    private const string XMLFileType = "xml";
+    private const string XMLFileFormat = "xml";
     private readonly Mock<IGitHubConsoleService> mockConsoleService;
     private readonly Mock<IGitHubDataService> mockDataService;
     private readonly Mock<IDataParserService> mockXMLParserService;
@@ -230,7 +230,7 @@ public class GitHubActionTests
         // Act & Assert
         void Assert(Exception e)
         {
-            e.Should().BeOfType<InvalidFileTypeException>();
+            e.Should().BeOfType<InvalidFileFormatException>();
             e.Message.Should().Be(expectedMsg);
         }
 
@@ -555,7 +555,7 @@ public class GitHubActionTests
         RepoName = "test-name",
         BranchName = branchName,
         FilePath = "test-path",
-        FileFormat = XMLFileType,
+        FileFormat = XMLFileFormat,
         VersionKeys = versionKeys,
         CaseSensitiveKeys = caseSensitiveKeys,
         TrimStartFromBranch = trimStartFromBranch,
