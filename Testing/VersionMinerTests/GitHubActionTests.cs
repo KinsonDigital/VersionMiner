@@ -127,7 +127,7 @@ public class GitHubActionTests
     {
         // Arrange
         var expectedUrl = "https://github.com/KinsonDigital/VersionMiner/issues/new/choose";
-        var inputs = CreateInputs("Version");
+        var inputs = CreateInputs(versionKeys: "Version");
 
         var action = CreateAction();
 
@@ -152,7 +152,7 @@ public class GitHubActionTests
             nameof(IGitHubConsoleService.BlankLine),
         };
         var actualExecutionOrder = new List<string>();
-        var inputs = CreateInputs("Version");
+        var inputs = CreateInputs(versionKeys: "Version");
 
         this.mockConsoleService.Setup(m => m.WriteLine(It.IsAny<string>()))
             .Callback<string>(value => actualExecutionOrder.Add($"{nameof(IGitHubConsoleService.WriteLine)}|{value}"));
@@ -179,7 +179,7 @@ public class GitHubActionTests
         const string branchBeforeTrim = "refs/heads/test-branch";
         const string branchAfterTrim = "test-branch";
         var inputs = CreateInputs(
-            "Version",
+            versionKeys: "Version",
             branchName: branchBeforeTrim,
             trimStartFromBranch: "refs/heads/");
         var action = CreateAction();
@@ -203,7 +203,7 @@ public class GitHubActionTests
         this.mockDataService.SetupSet(p => p.RepoName = It.IsAny<string>());
         this.mockDataService.SetupSet(p => p.BranchName = It.IsAny<string>());
         this.mockDataService.SetupSet(p => p.FilePath = It.IsAny<string>());
-        var inputs = CreateInputs("Version");
+        var inputs = CreateInputs(versionKeys: "Version");
         var action = CreateAction();
 
         // Act
@@ -220,7 +220,7 @@ public class GitHubActionTests
     public async void Run_WithInvalidFileFormat_ThrowsException()
     {
         // Arrange
-        var inputs = CreateInputs("Version");
+        var inputs = CreateInputs(versionKeys: "Version");
         inputs.FileFormat = "wrong-type";
         var action = CreateAction();
 
@@ -243,7 +243,7 @@ public class GitHubActionTests
         // Arrange
         this.mockDataService.Setup(m => m.OwnerExists()).ReturnsAsync(false);
 
-        var inputs = CreateInputs(It.IsAny<string>());
+        var inputs = CreateInputs();
         var action = CreateAction();
 
         // Act
@@ -308,7 +308,7 @@ public class GitHubActionTests
         this.mockXMLParserService.Setup(m => m.GetKeyValue(testData, XMLFileVersionTagName, true))
             .Returns("3.2.1");
 
-        var inputs = CreateInputs("Version,FileVersion");
+        var inputs = CreateInputs(versionKeys: "Version,FileVersion");
         var action = CreateAction();
 
         // Act
@@ -331,7 +331,7 @@ public class GitHubActionTests
     public async void Run_WhenInputFailOnKeyValueMisMatchIsFalseOrNull_DoesNotThrowException(bool? failOnKeyValueMismatch)
     {
         // Arrange
-        var inputs = CreateInputs("Version,FileVersion", failOnKeyValueMismatch: failOnKeyValueMismatch);
+        var inputs = CreateInputs(versionKeys: "Version,FileVersion", failOnKeyValueMismatch: failOnKeyValueMismatch);
         var action = CreateAction();
 
         // Act
@@ -354,7 +354,7 @@ public class GitHubActionTests
         this.mockDataService.Setup(m => m.GetFileData())
             .ReturnsAsync(testData);
 
-        var inputs = CreateInputs(versionKeys,
+        var inputs = CreateInputs(versionKeys: versionKeys,
             failOnKeyValueMismatch: false,
             failWhenVersionNotFound: false);
         var action = CreateAction();
@@ -386,7 +386,7 @@ public class GitHubActionTests
         // Arrange
         var keys = versionKeys.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 
-        var inputs = CreateInputs(versionKeys,
+        var inputs = CreateInputs(versionKeys: versionKeys,
             failOnKeyValueMismatch: false,
             failWhenVersionNotFound: false,
             caseSensitiveKeys: isCaseSensitive ?? false);
@@ -417,7 +417,7 @@ public class GitHubActionTests
         this.mockXMLParserService.Setup(m => m.GetKeyValue(testData, XMLFileVersionTagName, true))
             .Returns(expectedVersion);
 
-        var inputs = CreateInputs("Version,FileVersion",
+        var inputs = CreateInputs(versionKeys: "Version,FileVersion",
             failOnKeyValueMismatch: false);
         var action = CreateAction();
 
@@ -467,7 +467,7 @@ public class GitHubActionTests
             .Returns(true);
         this.mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), XMLVersionTagName, true))
             .Returns(string.Empty);
-        var inputs = CreateInputs("Version",
+        var inputs = CreateInputs(versionKeys: "Version",
             failWhenVersionNotFound: true);
         var action = CreateAction();
 
@@ -491,7 +491,7 @@ public class GitHubActionTests
             .Returns(true);
         this.mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), XMLVersionTagName, true))
             .Returns(string.Empty);
-        var inputs = CreateInputs("Version",
+        var inputs = CreateInputs(versionKeys: "Version",
             failWhenVersionNotFound: failWhenVersionNotFoundInput);
         var action = CreateAction();
 
@@ -512,7 +512,7 @@ public class GitHubActionTests
         this.mockXMLParserService.Setup(m => m.GetKeyValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
             .Returns(string.Empty);
 
-        var inputs = CreateInputs("Version,FileVersion,AssemblyVersion",
+        var inputs = CreateInputs(versionKeys: "Version,FileVersion,AssemblyVersion",
             failOnKeyValueMismatch: true,
             failWhenVersionNotFound: false);
         var action = CreateAction();
@@ -544,18 +544,22 @@ public class GitHubActionTests
     /// </summary>
     /// <returns>The instance to test.</returns>
     private static ActionInputs CreateInputs(
-        string versionKeys,
+        string repoOwner = "test-owner",
+        string repoName = "test-name",
+        string filePath = "test-path",
         string branchName = "test-branch",
-        bool? failOnKeyValueMismatch = true,
-        bool? failWhenVersionNotFound = true,
+        string fileFormat = XMLFileFormat,
+        string versionKeys = "Version,FileVersion",
         bool caseSensitiveKeys = true,
-        string trimStartFromBranch = "") => new ()
+        string trimStartFromBranch = "",
+        bool? failOnKeyValueMismatch = true,
+        bool? failWhenVersionNotFound = true) => new ()
     {
-        RepoOwner = "test-owner",
-        RepoName = "test-name",
+        RepoOwner = repoOwner,
+        RepoName = repoName,
+        FilePath = filePath,
         BranchName = branchName,
-        FilePath = "test-path",
-        FileFormat = XMLFileFormat,
+        FileFormat = fileFormat,
         VersionKeys = versionKeys,
         CaseSensitiveKeys = caseSensitiveKeys,
         TrimStartFromBranch = trimStartFromBranch,
