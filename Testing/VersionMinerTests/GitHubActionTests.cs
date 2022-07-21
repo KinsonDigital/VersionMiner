@@ -216,11 +216,13 @@ public class GitHubActionTests
         this.mockDataService.VerifySetOnce(p => p.FilePath = "test-path");
     }
 
-    [Fact]
-    public async void Run_WithInvalidFileFormat_ThrowsException()
+    [Theory]
+    [InlineData("xml")]
+    [InlineData("XML")]
+    public async void Run_WithInvalidFileFormat_ThrowsException(string fileFormat)
     {
         // Arrange
-        var inputs = CreateInputs(versionKeys: "Version");
+        var inputs = CreateInputs(versionKeys: "Version", fileFormat: fileFormat);
         inputs.FileFormat = "wrong-type";
         var action = CreateAction();
 

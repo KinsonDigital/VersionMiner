@@ -69,7 +69,7 @@ public sealed class GitHubAction : IGitHubAction
 
         try
         {
-            if (inputs.FileFormat != XMLFileFormat)
+            if (inputs.FileFormat.ToLower() != XMLFileFormat)
             {
                 var exMsg = $"The 'file-format' value of '{inputs.FileFormat}' is invalid.";
                 exMsg += $"{Environment.NewLine}The only file format currently supported is XML.";
