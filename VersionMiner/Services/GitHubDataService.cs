@@ -47,7 +47,7 @@ public sealed class GitHubDataService : IGitHubDataService
     {
         if (string.IsNullOrEmpty(RepoOwner))
         {
-            throw new InvalidOperationException($"The '{nameof(RepoOwner)}' value cannot be null or empty.");
+            throw new InvalidOperationException($"The 'repo-owner' value cannot be null or empty.");
         }
 
         this.client.AcceptedContentTypes = new[] { "application/vnd.github.v3+json" };
@@ -74,12 +74,12 @@ public sealed class GitHubDataService : IGitHubDataService
     {
         if (string.IsNullOrEmpty(RepoOwner))
         {
-            throw new InvalidOperationException($"The '{nameof(RepoOwner)}' value cannot be null or empty.");
+            throw new InvalidOperationException($"The 'repo-owner' value cannot be null or empty.");
         }
 
         if (string.IsNullOrEmpty(RepoName))
         {
-            throw new InvalidOperationException($"The '{nameof(RepoName)}' value cannot be null or empty.");
+            throw new InvalidOperationException($"The 'repo-name' value cannot be null or empty.");
         }
 
         this.client.AcceptedContentTypes = new[] { "application/vnd.github.v3+json" };
@@ -107,17 +107,17 @@ public sealed class GitHubDataService : IGitHubDataService
     {
         if (string.IsNullOrEmpty(RepoOwner))
         {
-            throw new InvalidOperationException($"The '{nameof(RepoOwner)}' value cannot be null or empty.");
+            throw new InvalidOperationException($"The 'repo-owner' value cannot be null or empty.");
         }
 
         if (string.IsNullOrEmpty(RepoName))
         {
-            throw new InvalidOperationException($"The '{nameof(RepoName)}' value cannot be null or empty.");
+            throw new InvalidOperationException($"The 'repo-name' value cannot be null or empty.");
         }
 
         if (string.IsNullOrEmpty(BranchName))
         {
-            throw new InvalidOperationException($"The '{nameof(BranchName)}' value cannot be null or empty.");
+            throw new InvalidOperationException($"The 'branch-name' value cannot be null or empty.");
         }
 
         this.client.AcceptedContentTypes = new[] { "application/vnd.github.v3+json" };
@@ -149,22 +149,22 @@ public sealed class GitHubDataService : IGitHubDataService
     {
         if (string.IsNullOrEmpty(RepoOwner))
         {
-            throw new InvalidOperationException($"The '{nameof(RepoOwner)}' value cannot be null or empty.");
+            throw new InvalidOperationException($"The 'repo-owner' value cannot be null or empty.");
         }
 
         if (string.IsNullOrEmpty(RepoName))
         {
-            throw new InvalidOperationException($"The '{nameof(RepoName)}' value cannot be null or empty.");
+            throw new InvalidOperationException($"The 'repo-name' value cannot be null or empty.");
         }
 
         if (string.IsNullOrEmpty(BranchName))
         {
-            throw new InvalidOperationException($"The '{nameof(BranchName)}' value cannot be null or empty.");
+            throw new InvalidOperationException($"The 'branch-name value cannot be null or empty.");
         }
 
         if (string.IsNullOrEmpty(FilePath))
         {
-            throw new InvalidOperationException($"The '{nameof(FilePath)}' value cannot be null or empty.");
+            throw new InvalidOperationException($"The 'file-path' value cannot be null or empty.");
         }
 
         this.client.AcceptedContentTypes = new[] { "application/vnd.github.v3.raw" };

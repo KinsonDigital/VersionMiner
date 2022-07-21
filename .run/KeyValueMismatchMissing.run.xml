@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="KeyValueMismatchMissing" type="DotNetProject" factoryName=".NET Project">
     <option name="EXE_PATH" value="$PROJECT_DIR$/VersionMiner/bin/Debug/net6.0/VersionMiner.exe" />
-    <option name="PROGRAM_PARAMETERS" value="--repo-owner KinsonDigital --repo-name VersionMiner --branch-name preview/feature/14-convert-to-dotnet --file-format xml --file-path VersionMiner/VersionMiner.csproj --version-keys Version --case-sensitive-keys true --fail-when-version-not-found true" />
+    <option name="PROGRAM_PARAMETERS" value="--repo-owner KinsonDigital --repo-name VersionMiner --branch-name refs/heads/preview/feature/14-convert-to-dotnet --file-format xml --file-path VersionMiner/VersionMiner.csproj --version-keys Version --case-sensitive-keys true --trim-start-from-branch refs/heads/ --fail-when-version-not-found true" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/VersionMiner/bin/Debug/net6.0" />
     <option name="PASS_PARENT_ENVS" value="1" />
     <option name="USE_EXTERNAL_CONSOLE" value="1" />
