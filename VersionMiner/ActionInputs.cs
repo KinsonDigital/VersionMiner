@@ -83,6 +83,15 @@ public class ActionInputs
     public bool? CaseSensitiveKeys { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets the the value to trim from the start of the <see cref="BranchName"/> input.
+    /// </summary>
+    [Option(
+        "trim-start-from-branch",
+        Required = false,
+        HelpText = "Trims the start from the 'branch-name' value.")]
+    public string TrimStartFromBranch { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not the action will fail if all of the key values
     /// in the list of <see cref="VersionKeys"/> do not match.
     /// </summary>

@@ -34,7 +34,8 @@
 This is a **GitHub Action** to make it easy to pull versions from XML files.
 This can be used in your workflows for other uses such as version validation, version tag management, and more!!
 
-<div align="center"><h3 style="font-weight:bold">⚠️Quick Note⚠️</h3></div>
+
+<div align="center"><h3 style="font-weight:bold">📒Quick Note📒</h3></div>
 
 This GitHub action is built using C#/NET and runs in a docker container.  This means that the action can only be run on Linux.  Running in ***Windows*** is not supported.  If you need to use steps on ***Windows*** AND ***Ubuntu***, then you can split up your workflow so that this action is in an isolated job that runs on ***Ubuntu***, while the rest of the workflow can be executed in ***Windows***.
 
@@ -78,13 +79,13 @@ jobs:
 
     - name: Get Version From C# Project File
       id: get-version
-      uses: KinsonDigital/VersionMiner@v1.0.0-preview.1
+      uses: KinsonDigital/VersionMiner@v1.0.0-preview.2
       with:
       repo-owner: JohnDoe
       repo-name: MyRepo
       branch-name: master
-      file-format: xml
-      file-path: MyProject/MyProject.csproj
+      file-format: xml # Not case sensitive
+      file-path: "MyProject/MyProject.csproj"
       version-keys: Version
 
     - name: Print Version From File
@@ -92,9 +93,10 @@ jobs:
       run: echo "${{ steps.get-version.outputs.version }}"
 ```
 
-So if the C# project file had the contents below, the workflow above would print the value ***1.2.3*** to the GitHub console.
+If the XML file had the contents below, the workflow above would print the value ***1.2.3*** to the GitHub console.
 
 ``` xml
+<!--Quick Example - C# Project File-->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -121,10 +123,11 @@ So if the C# project file had the contents below, the workflow above would print
 | `repo-owner` | The owner of the repository. | yes | N/A |
 | `repo-name` | The name of the repository. | yes | N/A |
 | `branch-name` | The name of the branch where the file lives. | yes | N/A |
-| `file-format` | The type of file that contains the version. Currently, the only supported value is `xml`. | yes | N/A |
+| `file-format` | The data format of the file that contains the version. Currently, the only supported value is `xml` for a file format.  Not case sensitive. | yes | N/A |
 | `file-path` | The path to the file relative to the root of the repository. | yes | N/A |
-| `version-keys` | The key(s) that can hold the version in the file. | yes | N/A |
+| `version-keys` | A comma delimited list of keys that hold the version value. Spaces around commas are ignored.  Keys must be wrapped with single or double quotes to be processed properly if more than one key exists. | yes | N/A |
 | `case-sensitive-keys` | If true, key searching will be case-sensitive. | no | `true` |
+| `trim-start-from-branch` | Will trim the given value from the beginning of the `branch-name` input. | no | empty |
 | `fail-on-key-value-mismatch` | If true, the action will fail, if all of the key values listed in the `version-keys` input do not match.  Other failure inputs will not affect this input. | no | `false` |
 | `fail-when-version-not-found` | If true, the action will fail, if no version exists.   Other failure inputs will not affect this input. | no | `true` |
 
@@ -137,35 +140,35 @@ So if the C# project file had the contents below, the workflow above would print
 
 <div align="center">
 
-### **Example 1 - (Pass If Version Not Found)**
+### **Example 1 - (Pass When Version Is Not Found)**
 </div>
 
 Requirements:
-- Search for a version but do not fail the workflow if no version is found
+- Searches for a version but does not fail the workflow if no version is found.
 
-⚠️The action input `fail-when-version-not-found` is not required and has a default value of `true`.  If you do not want the action to fail when the version is not found, you must explicitly use the input.
+📒Quick Note: The action input `fail-when-version-not-found` is not required and has a default value of `true`.  If you do not want the action to fail when the version is not found, you must explicitly use the input with a value of `false`.
 
 ``` yml
 #Example 1 Workflow
 - name: Get Version From C# Project File
-    uses: KinsonDigital/VersionMiner@v1.0.0-preview.1
+    uses: KinsonDigital/VersionMiner@v1.0.0-preview.2
     with:
         repo-owner: JohnDoe
         repo-name: MyRepo
         branch-name: master
-        file-format: xml
-        file-path: MyProject/MyProject.csproj
+        file-format: xml # Not case sensitive
+        file-path: "MyProject/MyProject.csproj"
         version-keys: Version
         fail-when-version-not-found: false
 ```
 ``` xml
-<!--Example 1 C# Project File-->
+<!--Example 1 - C# Project File-->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>10.0</LangVersion>
-    <Version></Version>👈🏼No value.  Does not fail workflow.
+    <Version></Version> <!--No value.  Does not fail workflow.-->
 </Project>
 ```
 
@@ -181,29 +184,29 @@ Requirements:
 Result:  
 - The example below will use the value of ***4.5.6*** as the action output.
 
-⚠️Since the `fail-when-version-not-found` input is not explicitly used in the YAML, the default value of `true` will be used and the job will fail if the version was not found.
+📒Quick Note: Since the `fail-when-version-not-found` input is not explicitly used in the YAML, the default value of `true` will be used and the job will fail if the version was not found.
 
 ``` yml
 #Example 2 Workflow
 - name: Get Version From C# Project File
-    uses: KinsonDigital/VersionMiner@v1.0.0-preview.1
+    uses: KinsonDigital/VersionMiner@v1.0.0-preview.2
     with:
         repo-owner: JohnDoe
         repo-name: MyRepo
         branch-name: master
-        file-format: xml
-        file-path: MyProject/MyProject.csproj
-        version-keys: Version,FileVersion
+        file-format: xml # Not case sensitive
+        file-path: "MyProject/MyProject.csproj"
+        version-keys: "Version,FileVersion"
 ```
 ``` xml
-<!--Example 2 C# Project File-->
+<!--Example 2 - C# Project File-->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>10.0</LangVersion>
-    <Version></Version>👈🏼No value.  Search continues using the FileVersion key
-    <FileVersion>4.5.6</FileVersion>👈🏼Key exists so this value is returned
+    <Version></Version> <!--No value. Search continues using the FileVersion key-->
+    <FileVersion>4.5.6</FileVersion> <!--Key exists so this value is returned-->
 </Project>
 ```
 
@@ -221,25 +224,51 @@ Result:
 ``` yml
 #Example 3 Workflow
 - name: Get Version From C# Project File
-    uses: KinsonDigital/VersionMiner@v1.0.0-preview.1
+    uses: KinsonDigital/VersionMiner@v1.0.0-preview.2
     with:
         repo-owner: JohnDoe
         repo-name: MyRepo
         branch-name: master
-        file-format: xml
-        file-path: MyProject/MyProject.csproj
-        version-keys: VeRSion 👈🏼 # Different casing as the XML key below.
-        case-sensitive-keys: false 👈🏼 # Not required and has a default value of true.
+        file-format: xml # Not case sensitive
+        file-path: "MyProject/MyProject.csproj"
+        version-keys: VeRSion # Different casing as the XML key below.
+        case-sensitive-keys: false # Not required and has a default value of true.
 ```
 ``` xml
-<!--Example 3 C# Project File-->
+<!--Example 3 - C# Project File-->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>10.0</LangVersion>
-    <version>1.2.3</version> 👈🏼 <!--Spelling matches "VeRSion" but is still found as a version key.-->
+    <version>1.2.3</version> <!--Spelling matches "VeRSion" but is still discovered.-->
 </Project>
+```
+
+<div align="center">
+
+### **Example 4 - (Branch Trimming)**
+</div>
+
+Requirements:
+- Need to trim the value 'refs/heads/' from the beginning of the branch.
+
+Result:  
+- The example below will use the value of ***1.2.3*** as the action output.
+- Click [here](https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables) to get more information about the default variable used in the example below.
+
+``` yml
+#Example 4 Workflow
+- name: Get Version From C# Project File
+    uses: KinsonDigital/VersionMiner@v1.0.0-preview.2
+    with:
+        repo-owner: JohnDoe
+        repo-name: MyRepo
+        branch-name: ${{ github.ref }} # If the branch was 'my-branch', this value could be 'refs/heads/my-branch'
+        file-format: xml # Not case sensitive
+        file-path: "MyProject/MyProject.csproj"
+        version-keys: version
+        trim-start-from-branch: "refs/heads/"
 ```
 
 ---
@@ -252,7 +281,7 @@ Result:
 <div align="left">
 
 ### License
-- [MIT License - VersionMiner](https://github.com/KinsonDigital/VersionMiner/blob/preview/v1.0.0-preview.1/LICENSE)
+- [MIT License - VersionMiner](https://github.com/KinsonDigital/VersionMiner/blob/preview/v1.0.0-preview.2/LICENSE)
 </div>
 
 <div align="left">
