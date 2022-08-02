@@ -28,6 +28,16 @@ public class ActionInputs
     public string RepoName { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the token used to authenticate to the repository owner set by the <see cref="RepoOwner"/> value
+    /// for a repository name set by the <see cref="RepoName"/> value.
+    /// </summary>
+    [Option(
+        "repo-token",
+        Required = false,
+        HelpText = "The PAT used to authenticate to the repository.")]
+    public string RepoToken { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the name of the branch where the file lives.
     /// </summary>
     [Option(

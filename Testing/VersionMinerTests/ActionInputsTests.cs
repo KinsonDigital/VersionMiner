@@ -16,7 +16,7 @@ namespace VersionMinerTests;
 /// </summary>
 public class ActionInputsTests
 {
-    #region Prop Tests
+    #region Constructor Tests
     [Fact]
     public void Ctor_WhenConstructed_PropsHaveCorrectDefaultValuesAndDecoratedWithAttributes()
     {
@@ -33,6 +33,11 @@ public class ActionInputsTests
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.RepoName)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.RepoName))
             .AssertOptionAttrProps("repo-name", true, "Gets or sets the name of the repository.");
+
+        inputs.RepoToken.Should().BeEmpty();
+        typeof(ActionInputs).GetProperty(nameof(ActionInputs.RepoToken)).Should().BeDecoratedWith<OptionAttribute>();
+        inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.RepoToken))
+            .AssertOptionAttrProps("repo-token", false, "The PAT used to authenticate to the repository.");
 
         inputs.BranchName.Should().BeEmpty();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.BranchName)).Should().BeDecoratedWith<OptionAttribute>();
@@ -75,7 +80,9 @@ public class ActionInputsTests
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailWhenVersionNotFound))
             .AssertOptionAttrProps("fail-when-version-not-found", false, true, "If true, the action will fail if the version is not found.");
     }
+    #endregion
 
+    #region Prop Tests
     [Fact]
     public void RepoOwner_WhenSettingValue_ReturnsCorrectResult()
     {
@@ -98,10 +105,22 @@ public class ActionInputsTests
 
         // Act
         inputs.RepoName = "test-repo";
-        var actual = inputs.RepoName;
 
         // Assert
-        actual.Should().Be("test-repo");
+        inputs.RepoName.Should().Be("test-repo");
+    }
+
+    [Fact]
+    public void RepoToken_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var inputs = new ActionInputs();
+
+        // Act
+        inputs.RepoToken = "test-token";
+
+        // Assert
+        inputs.RepoToken.Should().Be("test-token");
     }
 
     [Fact]
