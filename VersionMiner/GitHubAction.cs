@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using GitHubData;
 using VersionMiner.Exceptions;
 using VersionMiner.Guards;
 using VersionMiner.Services;
@@ -48,11 +49,6 @@ public sealed class GitHubAction : IGitHubAction
     {
         ShowWelcomeMessage();
 
-        this.gitHubDataService.RepoOwner = inputs.RepoOwner;
-        this.gitHubDataService.RepoName = inputs.RepoName;
-        this.gitHubDataService.BranchName = inputs.BranchName;
-        this.gitHubDataService.FilePath = inputs.FilePath;
-
         var branchNeedsTrimming = string.IsNullOrEmpty(inputs.TrimStartFromBranch) is false &&
                                   inputs.BranchName.ToLower().StartsWith(inputs.TrimStartFromBranch.ToLower());
 
@@ -77,7 +73,9 @@ public sealed class GitHubAction : IGitHubAction
             }
 
             this.consoleService.Write($"✔️️Verifying if the repository owner '{inputs.RepoOwner}' exists . . . ");
-            var ownerExists = await this.gitHubDataService.OwnerExists();
+            var ownerExists = await this.gitHubDataService.OwnerExistsAsync(
+                inputs.RepoOwner);
+
             if (ownerExists is false)
             {
                 throw new OwnerDoesNotExistException($"The repository owner '{inputs.RepoOwner}' does not exist.");
@@ -87,7 +85,10 @@ public sealed class GitHubAction : IGitHubAction
             this.consoleService.BlankLine();
 
             this.consoleService.Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ");
-            var repoExists = await this.gitHubDataService.RepoExists();
+            var repoExists = await this.gitHubDataService.RepoExistsAsync(
+                inputs.RepoOwner,
+                inputs.RepoName);
+
             if (repoExists is false)
             {
                 throw new RepoDoesNotExistException($"The repository '{inputs.RepoName}' does not exist.");
@@ -97,7 +98,11 @@ public sealed class GitHubAction : IGitHubAction
             this.consoleService.BlankLine();
 
             this.consoleService.Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ");
-            var branchExists = await this.gitHubDataService.BranchExists();
+            var branchExists = await this.gitHubDataService.BranchExistsAsync(
+                inputs.RepoOwner,
+                inputs.RepoName,
+                inputs.BranchName);
+
             if (branchExists is false)
             {
                 throw new BranchDoesNotExistException($"The repository branch '{inputs.BranchName}' does not exist.");
@@ -107,7 +112,12 @@ public sealed class GitHubAction : IGitHubAction
             this.consoleService.BlankLine();
 
             this.consoleService.Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ");
-            var xmlData = await this.gitHubDataService.GetFileData();
+            var xmlData = await this.gitHubDataService.GetFileDataAsync(
+                inputs.RepoOwner,
+                inputs.RepoName,
+                inputs.BranchName,
+                inputs.FilePath);
+
             this.consoleService.Write("data retrieved", true);
             this.consoleService.BlankLine();
 
