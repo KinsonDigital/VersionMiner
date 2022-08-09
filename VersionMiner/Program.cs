@@ -80,7 +80,7 @@ public static class Program
                         gitHubAction.Dispose();
                         appService.Exit(0);
                     },
-                    (e) =>
+                    e =>
                     {
                         host.Dispose();
                         Default.Dispose();
