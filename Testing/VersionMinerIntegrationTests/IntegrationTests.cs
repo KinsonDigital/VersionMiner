@@ -3,8 +3,10 @@
 // </copyright>
 
 using FluentAssertions;
+using GitHubData;
 using VersionMiner;
 using VersionMiner.Services;
+using GHHttpClient = GitHubData.HttpClient;
 
 namespace VersionMinerIntegrationTests;
 
@@ -14,14 +16,16 @@ namespace VersionMinerIntegrationTests;
 public class IntegrationTests : IDisposable
 {
     private readonly GitHubAction action;
+    private readonly IHttpClient httpClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationTests"/> class.
     /// </summary>
     public IntegrationTests()
     {
+        this.httpClient = new GHHttpClient();
         var consoleService = new GitHubConsoleService();
-        var gitHubDataService = new GitHubDataService();
+        var gitHubDataService = new GitHubDataService(this.httpClient);
         var parserService = new XMLParserService();
         var actionOutputService = new ActionOutputService(consoleService);
 
@@ -51,10 +55,10 @@ public class IntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData(nameof(ActionInputs.RepoOwner), "", "The 'repo-owner' value cannot be null or empty.")]
-    [InlineData(nameof(ActionInputs.RepoName), "", "The 'repo-name' value cannot be null or empty.")]
-    [InlineData(nameof(ActionInputs.BranchName), "", "The 'branch-name' value cannot be null or empty.")]
-    [InlineData(nameof(ActionInputs.FilePath), "", "The 'file-path' value cannot be null or empty.")]
+    [InlineData(nameof(ActionInputs.RepoOwner), "", "The 'repoOwner' value cannot be null or empty.")]
+    [InlineData(nameof(ActionInputs.RepoName), "", "The 'repoName' value cannot be null or empty.")]
+    [InlineData(nameof(ActionInputs.BranchName), "", "The 'branchName' value cannot be null or empty.")]
+    [InlineData(nameof(ActionInputs.FilePath), "", "The 'filePath' value cannot be null or empty.")]
     [InlineData(nameof(ActionInputs.FileFormat), "invalid-format", "The 'file-format' value of 'invalid-format' is invalid.\r\nThe only file format currently supported is XML.")]
     [InlineData(nameof(ActionInputs.FileFormat), "", "The 'file-format' value of '' is invalid.\r\nThe only file format currently supported is XML.")]
     [InlineData(nameof(ActionInputs.VersionKeys), "", "No version keys supplied for the 'version-keys' input.")]
@@ -86,7 +90,11 @@ public class IntegrationTests : IDisposable
     }
 
     /// <inheritdoc/>
-    public void Dispose() => this.action.Dispose();
+    public void Dispose()
+    {
+        this.action.Dispose();
+        this.httpClient.Dispose();
+    }
 
     /// <summary>
     /// Creates a new instance of <see cref="ActionInputs"/> with default values for the purpose of testing.

@@ -4,6 +4,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using GitHubData;
 using VersionMiner.Services;
 
 [assembly: InternalsVisibleTo("VersionMinerTests", AllInternalsVisible = true)]
