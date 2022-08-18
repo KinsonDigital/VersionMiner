@@ -12,7 +12,7 @@ inputs:
     description: 'The name of the repository'
     required: true
   repo-token:
-    description: 'The PAT used to authenticate to the repository.'
+    description: 'The GitHub or PAT token used to authenticate to the repository.'
     required: false
     default: ""
   branch-name:

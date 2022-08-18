@@ -28,13 +28,13 @@ public class ActionInputs
     public string RepoName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the token used to authenticate to the repository owner set by the <see cref="RepoOwner"/> value
-    /// for a repository name set by the <see cref="RepoName"/> value.
+    /// Gets or sets the token used to authenticate to the repository set by <see cref="RepoName"/>
+    /// which is owned by the <see cref="RepoOwner"/>.
     /// </summary>
     [Option(
         "repo-token",
         Required = false,
-        HelpText = "The PAT used to authenticate to the repository.")]
+        HelpText = "The GitHub or PAT token used to authenticate to the repository.")]
     public string RepoToken { get; set; } = string.Empty;
 
     /// <summary>

@@ -37,7 +37,7 @@ public class ActionInputsTests
         inputs.RepoToken.Should().BeEmpty();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.RepoToken)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.RepoToken))
-            .AssertOptionAttrProps("repo-token", false, "The PAT used to authenticate to the repository.");
+            .AssertOptionAttrProps("repo-token", false, "The GitHub or PAT token used to authenticate to the repository.");
 
         inputs.BranchName.Should().BeEmpty();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.BranchName)).Should().BeDecoratedWith<OptionAttribute>();
