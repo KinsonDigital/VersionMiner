@@ -1,4 +1,4 @@
-﻿// <copyright file="Program.cs" company="KinsonDigital">
+// <copyright file="Program.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -33,7 +33,9 @@ public static class Program
             {
                 services.AddSingleton<IAppService, AppService>();
                 services.AddSingleton<IHttpClient, HttpClient>();
+                services.AddSingleton<IJSONService, JSONService>();
                 services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
+                services.AddSingleton<IRequestRateLimitService, RequestRateLimitService>();
                 services.AddSingleton<IGitHubDataService, GitHubDataService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
                 services.AddSingleton<IDataParserService, XMLParserService>();
