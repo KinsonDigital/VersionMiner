@@ -5,7 +5,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using GitHubData;
+using GitHubData.Services;
 using VersionMiner.Services;
+using HttpClient = GitHubData.HttpClient;
 
 [assembly: InternalsVisibleTo("VersionMinerTests", AllInternalsVisible = true)]
 
@@ -30,7 +32,10 @@ public static class Program
             .ConfigureServices((_, services) =>
             {
                 services.AddSingleton<IAppService, AppService>();
+                services.AddSingleton<IHttpClient, HttpClient>();
+                services.AddSingleton<IJSONService, JSONService>();
                 services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
+                services.AddSingleton<IRequestRateLimitService, RequestRateLimitService>();
                 services.AddSingleton<IGitHubDataService, GitHubDataService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
                 services.AddSingleton<IDataParserService, XMLParserService>();
@@ -38,9 +43,21 @@ public static class Program
                 services.AddSingleton<IGitHubAction, GitHubAction>();
             }).Build();
 
-        var appService = host.Services.GetRequiredService<IAppService>();
-        var gitHubAction = host.Services.GetRequiredService<IGitHubAction>();
-        var consoleService = host.Services.GetRequiredService<IGitHubConsoleService>();
+        IAppService appService;
+        IGitHubAction gitHubAction;
+        IGitHubConsoleService consoleService;
+
+        try
+        {
+            appService = host.Services.GetRequiredService<IAppService>();
+            gitHubAction = host.Services.GetRequiredService<IGitHubAction>();
+            consoleService = host.Services.GetRequiredService<IGitHubConsoleService>();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
 
         var argParsingService = host.Services.GetRequiredService<IArgParsingService<ActionInputs>>();
 
@@ -58,7 +75,7 @@ public static class Program
                         gitHubAction.Dispose();
                         appService.Exit(0);
                     },
-                    (e) =>
+                    e =>
                     {
                         host.Dispose();
                         Default.Dispose();

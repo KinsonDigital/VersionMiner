@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-using GitHubData;
+using GitHubData.Services;
 using VersionMiner.Exceptions;
 using VersionMiner.Guards;
 using VersionMiner.Services;
@@ -70,6 +70,12 @@ public sealed class GitHubAction : IGitHubAction
                 var exMsg = $"The 'file-format' value of '{inputs.FileFormat}' is invalid.";
                 exMsg += $"{Environment.NewLine}The only file format currently supported is XML.";
                 throw new InvalidFileFormatException(exMsg);
+            }
+
+            // If a repo token exists
+            if (string.IsNullOrEmpty(inputs.RepoToken) is false)
+            {
+                this.gitHubDataService.AuthToken = inputs.RepoToken;
             }
 
             this.consoleService.Write($"✔️️Verifying if the repository owner '{inputs.RepoOwner}' exists . . . ");

@@ -3,7 +3,7 @@
 // </copyright>
 
 using FluentAssertions;
-using GitHubData;
+using GitHubData.Services;
 using Moq;
 using VersionMiner;
 using VersionMiner.Exceptions;
@@ -227,6 +227,23 @@ public class GitHubActionTests
         }
 
         await action.Run(inputs, () => { }, Assert);
+    }
+
+    [Fact]
+    public async void Run_WhenRepoTokenExists_SetRepoTokenForRequests()
+    {
+        // Arrange
+        const string authToken = "test-token";
+
+        var inputs = CreateInputs(repoToken: authToken, failWhenVersionNotFound: false);
+        var action = CreateAction();
+
+        // Act
+        var act = async () => await action.Run(inputs, () => { }, e => throw e);
+
+        // Assert
+        await act.Should().NotThrowAsync();
+        this.mockDataService.VerifySet(p => p.AuthToken = authToken);
     }
 
     [Fact]
@@ -581,6 +598,7 @@ public class GitHubActionTests
     private static ActionInputs CreateInputs(
         string repoOwner = "test-owner",
         string repoName = "test-name",
+        string repoToken = "",
         string filePath = "test-path",
         string branchName = "test-branch",
         string fileFormat = XMLFileFormat,
@@ -592,6 +610,7 @@ public class GitHubActionTests
     {
         RepoOwner = repoOwner,
         RepoName = repoName,
+        RepoToken = repoToken,
         FilePath = filePath,
         BranchName = branchName,
         FileFormat = fileFormat,

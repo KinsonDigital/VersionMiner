@@ -1,7 +1,8 @@
 <h1 align="center" style='color:mediumseagreen;font-weight:bold'>
-VersionMiner Release Notes - [add-prod-release-here]</h1>
+    VersionMiner Production Release Notes - [TODO: add-prod-release-here]
+</h1>
 
-<h2 style="font-weight:bold" align="center">New ✨</h2>
+<h2 style="font-weight:bold" align="center">New Features✨</h2>
 
 ---
 
@@ -14,6 +15,7 @@ VersionMiner Release Notes - [add-prod-release-here]</h1>
 ---
 
 <h2 style="font-weight:bold" align="center">Internal Changes ⚙️</h2>
+<h5 align="center">(Changes that do not affect users.  Not breaking changes, new features, or bug fixes.)</h5>
 
 ---
 
@@ -22,3 +24,4 @@ VersionMiner Release Notes - [add-prod-release-here]</h1>
 ---
 
 <h2 style="font-weight:bold" align="center">Other 🪧</h2>
+<h5 align="center">(Includes anything that does not fit into the categories above)</h5>
