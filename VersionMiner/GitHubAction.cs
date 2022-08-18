@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-using GitHubData;
+using GitHubData.Services;
 using VersionMiner.Exceptions;
 using VersionMiner.Guards;
 using VersionMiner.Services;

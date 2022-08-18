@@ -4,6 +4,7 @@
 
 using FluentAssertions;
 using GitHubData;
+using GitHubData.Services;
 using VersionMiner;
 using VersionMiner.Services;
 using GHHttpClient = GitHubData.HttpClient;
@@ -24,8 +25,10 @@ public class IntegrationTests : IDisposable
     public IntegrationTests()
     {
         this.httpClient = new GHHttpClient();
+        var jsonService = new JSONService();
         var consoleService = new GitHubConsoleService();
-        var gitHubDataService = new GitHubDataService(this.httpClient);
+        var requestRateLimitService = new RequestRateLimitService(this.httpClient, jsonService);
+        var gitHubDataService = new GitHubDataService(requestRateLimitService, this.httpClient);
         var parserService = new XMLParserService();
         var actionOutputService = new ActionOutputService(consoleService);
 

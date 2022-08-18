@@ -5,6 +5,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using GitHubData;
+using GitHubData.Services;
 using VersionMiner.Services;
 using HttpClient = GitHubData.HttpClient;
 

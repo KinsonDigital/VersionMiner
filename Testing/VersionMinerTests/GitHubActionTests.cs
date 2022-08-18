@@ -3,7 +3,7 @@
 // </copyright>
 
 using FluentAssertions;
-using GitHubData;
+using GitHubData.Services;
 using Moq;
 using VersionMiner;
 using VersionMiner.Exceptions;
