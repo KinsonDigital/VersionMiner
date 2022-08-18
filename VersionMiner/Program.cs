@@ -1,4 +1,4 @@
-// <copyright file="Program.cs" company="KinsonDigital">
+﻿// <copyright file="Program.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -46,14 +46,12 @@ public static class Program
         IAppService appService;
         IGitHubAction gitHubAction;
         IGitHubConsoleService consoleService;
-        IHttpClient httpClient;
 
         try
         {
             appService = host.Services.GetRequiredService<IAppService>();
             gitHubAction = host.Services.GetRequiredService<IGitHubAction>();
             consoleService = host.Services.GetRequiredService<IGitHubConsoleService>();
-            httpClient = host.Services.GetRequiredService<IHttpClient>();
         }
         catch (Exception e)
         {
@@ -68,12 +66,6 @@ public static class Program
             args,
             async inputs =>
             {
-                // If the repo token input is not null or empty, use it to add auth to all GitHub requests
-                if (string.IsNullOrEmpty(inputs.RepoToken) is false)
-                {
-                    httpClient.AddHeader("Authorization", $"token {inputs.RepoToken}");
-                }
-
                 await gitHubAction.Run(
                     inputs,
                     () =>

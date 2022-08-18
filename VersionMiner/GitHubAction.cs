@@ -72,6 +72,12 @@ public sealed class GitHubAction : IGitHubAction
                 throw new InvalidFileFormatException(exMsg);
             }
 
+            // If a repo token exists
+            if (string.IsNullOrEmpty(inputs.RepoToken) is false)
+            {
+                this.gitHubDataService.AuthToken = inputs.RepoToken;
+            }
+
             this.consoleService.Write($"✔️️Verifying if the repository owner '{inputs.RepoOwner}' exists . . . ");
             var ownerExists = await this.gitHubDataService.OwnerExistsAsync(
                 inputs.RepoOwner);
