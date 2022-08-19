@@ -35,10 +35,13 @@ This is a **GitHub Action** to make it easy to pull versions from XML files.
 This can be used in your workflows for other uses such as version validation, version tag management, and more!!
 
 
-<div align="center"><h3 style="font-weight:bold">📒Quick Note📒</h3></div>
+<div align="center"><h3 style="font-weight:bold">⚠️Quick Note⚠️</h3></div>
 
-This GitHub action is built using C#/NET and runs in a docker container.  This means that the action can only be run on Linux.  Running in ***Windows*** is not supported.  If you need to use steps on ***Windows*** AND ***Ubuntu***, then you can split up your workflow so that this action is in an isolated job that runs on ***Ubuntu***, while the rest of the workflow can be executed in ***Windows***.
+This GitHub action is built using C#/NET and runs in a docker container.  If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**.  You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into it's own job.  You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow. For more information, refer to the Github documentation links below:
 
+For more info on step and job outputs, refer to the GitHub documentation links below:
+- [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
+- [Setting a step action output parameter](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
 <div align="center"><h3 style="font-weight:bold">Usage Examples</h3></div>
 
 - Create tags automatically with the version, during the release process.
