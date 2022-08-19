@@ -9,10 +9,10 @@
     <RootNamespace>VersionMiner</RootNamespace>
 
     <!--Update this for production and preview releases-->
-    <Version>0.1.0</Version>
+    <Version>1.0.0-preview.2</Version>
 
     <!--Update this for production and preview releases-->
-    <FileVersion>0.1.0</FileVersion>
+    <FileVersion>1.0.0-preview.2</FileVersion>
 
     <Authors>Calvin Wilkinson</Authors>
     <Company>Kinson Digital</Company>
