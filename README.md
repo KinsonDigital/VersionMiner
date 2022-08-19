@@ -42,6 +42,7 @@ This GitHub action is built using C#/NET and runs in a docker container.  If the
 For more info on step and job outputs, refer to the GitHub documentation links below:
 - [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
 - [Setting a step action output parameter](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
+
 <div align="center"><h3 style="font-weight:bold">Usage Examples</h3></div>
 
 - Create tags automatically with the version, during the release process.
