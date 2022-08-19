@@ -28,6 +28,16 @@ public class ActionInputs
     public string RepoName { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the token used to authenticate to the repository set by <see cref="RepoName"/>
+    /// which is owned by the <see cref="RepoOwner"/>.
+    /// </summary>
+    [Option(
+        "repo-token",
+        Required = false,
+        HelpText = "The GitHub or PAT token used to authenticate to the repository.")]
+    public string RepoToken { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the name of the branch where the file lives.
     /// </summary>
     [Option(
@@ -81,6 +91,15 @@ public class ActionInputs
         Default = true,
         HelpText = "If true, the key search will be case sensitive.")]
     public bool? CaseSensitiveKeys { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the the value to trim from the start of the <see cref="BranchName"/> input.
+    /// </summary>
+    [Option(
+        "trim-start-from-branch",
+        Required = false,
+        HelpText = "Trims the start from the 'branch-name' value.")]
+    public string TrimStartFromBranch { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not the action will fail if all of the key values

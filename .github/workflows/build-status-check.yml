@@ -1,14 +1,10 @@
 name: ✔Build Status Check
 
-
 env:
-  PROJECT_NAME: VersionMiner
   NET_SDK_VERSION: 6.0.300
-
 
 on:
   workflow_dispatch:
-  pull_request:
     paths-ignore:
       - ".github/**"
       - "Documentation/**"
@@ -23,31 +19,51 @@ on:
 
 
 jobs:
-  Build_Status_Check:
-    name: Build Status Check
-    runs-on: windows-latest
+  determine_build_config:
+    name: Determine Build Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      build-config: ${{ steps.get-build-config.outputs.build-config }}
     steps:
-    - uses: actions/checkout@v2
+      - name: Get Build Config
+        id: get-build-config
+        shell: pwsh
+        run: |
+          # If the destination branch that the pull request is merging into is the master, do a release build
+          if ( "${{ github.base_ref }}" -eq "master") {
+            Write-Host "::set-output name=build-config::Release";
+          } else { # Any other branch than master, do a debug build
+            Write-Host "::set-output name=build-config::Debug";
+          }
 
-    - name: Get Build Config
-      id: get-build-config
-      run: |
-        # If the destination branch that the pull request is merging into is master, do a release build
-        if ( "${{ github.base_ref }}" -eq "master") {
-          Write-Host "::set-output name=build-config::Release"
-        } else { # Any other branch than master, do a debug build
-          Write-Host "::set-output name=build-config::Debug"
-        }
+  get_sdk_version:
+    name: Get SDK Version
+    runs-on: ubuntu-latest
+    outputs:
+      sdk-version: ${{ steps.get-sdk-version.outputs.sdk-version }}
+    steps:
+      - name: Get SDK Version From Environment Variable
+        id: get-sdk-version
+        shell: pwsh
+        run: Write-Host "::set-output name=sdk-version::${{ env.NET_SDK_VERSION }}";
 
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: ${{ env.NET_SDK_VERSION }}
+  # Build Main Projects
+  build_versionminer:
+    name: Build VersionMiner Project
+    needs: [determine_build_config, get_sdk_version]
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    with:
+      project-name: VersionMiner
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
-    - name: Restore Dependencies
-      run: dotnet restore "${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj"
-
-    - name: Build Project
-      run: dotnet build "${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj" `
-        -c ${{ steps.get-build-config.outputs.build-config }} `
-        --no-restore
+  build_versionminer_tests_shared:
+    name: Build VersionMinerTests Project
+    needs: [determine_build_config,
+            get_sdk_version,
+            build_versionminer]
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    with:
+      project-name: VersionMinerTests
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}

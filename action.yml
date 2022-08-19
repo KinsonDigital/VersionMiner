@@ -2,7 +2,7 @@ name: 'Version Miner'
 description: 'Pulls versions out from various types of files.'
 author: 'Calvin Wilkinson (KinsonDigital)'
 branding:
-  icon: settings
+  icon: search
   color: purple
 inputs:
   repo-owner:
@@ -11,6 +11,10 @@ inputs:
   repo-name:
     description: 'The name of the repository'
     required: true
+  repo-token:
+    description: 'The GitHub or PAT token used to authenticate to the repository.'
+    required: false
+    default: ""
   branch-name:
     description: 'The name of the branch where the file lives.'
     required: true
@@ -27,6 +31,10 @@ inputs:
     description: 'If true, the key search will be case sensitive.'
     required: false
     default: true
+  trim-start-from-branch:
+    description: 'Trims the start from the ''branch-name'' value.'
+    required: false
+    default: ''
   fail-on-key-value-mismatch:
     description: 'If true, the action will fail if all of the key values listed in the "version-keys" input do not match.'
     required: false
@@ -49,6 +57,8 @@ runs:
   - ${{ inputs.repo-owner }}
   - '--repo-name'
   - ${{ inputs.repo-name }}
+  - '--repo-token'
+  - ${{ inputs.repo-token }}
   - '--branch-name'
   - ${{ inputs.branch-name }}
   - '--file-format'
@@ -59,6 +69,8 @@ runs:
   - ${{ inputs.version-keys }}
   - '--case-sensitive-keys'
   - ${{ inputs.case-sensitive-keys }}
+  - '--trim-start-from-branch'
+  - ${{ inputs.trim-start-from-branch }}
   - '--fail-on-key-value-mismatch'
   - ${{ inputs.fail-on-key-value-mismatch }}
   - '--fail-when-version-not-found'
