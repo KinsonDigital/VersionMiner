@@ -35,7 +35,7 @@ This is a **GitHub Action** to make it easy to pull versions from XML files.
 This can be used in your workflows for other uses such as version validation, version tag management, and more!!
 
 
-<div align="center"><h3 style="font-weight:bold">⚠️Quick Note⚠️</h3></div>
+<div align="center"><h2 style="font-weight:bold">⚠️Quick Note⚠️</h2></div>
 
 This GitHub action is built using C#/NET and runs in a docker container.  If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**.  You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into it's own job.  You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow. For more information, refer to the Github documentation links below:
 
@@ -43,7 +43,7 @@ For more info on step and job outputs, refer to the GitHub documentation links b
 - [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
 - [Setting a step action output parameter](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
 
-<div align="center"><h3 style="font-weight:bold">Usage Examples</h3></div>
+<div align="center"><h2 style="font-weight:bold">Usage Examples</h2></div>
 
 - Create tags automatically with the version, during the release process.
 - Validate the version syntax to help enforce version syntax.
@@ -70,7 +70,7 @@ the XML for any XML elements that match the name ***"Version"*** or ***"FileVers
 
 ---
 
-<div align="center"><h3 style="font-weight:bold">Quick Example</h3></div>
+<div align="center"><h2 style="font-weight:bold">Quick Example</h2></div>
 
 ```yaml
 name: Get Version Example
