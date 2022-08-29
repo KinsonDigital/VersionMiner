@@ -8,7 +8,7 @@ using System.Reflection;
 namespace VersionMiner;
 
 /// <summary>
-/// Provides simple application type information.
+/// Provides simple application information.
 /// </summary>
 [ExcludeFromCodeCoverage]
 public static class App
