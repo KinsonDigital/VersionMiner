@@ -72,7 +72,7 @@ public sealed class HttpClient : IHttpClient
 
     /// <inheritdoc/>
     /// <exception cref="Exception">
-    ///     Invoked when a default header already exists.
+    ///     Invoked when a default header exists.
     /// </exception>
     public void AddRequestHeader(string name, string value)
     {
@@ -86,7 +86,7 @@ public sealed class HttpClient : IHttpClient
 
     /// <inheritdoc/>
     /// <exception cref="Exception">
-    ///     Invoked when a default header already exists.
+    ///     Invoked when a default header exists.
     /// </exception>
     public void AddRequestHeaders(IEnumerable<(string name, string value)> headers)
     {
@@ -98,13 +98,13 @@ public sealed class HttpClient : IHttpClient
 
     /// <inheritdoc/>
     /// <exception cref="Exception">
-    ///     Invoked when a default header already exists.
+    ///     Invoked when a default header exists.
     /// </exception>
     public void AddDefaultHeader(string name, string value) => this.restClient.AddDefaultHeader(name, value);
 
     /// <inheritdoc/>
     /// <exception cref="Exception">
-    ///     Invoked when a default header already exists.
+    ///     Invoked when the default header exists.
     /// </exception>
     public void AddDefaultHeaders(IEnumerable<(string name, string value)> headers)
     {

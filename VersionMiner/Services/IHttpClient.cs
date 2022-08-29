@@ -32,7 +32,7 @@ public interface IHttpClient : IDisposable
     /// <param name="name">The name of the header to add.</param>
     /// <param name="value">The value of the header to add.</param>
     /// <remarks>
-    ///     After the next request is made, the headers will be cleared out.
+    ///     After the next request is made, the headers will be cleared.
     /// </remarks>
     void AddRequestHeader(string name, string value);
 
@@ -70,7 +70,7 @@ public interface IHttpClient : IDisposable
     void RemoveHeader(string name);
 
     /// <summary>
-    /// Clears all of the currently existing headers.
+    /// Clears all of the existing headers.
     /// </summary>
     void ClearHeaders();
 

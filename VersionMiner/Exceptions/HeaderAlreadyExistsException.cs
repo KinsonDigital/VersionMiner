@@ -5,7 +5,7 @@
 namespace VersionMiner.Exceptions;
 
 /// <summary>
-/// Occurs when an HTTP header already exists.
+/// Occurs when an HTTP header exists.
 /// </summary>
 public class HeaderAlreadyExistsException : Exception
 {
