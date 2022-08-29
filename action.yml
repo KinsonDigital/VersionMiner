@@ -13,8 +13,7 @@ inputs:
     required: true
   repo-token:
     description: 'The GitHub or PAT token used to authenticate to the repository.'
-    required: false
-    default: ""
+    required: true
   branch-name:
     description: 'The name of the branch where the file lives.'
     required: true
