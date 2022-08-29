@@ -1,7 +1,8 @@
-﻿// <copyright file="ExtensionMethods.cs" company="KinsonDigital">
+// <copyright file="ExtensionMethods.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace VersionMiner;
@@ -85,4 +86,17 @@ public static class ExtensionMethods
 
         return result.ToString();
     }
+
+    /// <summary>
+    /// Converts the given list (<typeparamref name="TKey"/>), <typeparamref name="TValue"/>) tuples
+    /// to a list of <see cref="IEnumerable{T}"/> items of type <see cref="KeyValuePair{TKey,TValue}"/>.
+    /// </summary>
+    /// <param name="pairs">The pairs to convert.</param>
+    /// <typeparam name="TKey">The type of key.</typeparam>
+    /// <typeparam name="TValue">The type of value.</typeparam>
+    /// <returns>
+    ///     The tuples converted to a list of <see cref="KeyValuePair{TKey,TValue}"/> items.
+    /// </returns>
+    public static IEnumerable<KeyValuePair<TKey, TValue>> ToKeyValuePairs<TKey, TValue>(this IEnumerable<(TKey key, TValue value)> pairs)
+        => pairs.Select(pair => new KeyValuePair<TKey, TValue>(pair.key, pair.value)).ToArray();
 }
