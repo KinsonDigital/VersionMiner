@@ -4,10 +4,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using GitHubData;
-using GitHubData.Services;
+using Octokit;
 using VersionMiner.Services;
-using HttpClient = GitHubData.HttpClient;
+using MinerHttpClient = VersionMiner.Services.HttpClient;
 
 [assembly: InternalsVisibleTo("VersionMinerTests", AllInternalsVisible = true)]
 
@@ -31,12 +30,12 @@ public static class Program
         host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((_, services) =>
             {
+                services.AddSingleton<IGitHubClient, GitHubClient>(_
+                    => new GitHubClient(new ProductHeaderValue("version-miner", App.GetVersion())));
                 services.AddSingleton<IAppService, AppService>();
-                services.AddSingleton<IHttpClient, HttpClient>();
-                services.AddSingleton<IJSONService, JSONService>();
+                services.AddSingleton<IHttpClient, MinerHttpClient>();
                 services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
-                services.AddSingleton<IRequestRateLimitService, RequestRateLimitService>();
-                services.AddSingleton<IGitHubDataService, GitHubDataService>();
+                services.AddSingleton<IRepoFileDataService, RepoFileDataService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
                 services.AddSingleton<IDataParserService, XMLParserService>();
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();

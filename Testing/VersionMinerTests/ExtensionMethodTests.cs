@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Collections.ObjectModel;
 using FluentAssertions;
 using VersionMiner;
 
@@ -50,6 +51,34 @@ public class ExtensionMethodTests
 
         // Assert
         actual.Should().Be(expected);
+    }
+
+    [Fact]
+    public void ToKeyValuePairs_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        var expected = new[] { new KeyValuePair<string, int>("key1", 10), new KeyValuePair<string, int>("key2", 20) };
+        var tuples = new[] { ("key1", 10), ("key2", 20) };
+
+        // Act
+        var actual = tuples.ToKeyValuePairs();
+
+        // Assert
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public void ToCollection_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        var expected = new Collection<int>(new List<int>(new[] { 10, 20 }));
+        var values = new[] { 10, 20 };
+
+        // Act
+        var actual = values.ToCollection();
+
+        // Assert
+        actual.Should().BeEquivalentTo(expected);
     }
     #endregion
 }

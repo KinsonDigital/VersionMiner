@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-using GitHubData.Services;
+using Octokit;
 using VersionMiner.Exceptions;
 using VersionMiner.Guards;
 using VersionMiner.Services;
@@ -15,7 +15,8 @@ public sealed class GitHubAction : IGitHubAction
     private const string VersionOutputName = "version";
     private const string XMLFileFormat = "xml";
     private readonly IGitHubConsoleService consoleService;
-    private readonly IGitHubDataService gitHubDataService;
+    private readonly IGitHubClient githubClient;
+    private readonly IRepoFileDataService repoFileDataService;
     private readonly IDataParserService xmlParserService;
     private readonly IActionOutputService actionOutputService;
     private bool isDisposed;
@@ -24,22 +25,26 @@ public sealed class GitHubAction : IGitHubAction
     /// Initializes a new instance of the <see cref="GitHubAction"/> class.
     /// </summary>
     /// <param name="consoleService">Writes to the console.</param>
-    /// <param name="gitHubDataService">Provides data access to GitHub.</param>
+    /// <param name="githubClient">Gives access to GitHub related data.</param>
+    /// <param name="repoFileDataService">Gets file data from a branch in a repository.</param>
     /// <param name="xmlParserService">Parses XML data.</param>
     /// <param name="actionOutputService">Sets the output data of the action.</param>
     public GitHubAction(
         IGitHubConsoleService consoleService,
-        IGitHubDataService gitHubDataService,
+        IGitHubClient githubClient,
+        IRepoFileDataService repoFileDataService,
         IDataParserService xmlParserService,
         IActionOutputService actionOutputService)
     {
         EnsureThat.CtorParamIsNotNull(consoleService);
-        EnsureThat.CtorParamIsNotNull(gitHubDataService);
+        EnsureThat.CtorParamIsNotNull(githubClient);
+        EnsureThat.CtorParamIsNotNull(repoFileDataService);
         EnsureThat.CtorParamIsNotNull(xmlParserService);
         EnsureThat.CtorParamIsNotNull(actionOutputService);
 
         this.consoleService = consoleService;
-        this.gitHubDataService = gitHubDataService;
+        this.githubClient = githubClient;
+        this.repoFileDataService = repoFileDataService;
         this.xmlParserService = xmlParserService;
         this.actionOutputService = actionOutputService;
     }
@@ -75,50 +80,40 @@ public sealed class GitHubAction : IGitHubAction
             // If a repo token exists
             if (string.IsNullOrEmpty(inputs.RepoToken) is false)
             {
-                this.gitHubDataService.AuthToken = inputs.RepoToken;
+                var tokenAuth = new Credentials(inputs.RepoToken);
+                this.githubClient.Connection.Credentials = tokenAuth;
             }
-
-            this.consoleService.Write($"✔️️Verifying if the repository owner '{inputs.RepoOwner}' exists . . . ");
-            var ownerExists = await this.gitHubDataService.OwnerExistsAsync(
-                inputs.RepoOwner);
-
-            if (ownerExists is false)
-            {
-                throw new OwnerDoesNotExistException($"The repository owner '{inputs.RepoOwner}' does not exist.");
-            }
-
-            this.consoleService.Write("the owner exists.", true);
-            this.consoleService.BlankLine();
 
             this.consoleService.Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ");
-            var repoExists = await this.gitHubDataService.RepoExistsAsync(
-                inputs.RepoOwner,
-                inputs.RepoName);
 
-            if (repoExists is false)
+            var repo = (from r in await this.githubClient.Repository.GetAllForCurrent()
+                where !string.IsNullOrEmpty(r.Name) && r.Name.ToLower() == inputs.RepoName.ToLower()
+                select r).FirstOrDefault();
+
+            if (repo is null)
             {
-                throw new RepoDoesNotExistException($"The repository '{inputs.RepoName}' does not exist.");
+                throw new HttpRequestException($"The repository '{inputs.RepoName}' does not exist.");
             }
 
             this.consoleService.Write("the repository exists.", true);
             this.consoleService.BlankLine();
 
             this.consoleService.Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ");
-            var branchExists = await this.gitHubDataService.BranchExistsAsync(
-                inputs.RepoOwner,
-                inputs.RepoName,
-                inputs.BranchName);
 
-            if (branchExists is false)
+            var branch = await this.githubClient.Repository.Branch.Get(repo.Id, inputs.BranchName);
+
+            if (branch is null)
             {
-                throw new BranchDoesNotExistException($"The repository branch '{inputs.BranchName}' does not exist.");
+                throw new HttpRequestException($"The repository branch '{inputs.BranchName}' does not exist.");
             }
 
             this.consoleService.Write("the branch exists.", true);
             this.consoleService.BlankLine();
 
             this.consoleService.Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ");
-            var xmlData = await this.gitHubDataService.GetFileDataAsync(
+            this.repoFileDataService.AuthToken = inputs.RepoToken;
+
+            var fileData = await this.repoFileDataService.GetFileData(
                 inputs.RepoOwner,
                 inputs.RepoName,
                 inputs.BranchName,
@@ -141,10 +136,10 @@ public sealed class GitHubAction : IGitHubAction
             this.consoleService.Write("✔️️Pulling version from file . . . ");
             foreach (var versionKey in versionKeys)
             {
-                var keyExists = this.xmlParserService.KeyExists(xmlData, versionKey, inputs.CaseSensitiveKeys ?? false);
+                var keyExists = this.xmlParserService.KeyExists(fileData, versionKey, inputs.CaseSensitiveKeys ?? false);
 
                 var keyValue = keyExists
-                    ? this.xmlParserService.GetKeyValue(xmlData, versionKey)
+                    ? this.xmlParserService.GetKeyValue(fileData, versionKey)
                     : string.Empty;
                 keyValues.Add(keyValue);
             }
@@ -209,7 +204,7 @@ public sealed class GitHubAction : IGitHubAction
 
         if (disposing)
         {
-            this.gitHubDataService.Dispose();
+            this.repoFileDataService.Dispose();
         }
 
         this.isDisposed = true;

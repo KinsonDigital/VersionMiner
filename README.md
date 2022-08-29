@@ -1,6 +1,6 @@
 <h1 align="center">
 
-**Version Miner Action🪨⛏️**
+**🪨⛏️**
 </h1>
 
 <div align="center">
@@ -125,10 +125,10 @@ If the XML file had the contents below, the workflow above would print the value
 
 | Input Name | Description | Required | Default Value |
 |---|:---|:---:|---|
-| `repo-owner` | The owner of the repository. | yes | N/A |
-| `repo-name` | The name of the repository. | yes | N/A |
-| `repo-token` | The repository or PAT token to use for authorized requests. This action uses the GitHub API to do its job.  This is not required but you will not be able to get very far once the rate limit has been reached.  Refer to [GitHub API Authentication](https://docs.github.com/en/rest/guides/getting-started-with-the-rest-api#authentication) for more information about request rate limits. | no | empty |
-| `branch-name` | The name of the branch where the file lives. | yes | N/A |
+| `repo-owner` | The owner of the repository. This is **NOT** case sensitive. | yes | N/A |
+| `repo-name` | The name of the repository. This is **NOT** case sensitive. | yes | N/A |
+| `repo-token` | The repository or PAT token to use for authorized requests. This action uses [Octokit](https://github.com/octokit/octokit.net) and the [GitHub API](https://docs.github.com/en/rest) to do its job. | yes | empty |
+| `branch-name` | The name of the branch where the file lives. This **IS** case sensitive. | yes | N/A |
 | `file-format` | A non case-sensitive value representing the data format of the file that contains the version. Currently, the only supported value is `xml` for a file format. | yes | N/A |
 | `file-path` | The path to the file relative to the root of the repository. | yes | N/A |
 | `version-keys` | A comma delimited list of keys that hold the version value. Spaces around commas are ignored.  Keys must be wrapped with single or double quotes to be processed properly if more than one key exists. | yes | N/A |
