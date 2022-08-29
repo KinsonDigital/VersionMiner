@@ -1,6 +1,6 @@
 <h1 align="center">
 
-**Version Miner Action🪨⛏️**
+**🪨⛏️**
 </h1>
 
 <div align="center">
