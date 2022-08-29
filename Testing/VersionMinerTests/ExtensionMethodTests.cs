@@ -1,4 +1,4 @@
-// <copyright file="ExtensionMethodTests.cs" company="KinsonDigital">
+﻿// <copyright file="ExtensionMethodTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -62,6 +62,20 @@ public class ExtensionMethodTests
 
         // Act
         var actual = tuples.ToKeyValuePairs();
+
+        // Assert
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public void ToCollection_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        var expected = new Collection<int>(new List<int>(new[] { 10, 20 }));
+        var values = new[] { 10, 20 };
+
+        // Act
+        var actual = values.ToCollection();
 
         // Assert
         actual.Should().BeEquivalentTo(expected);

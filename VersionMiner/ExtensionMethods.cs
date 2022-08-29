@@ -99,4 +99,15 @@ public static class ExtensionMethods
     /// </returns>
     public static IEnumerable<KeyValuePair<TKey, TValue>> ToKeyValuePairs<TKey, TValue>(this IEnumerable<(TKey key, TValue value)> pairs)
         => pairs.Select(pair => new KeyValuePair<TKey, TValue>(pair.key, pair.value)).ToArray();
+
+    /// <summary>
+    /// Converts the given list of <see cref="IEnumerable{T}"/> items to a collection of <see cref="Collection{T}"/> items.
+    /// </summary>
+    /// <param name="items">The items to convert.</param>
+    /// <typeparam name="T">The type of items of the list and resulting collection.</typeparam>
+    /// <returns>
+    ///     The <see cref="Collection{T}"/> equivalent of the given <paramref name="items"/>.
+    /// </returns>
+    public static ICollection<T> ToCollection<T>(this IEnumerable<T> items) => new Collection<T>(items.ToList());
+
 }
