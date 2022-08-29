@@ -3,11 +3,10 @@
 // </copyright>
 
 using FluentAssertions;
-using GitHubData;
-using GitHubData.Services;
+using Octokit;
 using VersionMiner;
 using VersionMiner.Services;
-using GHHttpClient = GitHubData.HttpClient;
+using MinerHttpClient = VersionMiner.Services.HttpClient;
 
 namespace VersionMinerIntegrationTests;
 
@@ -16,6 +15,7 @@ namespace VersionMinerIntegrationTests;
 /// </summary>
 public class IntegrationTests : IDisposable
 {
+    private const string RepoToken = "";
     private readonly GitHubAction action;
     private readonly IHttpClient httpClient;
 
@@ -24,17 +24,17 @@ public class IntegrationTests : IDisposable
     /// </summary>
     public IntegrationTests()
     {
-        this.httpClient = new GHHttpClient();
-        var jsonService = new JSONService();
+        this.httpClient = new MinerHttpClient();
+        var githubClient = new GitHubClient(new ProductHeaderValue("version-miner-testing"));
+        var repoFileDataService = new RepoFileDataService(this.httpClient);
         var consoleService = new GitHubConsoleService();
-        var requestRateLimitService = new RequestRateLimitService(this.httpClient, jsonService);
-        var gitHubDataService = new GitHubDataService(requestRateLimitService, this.httpClient);
         var parserService = new XMLParserService();
         var actionOutputService = new ActionOutputService(consoleService);
 
         this.action = new GitHubAction(
             consoleService,
-            gitHubDataService,
+            githubClient,
+            repoFileDataService,
             parserService,
             actionOutputService);
     }
@@ -58,10 +58,9 @@ public class IntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData(nameof(ActionInputs.RepoOwner), "", "The 'repoOwner' value cannot be null or empty.")]
-    [InlineData(nameof(ActionInputs.RepoName), "", "The 'repoName' value cannot be null or empty.")]
-    [InlineData(nameof(ActionInputs.BranchName), "", "The 'branchName' value cannot be null or empty.")]
-    [InlineData(nameof(ActionInputs.FilePath), "", "The 'filePath' value cannot be null or empty.")]
+    [InlineData(nameof(ActionInputs.RepoName), "does-not-exist-repo", "The repository 'does-not-exist-repo' does not exist.")]
+    [InlineData(nameof(ActionInputs.BranchName), "does-not-exist-branch", "Branch not found")]
+    [InlineData(nameof(ActionInputs.FilePath), "invalid-file-path", "Request failed with status code '404(NotFound)' for file 'invalid-file-path'.")]
     [InlineData(nameof(ActionInputs.FileFormat), "invalid-format", "The 'file-format' value of 'invalid-format' is invalid.\r\nThe only file format currently supported is XML.")]
     [InlineData(nameof(ActionInputs.FileFormat), "", "The 'file-format' value of '' is invalid.\r\nThe only file format currently supported is XML.")]
     [InlineData(nameof(ActionInputs.VersionKeys), "", "No version keys supplied for the 'version-keys' input.")]
@@ -103,6 +102,7 @@ public class IntegrationTests : IDisposable
     /// Creates a new instance of <see cref="ActionInputs"/> with default values for the purpose of testing.
     /// </summary>
     private static ActionInputs CreateInputs(
+        string repoToken = RepoToken,
         string repoOwner = "KinsonDigital",
         string repoName = "ActionTestRepo",
         string branchName = "version-miner-testing",
@@ -115,6 +115,7 @@ public class IntegrationTests : IDisposable
         bool failWhenVersionNotFound = true)
         => new ()
         {
+            RepoToken = repoToken,
             RepoOwner = repoOwner,
             RepoName = repoName,
             BranchName = branchName,
