@@ -128,7 +128,7 @@ If the XML file had the contents below, the workflow above would print the value
 | `repo-owner` | The owner of the repository. This is **NOT** case sensitive. | yes | N/A |
 | `repo-name` | The name of the repository. This is **NOT** case sensitive. | yes | N/A |
 | `repo-token` | The repository or PAT token to use for authorized requests. This action uses [Octokit](https://github.com/octokit/octokit.net) and the [GitHub API](https://docs.github.com/en/rest) to do its job. | yes | empty |
-| `branch-name` | The name of the branch where the file lives. | yes | N/A |
+| `branch-name` | The name of the branch where the file lives. This **IS** case sensitive. | yes | N/A |
 | `file-format` | A non case-sensitive value representing the data format of the file that contains the version. Currently, the only supported value is `xml` for a file format. | yes | N/A |
 | `file-path` | The path to the file relative to the root of the repository. | yes | N/A |
 | `version-keys` | A comma delimited list of keys that hold the version value. Spaces around commas are ignored.  Keys must be wrapped with single or double quotes to be processed properly if more than one key exists. | yes | N/A |
