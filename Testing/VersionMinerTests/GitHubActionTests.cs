@@ -193,7 +193,7 @@ public class GitHubActionTests
     public async void Run_WhenInvoked_ShowsWelcomeMessageInCorrectOrder()
     {
         // Arrange
-        var expectedOrder = new List<string>()
+        var expectedOrder = new List<string>
         {
             $"{nameof(IGitHubConsoleService.WriteLine)}|Welcome to Version Miner!! 🪨⛏️",
             $"{nameof(IGitHubConsoleService.WriteLine)}|A GitHub action for pulling versions out of various types of files.",

@@ -44,8 +44,8 @@ public class RepoModelTests
     public void Owner_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var expected = new OwnerInfoModel() { Login = "test-login", };
-        var ownerInfoModel = new OwnerInfoModel() { Login = "test-login", };
+        var expected = new OwnerInfoModel { Login = "test-login", };
+        var ownerInfoModel = new OwnerInfoModel { Login = "test-login", };
         var repoModel = new RepoModel();
 
         // Act
