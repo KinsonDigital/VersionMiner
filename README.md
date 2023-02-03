@@ -9,19 +9,13 @@
 
 <div align="center">
 
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/VersionMiner/unit-tests-status-check.yml?color=2F8840&label=%F0%9F%A7%AABuild)
+![Unit Test Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/VersionMiner/unit-tests-status-check.yml?color=2F8840&label=%F0%9F%A7%AATests)
+
 ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/KinsonDigital/VersionMiner?color=%23318A42&include_prereleases&label=Latest%20Release&logo=github)
-</div>
-
-<div align="center">
-
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kinsondigital/VersionMiner/%E2%9C%94Unit%20Testing%20Status%20Check?color=%23238636&label=Unit%20Tests)
 ![GitHub issues by-label](https://img.shields.io/github/issues/kinsondigital/VersionMiner/good%20first%20issue?color=%23238636&label=Good%20First%20Issues)
-</div>
 
-<div align="center">
-
-![Discord](https://img.shields.io/discord/481597721199902720?color=%23575CCB&label=discord&logo=discord&logoColor=white)
-![Twitter URL](https://img.shields.io/twitter/url?color=%235c5c5c&label=Follow%20%40KDCoder&logo=twitter&url=https%3A%2F%2Ftwitter.com%2FKDCoder)
+[![Discord](https://img.shields.io/discord/481597721199902720?color=%23575CCB&label=chat%20on%20discord&logo=discord&logoColor=white)](https://discord.gg/qewu6fNgv7)
 </div>
 
 
@@ -79,7 +73,7 @@ jobs:
   Get_Version_Job:
     runs-on: ubuntu-latest # Cannot use windows
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/3
 
     - name: Get Version From C# Project File
       id: get-version
@@ -294,14 +288,16 @@ Result:
 - [MIT License - VersionMiner](https://github.com/KinsonDigital/VersionMiner/blob/preview/v1.0.0-preview.2/LICENSE)
 </div>
 
+- Click [here](https://github.com/KinsonDigital/VersionMiner/issues/new/choose) to report any issues for this GitHub action!!
 <div align="left">
 
-### Maintainer
 </div>
 
-- [Calvin Wilkinson](https://github.com/CalvinWilkinson) (Owner and main contributor of the GitHub organization [KinsonDigital](https://github.com/KinsonDigital))
-  - [Version Miner](https://github.com/KinsonDigital/VersionMiner) is used in various projects for this organization with great success.
-- Click [here](https://github.com/KinsonDigital/VersionMiner/issues/new/choose) to report any issues for this GitHub action!!
+<h2 style="font-weight:bold;border:0" align="center">🔧Maintainers</h2>
+
+### Project Maintainers:
+- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/Velaptor/release/v1.0.0/Documentation/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
+- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/Velaptor/release/v1.0.0/Documentation/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
 
 <div align="right">
 <a href="#what-is-it">Back to the top!👆🏼</a>
