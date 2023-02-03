@@ -1,0 +1,8 @@
+﻿{
+  "$schema": "./build.schema.json",
+  "Solution": "VersionMiner.sln",
+  "RepoOwner": "KinsonDigital",
+  "RepoName": "VersionMiner",
+  "ProjectName": "VersionMiner",
+  "PreProcessReadMe": true
+}
