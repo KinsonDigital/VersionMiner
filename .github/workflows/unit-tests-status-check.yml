@@ -2,18 +2,8 @@ name: ✔Unit Testing Status Check
 
 
 on:
+  pull_request:
   workflow_dispatch:
-    paths-ignore:
-      - ".github/**"
-      - "Documentation/**"
-      - '.editorconfig'
-      - '*.runsettings'
-      - '.gitattributes'
-      - '.gitignore'
-      - '*.md'
-      - '*.yml'
-      - '.vscode/**'
-      - '*.sln'
 
 
 jobs:

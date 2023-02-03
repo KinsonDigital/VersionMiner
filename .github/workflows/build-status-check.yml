@@ -1,21 +1,13 @@
 name: ✔Build Status Check
 
+
 env:
   NET_SDK_VERSION: 6.0.300
 
+
 on:
+  pull_request:
   workflow_dispatch:
-    paths-ignore:
-      - ".github/**"
-      - "Documentation/**"
-      - '.editorconfig'
-      - '*.runsettings'
-      - '.gitattributes'
-      - '.gitignore'
-      - '*.md'
-      - '*.yml'
-      - '.vscode/**'
-      - '*.sln'
 
 
 jobs:
