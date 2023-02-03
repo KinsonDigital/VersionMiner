@@ -38,7 +38,7 @@ jobs:
   run_versionminer_tests:
     name: Run VersionMiner Tests
     needs: determine_build_config
-    uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@master
     with:
       project-name: "VersionMinerTests"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}

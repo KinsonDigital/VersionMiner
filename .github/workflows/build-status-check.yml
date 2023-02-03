@@ -51,7 +51,7 @@ jobs:
   build_versionminer:
     name: Build VersionMiner Project
     needs: [determine_build_config, get_sdk_version]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@master
     with:
       project-name: VersionMiner
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
@@ -62,7 +62,7 @@ jobs:
     needs: [determine_build_config,
             get_sdk_version,
             build_versionminer]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@master
     with:
       project-name: VersionMinerTests
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
