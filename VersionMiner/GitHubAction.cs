@@ -1,4 +1,4 @@
-﻿// <copyright file="GitHubAction.cs" company="KinsonDigital">
+// <copyright file="GitHubAction.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -215,7 +215,7 @@ public sealed class GitHubAction : IGitHubAction
     /// </summary>
     private void ShowWelcomeMessage()
     {
-        var issueUrl = "https://github.com/KinsonDigital/VersionMiner/issues/new/choose";
+        const string issueUrl = "https://github.com/KinsonDigital/VersionMiner/issues/new/choose";
         this.consoleService.WriteLine("Welcome to Version Miner!! 🪨⛏️");
         this.consoleService.WriteLine("A GitHub action for pulling versions out of various types of files.");
         this.consoleService.WriteLine($"To open an issue, click here 👉🏼 {issueUrl}");

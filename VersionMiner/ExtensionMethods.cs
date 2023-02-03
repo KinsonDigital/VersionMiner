@@ -109,5 +109,4 @@ public static class ExtensionMethods
     ///     The <see cref="Collection{T}"/> equivalent of the given <paramref name="items"/>.
     /// </returns>
     public static ICollection<T> ToCollection<T>(this IEnumerable<T> items) => new Collection<T>(items.ToList());
-
 }
