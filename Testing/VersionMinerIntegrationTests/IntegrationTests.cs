@@ -15,26 +15,15 @@ namespace VersionMinerIntegrationTests;
 /// </summary>
 public class IntegrationTests : IDisposable
 {
-    private const string TokenVarName = "GITHUB_TOKEN";
     private readonly GitHubAction action;
     private readonly IHttpClient httpClient;
-    private readonly string repoToken;
+    private readonly string repoToken = "add-token-here";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationTests"/> class.
     /// </summary>
     public IntegrationTests()
     {
-        this.repoToken = Environment.GetEnvironmentVariable(TokenVarName) ?? string.Empty;
-
-        if (string.IsNullOrEmpty(this.repoToken))
-        {
-            var exceptionMsg = $"The '{TokenVarName}' environment variable was not provided to run the integration tests.";
-            exceptionMsg += $"{Environment.NewLine}Use the command 'dotnet test -e {TokenVarName}=\"<TOKEN>\"' to";
-            exceptionMsg += $" pass the '{TokenVarName}' value to the integration tests";
-            throw new Exception(exceptionMsg);
-        }
-
         this.httpClient = new MinerHttpClient();
         var githubClient = new GitHubClient(new ProductHeaderValue("version-miner-testing"));
         var repoFileDataService = new RepoFileDataService(this.httpClient);

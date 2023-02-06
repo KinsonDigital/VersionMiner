@@ -5,8 +5,6 @@ defaults:
   run:
     shell: pwsh
 
-permissions:
-  pull-requests: write
 
 on:
   workflow_dispatch:
