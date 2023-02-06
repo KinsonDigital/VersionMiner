@@ -17,6 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Run Unit Test Status Check
+      run: dotnet test "${{ github.workspace }}/Testing/VersionMinerTests/VersionMinerTests.csproj"
+
     - name: Get Version
       id: get-version
       run: |

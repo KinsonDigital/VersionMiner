@@ -5,6 +5,8 @@ defaults:
   run:
     shell: pwsh
 
+permissions:
+  pull-requests: write
 
 on:
   workflow_dispatch:
@@ -22,17 +24,5 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Restore DotNet Tools
-      run: dotnet tool restore
-
-    - name: Get Pull Request Number
-      id: get-pr-number
-      run: |
-        $pullRequestNumber = "${{ github.ref }}".Replace("refs/pull/", "").Replace("/merge", "");
-        Write-Host "Pull Request Number: $pullRequestNumber";
-        Write-Host "::set-output name=pr-number::$pullRequestNumber";
-
-    - name: Run Unit Test Status Check
-      run: dotnet cicd PRUnitTestStatusCheck --pull-request-number ${{ steps.get-pr-number.outputs.pr-number }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run Unit Tests
+      run: dotnet test "${{ github.workspace }}/Testing/VersionMinerTests/VersionMinerTests.csproj"

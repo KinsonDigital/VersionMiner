@@ -15,15 +15,26 @@ namespace VersionMinerIntegrationTests;
 /// </summary>
 public class IntegrationTests : IDisposable
 {
-    private const string RepoToken = "";
+    private const string TokenVarName = "GITHUB_TOKEN";
     private readonly GitHubAction action;
     private readonly IHttpClient httpClient;
+    private readonly string repoToken;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationTests"/> class.
     /// </summary>
     public IntegrationTests()
     {
+        this.repoToken = Environment.GetEnvironmentVariable(TokenVarName) ?? string.Empty;
+
+        if (string.IsNullOrEmpty(this.repoToken))
+        {
+            var exceptionMsg = $"The '{TokenVarName}' environment variable was not provided to run the integration tests.";
+            exceptionMsg += $"{Environment.NewLine}Use the command 'dotnet test -e {TokenVarName}=\"<TOKEN>\"' to";
+            exceptionMsg += $" pass the '{TokenVarName}' value to the integration tests";
+            throw new Exception(exceptionMsg);
+        }
+
         this.httpClient = new MinerHttpClient();
         var githubClient = new GitHubClient(new ProductHeaderValue("version-miner-testing"));
         var repoFileDataService = new RepoFileDataService(this.httpClient);
@@ -101,8 +112,7 @@ public class IntegrationTests : IDisposable
     /// <summary>
     /// Creates a new instance of <see cref="ActionInputs"/> with default values for the purpose of testing.
     /// </summary>
-    private static ActionInputs CreateInputs(
-        string repoToken = RepoToken,
+    private ActionInputs CreateInputs(
         string repoOwner = "KinsonDigital",
         string repoName = "ActionTestRepo",
         string branchName = "version-miner-testing",
@@ -115,7 +125,7 @@ public class IntegrationTests : IDisposable
         bool failWhenVersionNotFound = true)
         => new ()
         {
-            RepoToken = repoToken,
+            RepoToken = this.repoToken,
             RepoOwner = repoOwner,
             RepoName = repoName,
             BranchName = branchName,
