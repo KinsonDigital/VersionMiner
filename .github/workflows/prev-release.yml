@@ -1,0 +1,75 @@
+name: 🚀Preview Release
+
+
+defaults:
+  run:
+    shell: pwsh
+
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  preview_release:
+    name: Preview Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Run Unit Test Status Check
+      run: dotnet test "${{ github.workspace }}/Testing/VersionMinerTests/VersionMinerTests.csproj"
+
+    - name: Get Version
+      id: get-version
+      run: |
+        $projectName = "VersionMiner";
+        $projFilePath = "${{ github.workspace }}/$projectName/$projectName.csproj";
+
+        if (Test-Path -Path $projFilePath)
+        {
+          $xmlContent = [xml](Get-Content -Path $projFilePath -Raw);
+          $version = $xmlContent.Project.PropertyGroup.Version;
+
+          if ($null -eq $version)
+          {
+              Write-Host "::error::The '<Version/>' tag does not exist in the project file.";
+              exit 1; # Fail Workflow
+          }
+
+          Write-Host "::set-output name=version::$version";      
+        }
+        else
+        {
+            Write-Host "::error::The project file '$projFilePath' could not be found.";
+            exit 1; #Fail Workflow
+        }
+
+    - name: Validate Release Notes Path
+      id: release-notes
+      run: |
+        $version = "${{ steps.get-version.outputs.version }}";
+
+        $releaseNotesDirPath = "${{ github.workspace }}/Documentation/ReleaseNotes/PreviewReleases";
+        $releaseNotesFilePath = "$releaseNotesDirPath/Release-Notes-v$version.md";
+
+        if (Test-Path -Path $releaseNotesFilePath)
+        {
+            Write-Host "::set-output name=file-path::$releaseNotesFilePath";
+        }
+        else
+        {
+            Write-Host "::error::The release notes '$releaseNotesFilePath' do not exist.";
+            Write-Host "::error::Create the release notes and run the release again.";
+
+            exit 1; #Fail Workflow
+        }
+
+    - name: Perform Preview Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: "🚀Preview Release - ${{ steps.get-version.outputs.version }}"
+        tag_name: "v${{ steps.get-version.outputs.version }}"
+        body_path: "${{ steps.release-notes.outputs.file-path }}"
+        files: "${{ steps.release-notes.outputs.file-path }}"
+        prerelease: true

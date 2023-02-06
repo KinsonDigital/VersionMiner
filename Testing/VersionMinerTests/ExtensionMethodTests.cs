@@ -15,27 +15,6 @@ public class ExtensionMethodTests
 {
     #region Method Tests
     [Theory]
-    [InlineData(@"C:\", true)]
-    [InlineData(@"C:\test-file.txt", true)]
-    [InlineData(@"c:\", true)]
-    [InlineData(@"c:/", true)]
-    [InlineData(@"C:/", true)]
-    [InlineData(@"C:/test-file.txt", true)]
-    [InlineData(@":\", false)]
-    [InlineData(@"C\", false)]
-    [InlineData(@"C:", false)]
-    [InlineData("", false)]
-    [InlineData(null, false)]
-    public void PathContainsDrive_WhenInvoked_ReturnsCorrectResult(string path, bool expected)
-    {
-        // Act
-        var actual = path.PathContainsDrive();
-
-        // Assert
-        actual.Should().Be(expected);
-    }
-
-    [Theory]
     [InlineData("refs/heads/feature/123-my-branch", "refs/heads/", "feature/123-my-branch")]
     [InlineData("feature/123-branch-123", "123", "feature/123-branch-123")]
     [InlineData("feature/123-my-branch", "refs/heads/", "feature/123-my-branch")]

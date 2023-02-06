@@ -5,6 +5,7 @@
         "paramref",
         "pwsh",
         "runsettings",
+        "softprops",
         "typeparam",
         "versionminer",
         "Xunit"

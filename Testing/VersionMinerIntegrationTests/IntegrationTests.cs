@@ -15,9 +15,9 @@ namespace VersionMinerIntegrationTests;
 /// </summary>
 public class IntegrationTests : IDisposable
 {
-    private const string RepoToken = "";
     private readonly GitHubAction action;
     private readonly IHttpClient httpClient;
+    private readonly string repoToken = "add-token-here";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationTests"/> class.
@@ -101,8 +101,7 @@ public class IntegrationTests : IDisposable
     /// <summary>
     /// Creates a new instance of <see cref="ActionInputs"/> with default values for the purpose of testing.
     /// </summary>
-    private static ActionInputs CreateInputs(
-        string repoToken = RepoToken,
+    private ActionInputs CreateInputs(
         string repoOwner = "KinsonDigital",
         string repoName = "ActionTestRepo",
         string branchName = "version-miner-testing",
@@ -115,7 +114,7 @@ public class IntegrationTests : IDisposable
         bool failWhenVersionNotFound = true)
         => new ()
         {
-            RepoToken = repoToken,
+            RepoToken = this.repoToken,
             RepoOwner = repoOwner,
             RepoName = repoName,
             BranchName = branchName,
