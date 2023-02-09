@@ -12,14 +12,6 @@ namespace VersionMiner;
 /// </summary>
 public static class ExtensionMethods
 {
-    private static readonly char[] Letters =
-    {
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-        'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-        'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-        'y', 'z',
-    };
-
     /// <summary>
     /// Removes the given <c>string</c> <paramref name="value"/> from the beginning
     /// of this string.
