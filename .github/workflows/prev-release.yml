@@ -20,6 +20,7 @@ jobs:
     - name: Run Unit Test Status Check
       run: dotnet test "${{ github.workspace }}/Testing/VersionMinerTests/VersionMinerTests.csproj"
 
+    # TODO: Replace this step to pull version using version miner itself once preview.3 has been released
     - name: Get Version
       id: get-version
       run: |
@@ -73,3 +74,24 @@ jobs:
         body_path: "${{ steps.release-notes.outputs.file-path }}"
         files: "${{ steps.release-notes.outputs.file-path }}"
         prerelease: true
+
+
+  publish-code-coverage:
+    runs-on: ubuntu-latest
+    name: Publish Code Coverage Results
+    steps:
+    - uses: actions/checkout@v3
+
+    # TODO: Add step to pull version using version miner itself once preview.3 has been released for the VersionMiner action
+    # Use the version in the publish code coverage results step below as part of the name
+
+    - name: Execute Unit Tests
+      run: dotnet test "${{ github.workspace }}/Testing/VersionMinerTests/VersionMinerTests.csproj" -c Debug --collect:"XPlat Code Coverage"
+
+    - uses: codecov/codecov-action@v3
+      name: Publish Code Coverage Results
+      with:
+        directory: "${{ github.workspace }}/Testing/VersionMinerTests/TestResults/"
+        name: "Preview Release"
+        fail_ci_if_error: true
+        verbose: true
