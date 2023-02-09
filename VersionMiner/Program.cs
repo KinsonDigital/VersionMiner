@@ -3,7 +3,6 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using Octokit;
 using VersionMiner.Services;
 using MinerHttpClient = VersionMiner.Services.HttpClient;
@@ -38,6 +37,7 @@ public static class Program
                 services.AddSingleton<IDataParserService, XMLParserService>();
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
                 services.AddSingleton<IGitHubAction, GitHubAction>();
+                services.AddSingleton<IEnvVarService, EnvVarService>();
             }).Build();
 
         IAppService appService;
