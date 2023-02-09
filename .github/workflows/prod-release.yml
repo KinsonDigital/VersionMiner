@@ -31,16 +31,16 @@ jobs:
 
           if ($null -eq $version)
           {
-              Write-Host "::error::The '<Version/>' tag does not exist in the project file.";
-              exit 1; # Fail Workflow
+            Write-Host "::error::The '<Version/>' tag does not exist in the project file.";
+            exit 1; # Fail Workflow
           }
 
-          Write-Host "::set-output name=version::$version";      
+          "version=$version" >> $env:GITHUB_OUTPUT;
         }
         else
         {
-            Write-Host "::error::The project file '$projFilePath' could not be found.";
-            exit 1; #Fail Workflow
+          Write-Host "::error::The project file '$projFilePath' could not be found.";
+          exit 1; #Fail Workflow
         }
 
     - name: Validate Release Notes Path
@@ -53,14 +53,14 @@ jobs:
 
         if (Test-Path -Path $releaseNotesFilePath)
         {
-            Write-Host "::set-output name=file-path::$releaseNotesFilePath";
+          "file-path=$releaseNotesFilePath" >> $env:GITHUB_OUTPUT
         }
         else
         {
-            Write-Host "::error::The release notes '$releaseNotesFilePath' do not exist.";
-            Write-Host "::error::Create the release notes and run the release again.";
+          Write-Host "::error::The release notes '$releaseNotesFilePath' do not exist.";
+          Write-Host "::error::Create the release notes and run the release again.";
 
-            exit 1; #Fail Workflow
+          exit 1; #Fail Workflow
         }
 
     - name: Perform Production Release
