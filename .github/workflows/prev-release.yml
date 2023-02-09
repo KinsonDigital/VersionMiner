@@ -38,7 +38,7 @@ jobs:
               exit 1; # Fail Workflow
           }
 
-          Write-Host "::set-output name=version::$version";      
+          "version=$version" >> $env:GITHUB_OUTPUT;
         }
         else
         {
@@ -56,7 +56,7 @@ jobs:
 
         if (Test-Path -Path $releaseNotesFilePath)
         {
-            Write-Host "::set-output name=file-path::$releaseNotesFilePath";
+          "file-path=$releaseNotesFilePath" >> $env:GITHUB_OUTPUT
         }
         else
         {
