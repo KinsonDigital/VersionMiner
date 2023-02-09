@@ -296,8 +296,8 @@ Result:
 <h2 style="font-weight:bold;border:0" align="center">🔧Maintainers</h2>
 
 ### Project Maintainers:
-- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/Velaptor/release/v1.0.0/Documentation/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
-- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/Velaptor/release/v1.0.0/Documentation/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
+- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/VersionMiner/release/v1.0.0/Documentation/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
+- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/VersionMiner/release/v1.0.0/Documentation/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
 
 <div align="right">
 <a href="#what-is-it">Back to the top!👆🏼</a>
