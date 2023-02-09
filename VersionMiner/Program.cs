@@ -8,8 +8,6 @@ using Octokit;
 using VersionMiner.Services;
 using MinerHttpClient = VersionMiner.Services.HttpClient;
 
-[assembly: InternalsVisibleTo("VersionMinerTests", AllInternalsVisible = true)]
-
 namespace VersionMiner;
 
 /// <summary>
