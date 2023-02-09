@@ -42,6 +42,7 @@ jobs:
     - uses: codecov/codecov-action@v3
       name: Publish Code Coverage Results
       with:
+        token: 6f2006d2-a9c8-4096-ab1b-9ff22873a5a3
         directory: "${{ github.workspace }}/Testing/VersionMinerTests/TestResults/"
         name: "PR Status Check"
         fail_ci_if_error: true
