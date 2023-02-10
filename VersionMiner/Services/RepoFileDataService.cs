@@ -3,26 +3,26 @@
 // </copyright>
 
 using System.Net;
-using Octokit;
 using VersionMiner.Exceptions;
-using VersionMiner.Guards;
 
 namespace VersionMiner.Services;
 
 /// <inheritdoc/>
 public class RepoFileDataService : IRepoFileDataService
 {
-    private readonly IRepositoryContentsClient client;
+    private const string BaseUrl = "https://api.github.com";
+    private const string AuthHeaderName = "Authorization";
+    private readonly IHttpClient client;
+    private bool isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RepoFileDataService"/> class.
     /// </summary>
     /// <param name="client">Makes HTTP requests.</param>
-    public RepoFileDataService(IRepositoryContentsClient client)
+    public RepoFileDataService(IHttpClient client)
     {
-        EnsureThat.CtorParamIsNotNull(client);
-
         this.client = client;
+        this.client.BaseUrl = BaseUrl;
     }
 
     /// <inheritdoc/>
@@ -51,22 +51,59 @@ public class RepoFileDataService : IRepoFileDataService
             throw new NullOrEmptyStringException($"The param '{nameof(filePath)}' cannot be null or empty.");
         }
 
-        try
+        HttpResponse? fileDataResponse;
+        var queryString = $"?ref={branchName}";
+        var requestUri = $@"/repos/{repoOwner}/{repoName}/contents/{filePath}{queryString}";
+
+        this.client.AddRequestHeader(AuthHeaderName, $"token {AuthToken}");
+        this.client.AddRequestHeader("Accept", "application/vnd.github.v3.raw");
+
+        fileDataResponse = await this.client.ExecuteGetAsync(requestUri);
+
+        if (fileDataResponse is null)
         {
-            var result = await this.client.GetAllContentsByRef(repoOwner, repoName, filePath, branchName);
-
-            if (result.Count <= 0)
-            {
-                throw new NotFoundException(string.Empty, HttpStatusCode.NotFound);
-            }
-
-            return result[0].Content;
+            throw new HttpRequestException($"The response from '{this.client.BaseUrl}/{requestUri}' returned null.");
         }
-        catch (NotFoundException)
+
+        switch (fileDataResponse.StatusCode)
         {
-            var message = $"The file '{filePath}' in the repository '{repoName}' for the owner '{repoOwner}' was not found.";
-
-            throw new NotFoundException(message, HttpStatusCode.NotFound);
+            case HttpStatusCode.NotFound:
+                var notFoundMsg =
+                    $"Request failed with status code '{(int)HttpStatusCode.NotFound}({HttpStatusCode.NotFound})' for file '{filePath}'.";
+                throw new FileNotFoundException(notFoundMsg);
+            case HttpStatusCode.OK:
+                return fileDataResponse.Content ?? string.Empty;
+            default:
+                var errorMsg =
+                    $"Request failed with status code '{(int)fileDataResponse.StatusCode}({fileDataResponse.StatusCode})'.";
+                errorMsg += $"{Environment.NewLine}{fileDataResponse.ErrorException?.Message}";
+                throw new HttpRequestException(errorMsg);
         }
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="IDisposable.Dispose"/>
+    /// </summary>
+    /// <param name="disposing">True to dispose of managed resources.</param>
+    private void Dispose(bool disposing)
+    {
+        if (this.isDisposed)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            this.client.Dispose();
+        }
+
+        this.isDisposed = true;
     }
 }
