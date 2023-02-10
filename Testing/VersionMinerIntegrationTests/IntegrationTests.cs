@@ -29,7 +29,10 @@ public class IntegrationTests : IDisposable
         var repoFileDataService = new RepoFileDataService(this.httpClient);
         var consoleService = new GitHubConsoleService();
         var parserService = new XMLParserService();
-        var actionOutputService = new ActionOutputService(consoleService);
+        var envVarService = new EnvVarService();
+        var fileSystem = new FileSystem();
+        var file = fileSystem.File;
+        var actionOutputService = new ActionOutputService(envVarService, file);
 
         this.action = new GitHubAction(
             consoleService,

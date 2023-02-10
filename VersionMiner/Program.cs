@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
+using System.IO.Abstractions;
 using Octokit;
 using VersionMiner.Services;
 using MinerHttpClient = VersionMiner.Services.HttpClient;
@@ -16,6 +17,7 @@ namespace VersionMiner;
 public static class Program
 {
     private static IHost host = null!;
+    private static FileSystem fileSystem = new ();
 
     /// <summary>
     /// The main entry point of the GitHub action.
@@ -38,6 +40,7 @@ public static class Program
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
                 services.AddSingleton<IGitHubAction, GitHubAction>();
                 services.AddSingleton<IEnvVarService, EnvVarService>();
+                services.AddSingleton(fileSystem.File);
             }).Build();
 
         IAppService appService;
