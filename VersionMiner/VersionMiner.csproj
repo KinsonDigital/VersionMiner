@@ -19,6 +19,7 @@
     <Product>VersionMiner</Product>
     <Description>Custom GitHub action used to scan GitHub issues for information.</Description>
     <Copyright>Copyright ©2022 Kinson Digital</Copyright>
+    <NoWarn>CS7035</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
