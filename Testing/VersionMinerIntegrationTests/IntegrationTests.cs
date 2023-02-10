@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.IO.Abstractions;
 using FluentAssertions;
 using Octokit;
 using VersionMiner;
@@ -15,9 +16,9 @@ namespace VersionMinerIntegrationTests;
 /// </summary>
 public class IntegrationTests : IDisposable
 {
+    private const string RepoToken = "add-token-here";
     private readonly GitHubAction action;
     private readonly IHttpClient httpClient;
-    private readonly string repoToken = "add-token-here";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationTests"/> class.
@@ -29,7 +30,10 @@ public class IntegrationTests : IDisposable
         var repoFileDataService = new RepoFileDataService(this.httpClient);
         var consoleService = new GitHubConsoleService();
         var parserService = new XMLParserService();
-        var actionOutputService = new ActionOutputService(consoleService);
+        var envVarService = new EnvVarService();
+        var fileSystem = new FileSystem();
+        var file = fileSystem.File;
+        var actionOutputService = new ActionOutputService(envVarService, file);
 
         this.action = new GitHubAction(
             consoleService,
@@ -114,7 +118,7 @@ public class IntegrationTests : IDisposable
         bool failWhenVersionNotFound = true)
         => new ()
         {
-            RepoToken = this.repoToken,
+            RepoToken = RepoToken,
             RepoOwner = repoOwner,
             RepoName = repoName,
             BranchName = branchName,

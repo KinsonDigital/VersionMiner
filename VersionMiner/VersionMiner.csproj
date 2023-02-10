@@ -19,6 +19,7 @@
     <Product>VersionMiner</Product>
     <Description>Custom GitHub action used to scan GitHub issues for information.</Description>
     <Copyright>Copyright ©2022 Kinson Digital</Copyright>
+    <NoWarn>CS7035</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -41,6 +42,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="System.IO.Abstractions" Version="19.1.14" />
   </ItemGroup>
 
   <ItemGroup>

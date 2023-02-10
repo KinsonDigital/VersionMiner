@@ -2,6 +2,8 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.IO.Abstractions;
+using System.Text;
 using VersionMiner.Exceptions;
 using VersionMiner.Guards;
 
@@ -10,16 +12,24 @@ namespace VersionMiner.Services;
 /// <inheritdoc/>
 public class ActionOutputService : IActionOutputService
 {
-    private readonly IGitHubConsoleService gitHubConsoleService;
+    private const string GitHubOutput = "GITHUB_OUTPUT";
+    private readonly IEnvVarService envVarService;
+    private readonly IFile file;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ActionOutputService"/> class.
     /// </summary>
-    /// <param name="gitHubConsoleService">Writes to the console.</param>
-    public ActionOutputService(IGitHubConsoleService gitHubConsoleService)
+    /// <param name="envVarService">Manages environment variables.</param>
+    /// <param name="file">Manages files.</param>
+    public ActionOutputService(
+        IEnvVarService envVarService,
+        IFile file)
     {
-        EnsureThat.CtorParamIsNotNull(gitHubConsoleService);
-        this.gitHubConsoleService = gitHubConsoleService;
+        EnsureThat.CtorParamIsNotNull(envVarService);
+        EnsureThat.CtorParamIsNotNull(file);
+
+        this.envVarService = envVarService;
+        this.file = file;
     }
 
     /// <inheritdoc/>
@@ -30,6 +40,23 @@ public class ActionOutputService : IActionOutputService
             throw new NullOrEmptyStringException($"The parameter '{nameof(name)}' must not be null or empty.");
         }
 
-        this.gitHubConsoleService.WriteLine($"::set-output name={name}::{value}");
+        var outputPath = this.envVarService.GetEnvironmentVariable(GitHubOutput);
+
+        if (this.file.Exists(outputPath) is false)
+        {
+            throw new FileNotFoundException("The GitHub output environment file was not found.", outputPath);
+        }
+
+        var outputLines = this.file.ReadAllLines(outputPath).ToList();
+        outputLines.Add($"{name}={value}");
+
+        var fileContent = new StringBuilder();
+
+        foreach (var line in outputLines)
+        {
+            fileContent.AppendLine(line);
+        }
+
+        this.file.WriteAllText(outputPath, fileContent.ToString());
     }
 }
