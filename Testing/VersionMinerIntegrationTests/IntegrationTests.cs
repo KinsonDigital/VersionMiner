@@ -1,4 +1,4 @@
-// <copyright file="IntegrationIntegrationTestsBase.cs" company="KinsonDigital">
+// <copyright file="IntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -16,7 +16,7 @@ namespace VersionMinerIntegrationTests;
 /// </summary>
 public class IntegrationTests : IntegrationTestsBase, IDisposable
 {
-    private const string RepoToken = "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";
+    private const string RepoToken = "DO-NOT-COMMIT-TOKEN";
     private readonly GitHubAction action;
     private readonly IHttpClient httpClient;
 
