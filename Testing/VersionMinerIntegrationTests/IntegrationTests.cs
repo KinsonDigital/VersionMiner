@@ -7,27 +7,26 @@ using FluentAssertions;
 using Octokit;
 using VersionMiner;
 using VersionMiner.Services;
-using MinerHttpClient = VersionMiner.Services.HttpClient;
 
 namespace VersionMinerIntegrationTests;
 
 /// <summary>
 /// Performs various integration tests of the GitHub action.
 /// </summary>
-public class IntegrationTests : IDisposable
+public class IntegrationTests : IntegrationTestsBase, IDisposable
 {
-    private const string RepoToken = "add-token-here";
+    private const string RepoToken = "DO-NOT-COMMIT-TOKEN";
     private readonly GitHubAction action;
-    private readonly IHttpClient httpClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationTests"/> class.
     /// </summary>
     public IntegrationTests()
     {
-        this.httpClient = new MinerHttpClient();
         var githubClient = new GitHubClient(new ProductHeaderValue("version-miner-testing"));
-        var repoFileDataService = new RepoFileDataService(this.httpClient);
+
+        var repoContentClient = githubClient.Repository.Content;
+        var repoFileDataService = new RepoFileDataService(repoContentClient);
         var consoleService = new GitHubConsoleService();
         var parserService = new XMLParserService();
         var envVarService = new EnvVarService();
@@ -64,7 +63,7 @@ public class IntegrationTests : IDisposable
     [Theory]
     [InlineData(nameof(ActionInputs.RepoName), "does-not-exist-repo", "The repository 'does-not-exist-repo' does not exist.")]
     [InlineData(nameof(ActionInputs.BranchName), "does-not-exist-branch", "Branch not found")]
-    [InlineData(nameof(ActionInputs.FilePath), "invalid-file-path", "Request failed with status code '404(NotFound)' for file 'invalid-file-path'.")]
+    [InlineData(nameof(ActionInputs.FilePath), "invalid-file-path", "The file 'invalid-file-path' in the repository 'ActionTestRepo' for the owner 'KinsonDigital' was not found.")]
     [InlineData(nameof(ActionInputs.FileFormat), "invalid-format", "The 'file-format' value of 'invalid-format' is invalid.\r\nThe only file format currently supported is XML.")]
     [InlineData(nameof(ActionInputs.FileFormat), "", "The 'file-format' value of '' is invalid.\r\nThe only file format currently supported is XML.")]
     [InlineData(nameof(ActionInputs.VersionKeys), "", "No version keys supplied for the 'version-keys' input.")]
@@ -96,11 +95,7 @@ public class IntegrationTests : IDisposable
     }
 
     /// <inheritdoc/>
-    public void Dispose()
-    {
-        this.action.Dispose();
-        this.httpClient.Dispose();
-    }
+    public void Dispose() => this.action.Dispose();
 
     /// <summary>
     /// Creates a new instance of <see cref="ActionInputs"/> with default values for the purpose of testing.

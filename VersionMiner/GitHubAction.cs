@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Diagnostics.CodeAnalysis;
 using Octokit;
 using VersionMiner.Exceptions;
 using VersionMiner.Guards;
@@ -19,7 +20,6 @@ public sealed class GitHubAction : IGitHubAction
     private readonly IRepoFileDataService repoFileDataService;
     private readonly IDataParserService xmlParserService;
     private readonly IActionOutputService actionOutputService;
-    private bool isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GitHubAction"/> class.
@@ -189,25 +189,9 @@ public sealed class GitHubAction : IGitHubAction
     }
 
     /// <inheritdoc/>
-    public void Dispose() => Dispose(true);
-
-    /// <summary>
-    /// <inheritdoc cref="IDisposable.Dispose"/>
-    /// </summary>
-    /// <param name="disposing">Disposes managed resources when <c>true</c>.</param>
-    private void Dispose(bool disposing)
+    [ExcludeFromCodeCoverage(Justification = "Nothing to dispose of.")]
+    public void Dispose()
     {
-        if (this.isDisposed)
-        {
-            return;
-        }
-
-        if (disposing)
-        {
-            this.repoFileDataService.Dispose();
-        }
-
-        this.isDisposed = true;
     }
 
     /// <summary>
