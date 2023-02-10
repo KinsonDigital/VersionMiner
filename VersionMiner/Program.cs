@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using Octokit;
 using VersionMiner.Services;
-using MinerHttpClient = VersionMiner.Services.HttpClient;
 
 namespace VersionMiner;
 
@@ -43,7 +42,6 @@ public static class Program
                     return service.Repository.Content;
                 });
                 services.AddSingleton<IAppService, AppService>();
-                services.AddSingleton<IHttpClient, MinerHttpClient>();
                 services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
                 services.AddSingleton<IRepoFileDataService, RepoFileDataService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();

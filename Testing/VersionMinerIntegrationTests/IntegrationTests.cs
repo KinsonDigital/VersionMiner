@@ -7,7 +7,6 @@ using FluentAssertions;
 using Octokit;
 using VersionMiner;
 using VersionMiner.Services;
-using MinerHttpClient = VersionMiner.Services.HttpClient;
 
 namespace VersionMinerIntegrationTests;
 
@@ -18,14 +17,12 @@ public class IntegrationTests : IntegrationTestsBase, IDisposable
 {
     private const string RepoToken = "DO-NOT-COMMIT-TOKEN";
     private readonly GitHubAction action;
-    private readonly IHttpClient httpClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationTests"/> class.
     /// </summary>
     public IntegrationTests()
     {
-        this.httpClient = new MinerHttpClient();
         var githubClient = new GitHubClient(new ProductHeaderValue("version-miner-testing"));
 
         var repoContentClient = githubClient.Repository.Content;
@@ -98,11 +95,7 @@ public class IntegrationTests : IntegrationTestsBase, IDisposable
     }
 
     /// <inheritdoc/>
-    public void Dispose()
-    {
-        this.action.Dispose();
-        this.httpClient.Dispose();
-    }
+    public void Dispose() => this.action.Dispose();
 
     /// <summary>
     /// Creates a new instance of <see cref="ActionInputs"/> with default values for the purpose of testing.
