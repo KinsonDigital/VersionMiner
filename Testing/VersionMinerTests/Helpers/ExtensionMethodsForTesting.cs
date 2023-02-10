@@ -202,4 +202,60 @@ public static class ExtensionMethodsForTesting
                 $"The '{nameof(OptionAttribute)}.{nameof(OptionAttribute.HelpText)}' property value is not correct.");
         }
     }
+
+    /// <summary>
+    /// Sets the value of a property that matches the given <paramref name="propName"/> with the given
+    /// <paramref name="propValue"/> for the given <paramref name="obj"/>.
+    /// </summary>
+    /// <param name="obj">The object that contains the property to set.</param>
+    /// <param name="propName">The name of the property.</param>
+    /// <param name="propValue">The value of the property.</param>
+    /// <typeparam name="TObj">The type of object.</typeparam>
+    /// <typeparam name="TPropValue">The type of property value.</typeparam>
+    /// <exception cref="AssertActualExpectedException">
+    ///     Occurs if the parameters <paramref name="obj"/> or <paramref name="propName"/> are null.
+    ///     Occurs if the property was not found.
+    /// </exception>
+    public static void SetPropValue<TObj, TPropValue>(this TObj obj, string propName, TPropValue propValue)
+    {
+        if (obj is null)
+        {
+            throw new AssertActualExpectedException(
+                "Not to be null.",
+                "Is null.",
+                $"The parameter '{nameof(propName)}' must not be null to set the property value");
+        }
+
+        if (string.IsNullOrEmpty(propName))
+        {
+            throw new AssertActualExpectedException(
+                "Not to be null or empty.",
+                "Is null or empty.",
+                $"The parameter '{nameof(propName)}' must not be null or empty to set the property value");
+        }
+
+        var foundProp = (from p in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            where p.Name == propName
+            select p).First();
+
+        if (foundProp is null)
+        {
+            throw new AssertActualExpectedException(
+                "To exist.",
+                "Does not exit.",
+                $"A property with the name '{propName}' does not exit in the given '{nameof(obj)}' parameter");
+        }
+
+        try
+        {
+            foundProp.SetValue(obj, propValue);
+        }
+        catch (Exception e)
+        {
+            throw new AssertActualExpectedException(
+                $"Property '{propName}' value to be set.",
+                $"Property '{propName}' value was not set.",
+                $"Something went wrong with setting the property '{propName}' value in the '{obj}' parameter.\n{e.Message}");
+        }
+    }
 }

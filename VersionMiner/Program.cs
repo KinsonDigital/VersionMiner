@@ -3,13 +3,9 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using GitHubData;
-using GitHubData.Services;
+using System.IO.Abstractions;
+using Octokit;
 using VersionMiner.Services;
-using HttpClient = GitHubData.HttpClient;
-
-[assembly: InternalsVisibleTo("VersionMinerTests", AllInternalsVisible = true)]
 
 namespace VersionMiner;
 
@@ -19,6 +15,7 @@ namespace VersionMiner;
 [ExcludeFromCodeCoverage]
 public static class Program
 {
+    private static readonly FileSystem FileSystem = new ();
     private static IHost host = null!;
 
     /// <summary>
@@ -31,16 +28,28 @@ public static class Program
         host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((_, services) =>
             {
+                services.AddSingleton<IGitHubClient, GitHubClient>(_
+                    => new GitHubClient(new ProductHeaderValue("version-miner", App.GetVersion())));
+                services.AddSingleton<IRepositoryContentsClient>(provider =>
+                {
+                    var service = provider.GetService<IGitHubClient>();
+
+                    if (service is null)
+                    {
+                        throw new InvalidOperationException($"The service '{nameof(IGitHubClient)}' cannot be null when resolving dependencies.");
+                    }
+
+                    return service.Repository.Content;
+                });
                 services.AddSingleton<IAppService, AppService>();
-                services.AddSingleton<IHttpClient, HttpClient>();
-                services.AddSingleton<IJSONService, JSONService>();
                 services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
-                services.AddSingleton<IRequestRateLimitService, RequestRateLimitService>();
-                services.AddSingleton<IGitHubDataService, GitHubDataService>();
+                services.AddSingleton<IRepoFileDataService, RepoFileDataService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
                 services.AddSingleton<IDataParserService, XMLParserService>();
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
                 services.AddSingleton<IGitHubAction, GitHubAction>();
+                services.AddSingleton<IEnvVarService, EnvVarService>();
+                services.AddSingleton(FileSystem.File);
             }).Build();
 
         IAppService appService;

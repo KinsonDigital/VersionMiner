@@ -33,7 +33,7 @@ public class ActionInputs
     /// </summary>
     [Option(
         "repo-token",
-        Required = false,
+        Required = true,
         HelpText = "The GitHub or PAT token used to authenticate to the repository.")]
     public string RepoToken { get; set; } = string.Empty;
 

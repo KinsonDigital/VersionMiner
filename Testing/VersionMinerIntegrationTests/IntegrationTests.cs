@@ -2,39 +2,42 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.IO.Abstractions;
 using FluentAssertions;
-using GitHubData;
-using GitHubData.Services;
+using Octokit;
 using VersionMiner;
 using VersionMiner.Services;
-using GHHttpClient = GitHubData.HttpClient;
 
 namespace VersionMinerIntegrationTests;
 
 /// <summary>
 /// Performs various integration tests of the GitHub action.
 /// </summary>
-public class IntegrationTests : IDisposable
+public class IntegrationTests : IntegrationTestsBase, IDisposable
 {
+    private const string RepoToken = "DO-NOT-COMMIT-TOKEN";
     private readonly GitHubAction action;
-    private readonly IHttpClient httpClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationTests"/> class.
     /// </summary>
     public IntegrationTests()
     {
-        this.httpClient = new GHHttpClient();
-        var jsonService = new JSONService();
+        var githubClient = new GitHubClient(new ProductHeaderValue("version-miner-testing"));
+
+        var repoContentClient = githubClient.Repository.Content;
+        var repoFileDataService = new RepoFileDataService(repoContentClient);
         var consoleService = new GitHubConsoleService();
-        var requestRateLimitService = new RequestRateLimitService(this.httpClient, jsonService);
-        var gitHubDataService = new GitHubDataService(requestRateLimitService, this.httpClient);
         var parserService = new XMLParserService();
-        var actionOutputService = new ActionOutputService(consoleService);
+        var envVarService = new EnvVarService();
+        var fileSystem = new FileSystem();
+        var file = fileSystem.File;
+        var actionOutputService = new ActionOutputService(envVarService, file);
 
         this.action = new GitHubAction(
             consoleService,
-            gitHubDataService,
+            githubClient,
+            repoFileDataService,
             parserService,
             actionOutputService);
     }
@@ -58,10 +61,9 @@ public class IntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData(nameof(ActionInputs.RepoOwner), "", "The 'repoOwner' value cannot be null or empty.")]
-    [InlineData(nameof(ActionInputs.RepoName), "", "The 'repoName' value cannot be null or empty.")]
-    [InlineData(nameof(ActionInputs.BranchName), "", "The 'branchName' value cannot be null or empty.")]
-    [InlineData(nameof(ActionInputs.FilePath), "", "The 'filePath' value cannot be null or empty.")]
+    [InlineData(nameof(ActionInputs.RepoName), "does-not-exist-repo", "The repository 'does-not-exist-repo' does not exist.")]
+    [InlineData(nameof(ActionInputs.BranchName), "does-not-exist-branch", "Branch not found")]
+    [InlineData(nameof(ActionInputs.FilePath), "invalid-file-path", "The file 'invalid-file-path' in the repository 'ActionTestRepo' for the owner 'KinsonDigital' was not found.")]
     [InlineData(nameof(ActionInputs.FileFormat), "invalid-format", "The 'file-format' value of 'invalid-format' is invalid.\r\nThe only file format currently supported is XML.")]
     [InlineData(nameof(ActionInputs.FileFormat), "", "The 'file-format' value of '' is invalid.\r\nThe only file format currently supported is XML.")]
     [InlineData(nameof(ActionInputs.VersionKeys), "", "No version keys supplied for the 'version-keys' input.")]
@@ -93,16 +95,12 @@ public class IntegrationTests : IDisposable
     }
 
     /// <inheritdoc/>
-    public void Dispose()
-    {
-        this.action.Dispose();
-        this.httpClient.Dispose();
-    }
+    public void Dispose() => this.action.Dispose();
 
     /// <summary>
     /// Creates a new instance of <see cref="ActionInputs"/> with default values for the purpose of testing.
     /// </summary>
-    private static ActionInputs CreateInputs(
+    private ActionInputs CreateInputs(
         string repoOwner = "KinsonDigital",
         string repoName = "ActionTestRepo",
         string branchName = "version-miner-testing",
@@ -115,6 +113,7 @@ public class IntegrationTests : IDisposable
         bool failWhenVersionNotFound = true)
         => new ()
         {
+            RepoToken = RepoToken,
             RepoOwner = repoOwner,
             RepoName = repoName,
             BranchName = branchName,

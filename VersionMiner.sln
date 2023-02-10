@@ -14,7 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		README.md = README.md
 		.editorconfig = .editorconfig
-		.github\FUNDING.yml = .github\FUNDING.yml
+		codecov.yml = codecov.yml
+		code_of_conduct.md = code_of_conduct.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionMinerTests", "Testing\VersionMinerTests\VersionMinerTests.csproj", "{77B96B49-4D77-456B-A787-E852E9842B60}"
@@ -26,20 +27,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{0D64
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{5010ECCD-3BCC-475D-87EE-31E289E24571}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\build-status-check.yml = .github\workflows\build-status-check.yml
-		.github\workflows\unit-tests-status-check.yml = .github\workflows\unit-tests-status-check.yml
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Issue Templates", "Issue Templates", "{2C56562A-E5F8-43AD-A99F-049FEA733577}"
-	ProjectSection(SolutionItems) = preProject
-		.github\ISSUE_TEMPLATE\bug-issue-template.yml = .github\ISSUE_TEMPLATE\bug-issue-template.yml
-		.github\ISSUE_TEMPLATE\project-item-issue-template.yml = .github\ISSUE_TEMPLATE\project-item-issue-template.yml
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pull Request Templates", "Pull Request Templates", "{DC46D789-4072-4F81-B83C-CEF24FFD7229}"
-	ProjectSection(SolutionItems) = preProject
-		.github\PULL_REQUEST_TEMPLATE\feature-pr-template.md = .github\PULL_REQUEST_TEMPLATE\feature-pr-template.md
-		.github\PULL_REQUEST_TEMPLATE\preview-feature-pr-template.md = .github\PULL_REQUEST_TEMPLATE\preview-feature-pr-template.md
+		.github\workflows\build-pr-status-check.yml = .github\workflows\build-pr-status-check.yml
+		.github\workflows\feature-pr-status-check.yml = .github\workflows\feature-pr-status-check.yml
+		.github\workflows\hotfix-pr-status-check.yml = .github\workflows\hotfix-pr-status-check.yml
+		.github\workflows\prev-feature-pr-status-check.yml = .github\workflows\prev-feature-pr-status-check.yml
+		.github\workflows\prev-release.yml = .github\workflows\prev-release.yml
+		.github\workflows\prev-release-pr-status-check.yml = .github\workflows\prev-release-pr-status-check.yml
+		.github\workflows\prod-release.yml = .github\workflows\prod-release.yml
+		.github\workflows\prod-release-pr-status-check.yml = .github\workflows\prod-release-pr-status-check.yml
+		.github\workflows\unit-test-pr-status-check.yml = .github\workflows\unit-test-pr-status-check.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionMinerIntegrationTests", "Testing\VersionMinerIntegrationTests\VersionMinerIntegrationTests.csproj", "{AA5FFACB-335D-49DB-A25B-AE0ED088F9B0}"
@@ -72,8 +68,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{77B96B49-4D77-456B-A787-E852E9842B60} = {0D648979-F6A2-4DBD-ABE7-BDCB9E0EE4BE}
 		{5010ECCD-3BCC-475D-87EE-31E289E24571} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
-		{2C56562A-E5F8-43AD-A99F-049FEA733577} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
-		{DC46D789-4072-4F81-B83C-CEF24FFD7229} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
 		{AA5FFACB-335D-49DB-A25B-AE0ED088F9B0} = {0D648979-F6A2-4DBD-ABE7-BDCB9E0EE4BE}
 	EndGlobalSection
 EndGlobal

@@ -351,3 +351,6 @@ MigrationBackup/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+# Ignore secrets file used for CICD build system
+local-secrets.json

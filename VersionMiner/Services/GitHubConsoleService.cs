@@ -55,6 +55,7 @@ public class GitHubConsoleService : IGitHubConsoleService
         Console.ForegroundColor = ConsoleColor.Red;
 #endif
 
+        Console.WriteLine();
         Console.WriteLine($"::error::{value}");
         Console.ForegroundColor = currentClr;
     }

@@ -1,27 +1,21 @@
 <h1 align="center">
 
-**Version Miner Action🪨⛏️**
+**🪨⛏️**
 </h1>
 
 <div align="center">
-  <h3>GitHub Action for pulling out versions from files.</h3>
+  <h3>GitHub Action for pulling version numbers out of files.</h3>
 </div>
 
 <div align="center">
 
-![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/KinsonDigital/VersionMiner?color=%23318A42&include_prereleases&label=Latest%20Release&logo=github)
-</div>
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/VersionMiner/prod-release-pr-status-check.yml?color=2F8840&label=Prod%20CI%20Build&logo=GitHub)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/VersionMiner/prev-release-pr-status-check.yml?color=2F8840&label=Preview%20CI%20Build&logo=GitHub)
 
-<div align="center">
+![Codecov](https://img.shields.io/codecov/c/github/KinsonDigital/VersionMiner?color=2F8840&label=Code%20Coverage&logo=codecov)
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kinsondigital/VersionMiner/%E2%9C%94Unit%20Testing%20Status%20Check?color=%23238636&label=Unit%20Tests)
-![GitHub issues by-label](https://img.shields.io/github/issues/kinsondigital/VersionMiner/good%20first%20issue?color=%23238636&label=Good%20First%20Issues)
-</div>
-
-<div align="center">
-
-![Discord](https://img.shields.io/discord/481597721199902720?color=%23575CCB&label=discord&logo=discord&logoColor=white)
-![Twitter URL](https://img.shields.io/twitter/url?color=%235c5c5c&label=Follow%20%40KDCoder&logo=twitter&url=https%3A%2F%2Ftwitter.com%2FKDCoder)
+[![Good First GitHub Issues](https://img.shields.io/github/issues/kinsondigital/VersionMiner/good%20first%20issue?color=7057ff&label=Good%20First%20Issues)](https://github.com/KinsonDigital/VersionMiner/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+[![Discord](https://img.shields.io/discord/481597721199902720?color=%23575CCB&label=chat%20on%20discord&logo=discord&logoColor=white)](https://discord.gg/qewu6fNgv7)
 </div>
 
 
@@ -35,11 +29,15 @@ This is a **GitHub Action** to make it easy to pull versions from XML files.
 This can be used in your workflows for other uses such as version validation, version tag management, and more!!
 
 
-<div align="center"><h3 style="font-weight:bold">📒Quick Note📒</h3></div>
+<div align="center"><h2 style="font-weight:bold">⚠️Quick Note⚠️</h2></div>
 
-This GitHub action is built using C#/NET and runs in a docker container.  This means that the action can only be run on Linux.  Running in ***Windows*** is not supported.  If you need to use steps on ***Windows*** AND ***Ubuntu***, then you can split up your workflow so that this action is in an isolated job that runs on ***Ubuntu***, while the rest of the workflow can be executed in ***Windows***.
+This GitHub action is built using C#/NET and runs in a docker container.  If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**.  You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into it's own job.  You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow. For more information, refer to the Github documentation links below:
 
-<div align="center"><h3 style="font-weight:bold">Usage Examples</h3></div>
+For more info on step and job outputs, refer to the GitHub documentation links below:
+- [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
+- [Setting a step action output parameter](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
+
+<div align="center"><h2 style="font-weight:bold">Usage Examples</h2></div>
 
 - Create tags automatically with the version, during the release process.
 - Validate the version syntax to help enforce version syntax.
@@ -66,7 +64,7 @@ the XML for any XML elements that match the name ***"Version"*** or ***"FileVers
 
 ---
 
-<div align="center"><h3 style="font-weight:bold">Quick Example</h3></div>
+<div align="center"><h2 style="font-weight:bold">Quick Example</h2></div>
 
 ```yaml
 name: Get Version Example
@@ -75,7 +73,7 @@ jobs:
   Get_Version_Job:
     runs-on: ubuntu-latest # Cannot use windows
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/3
 
     - name: Get Version From C# Project File
       id: get-version
@@ -121,10 +119,10 @@ If the XML file had the contents below, the workflow above would print the value
 
 | Input Name | Description | Required | Default Value |
 |---|:---|:---:|---|
-| `repo-owner` | The owner of the repository. | yes | N/A |
-| `repo-name` | The name of the repository. | yes | N/A |
-| `repo-token` | The repository or PAT token to use for authorized requests. This action uses the GitHub API to do its job.  This is not required but you will not be able to get very far once the rate limit has been reached.  Refer to [GitHub API Authentication](https://docs.github.com/en/rest/guides/getting-started-with-the-rest-api#authentication) for more information about request rate limits. | no | empty |
-| `branch-name` | The name of the branch where the file lives. | yes | N/A |
+| `repo-owner` | The owner of the repository. This is **NOT** case sensitive. | yes | N/A |
+| `repo-name` | The name of the repository. This is **NOT** case sensitive. | yes | N/A |
+| `repo-token` | The repository or PAT token to use for authorized requests. This action uses [Octokit](https://github.com/octokit/octokit.net) and the [GitHub API](https://docs.github.com/en/rest) to do its job. | yes | empty |
+| `branch-name` | The name of the branch where the file lives. This **IS** case sensitive. | yes | N/A |
 | `file-format` | A non case-sensitive value representing the data format of the file that contains the version. Currently, the only supported value is `xml` for a file format. | yes | N/A |
 | `file-path` | The path to the file relative to the root of the repository. | yes | N/A |
 | `version-keys` | A comma delimited list of keys that hold the version value. Spaces around commas are ignored.  Keys must be wrapped with single or double quotes to be processed properly if more than one key exists. | yes | N/A |
@@ -290,14 +288,16 @@ Result:
 - [MIT License - VersionMiner](https://github.com/KinsonDigital/VersionMiner/blob/preview/v1.0.0-preview.2/LICENSE)
 </div>
 
+- Click [here](https://github.com/KinsonDigital/VersionMiner/issues/new/choose) to report any issues for this GitHub action!!
 <div align="left">
 
-### Maintainer
 </div>
 
-- [Calvin Wilkinson](https://github.com/CalvinWilkinson) (Owner and main contributor of the GitHub organization [KinsonDigital](https://github.com/KinsonDigital))
-  - [Version Miner](https://github.com/KinsonDigital/VersionMiner) is used in various projects for this organization with great success.
-- Click [here](https://github.com/KinsonDigital/VersionMiner/issues/new/choose) to report any issues for this GitHub action!!
+<h2 style="font-weight:bold;border:0" align="center">🔧Maintainers</h2>
+
+### Project Maintainers:
+- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/VersionMiner/release/v1.0.0/Documentation/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
+- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/VersionMiner/release/v1.0.0/Documentation/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
 
 <div align="right">
 <a href="#what-is-it">Back to the top!👆🏼</a>

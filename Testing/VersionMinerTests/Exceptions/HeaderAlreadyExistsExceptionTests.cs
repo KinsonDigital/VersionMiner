@@ -1,4 +1,4 @@
-// <copyright file="BranchDoesNotExistExceptionTests.cs" company="KinsonDigital">
+﻿// <copyright file="HeaderAlreadyExistsExceptionTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -8,26 +8,26 @@ using VersionMiner.Exceptions;
 namespace VersionMinerTests.Exceptions;
 
 /// <summary>
-/// Tests the <see cref="BranchDoesNotExistException"/> class.
+/// Tests the <see cref="HeaderAlreadyExistsException"/> class.
 /// </summary>
-public class BranchDoesNotExistExceptionTests
+public class HeaderAlreadyExistsExceptionTests
 {
     #region Constructor Tests
     [Fact]
     public void Ctor_WithNoParam_CorrectlySetsExceptionMessage()
     {
         // Act
-        var exception = new BranchDoesNotExistException();
+        var exception = new HeaderAlreadyExistsException();
 
         // Assert
-        exception.Message.Should().Be("The repository branch does not exist.");
+        exception.Message.Should().Be("The header already exists.");
     }
 
     [Fact]
     public void Ctor_WhenInvokedWithSingleMessageParam_CorrectlySetsMessage()
     {
         // Act
-        var exception = new BranchDoesNotExistException("test-message");
+        var exception = new HeaderAlreadyExistsException("test-message");
 
         // Assert
         exception.Message.Should().Be("test-message");
@@ -40,7 +40,7 @@ public class BranchDoesNotExistExceptionTests
         var innerException = new Exception("inner-exception");
 
         // Act
-        var deviceException = new BranchDoesNotExistException("test-exception", innerException);
+        var deviceException = new HeaderAlreadyExistsException("test-exception", innerException);
 
         // Assert
         deviceException.InnerException.Message.Should().Be("inner-exception");
