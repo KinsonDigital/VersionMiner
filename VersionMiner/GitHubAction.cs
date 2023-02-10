@@ -202,11 +202,6 @@ public sealed class GitHubAction : IGitHubAction
             return;
         }
 
-        if (disposing)
-        {
-            this.repoFileDataService.Dispose();
-        }
-
         this.isDisposed = true;
     }
 

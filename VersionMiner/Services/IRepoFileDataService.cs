@@ -7,7 +7,7 @@ namespace VersionMiner.Services;
 /// <summary>
 /// Provides the ability to get file data from a repository.
 /// </summary>
-public interface IRepoFileDataService : IDisposable
+public interface IRepoFileDataService
 {
     /// <summary>
     /// Gets or sets the authorization token to use when making requests for GitHub data.
