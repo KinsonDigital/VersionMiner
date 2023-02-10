@@ -16,8 +16,8 @@ namespace VersionMiner;
 [ExcludeFromCodeCoverage]
 public static class Program
 {
+    private static readonly FileSystem FileSystem = new ();
     private static IHost host = null!;
-    private static FileSystem fileSystem = new ();
 
     /// <summary>
     /// The main entry point of the GitHub action.
@@ -31,6 +31,17 @@ public static class Program
             {
                 services.AddSingleton<IGitHubClient, GitHubClient>(_
                     => new GitHubClient(new ProductHeaderValue("version-miner", App.GetVersion())));
+                services.AddSingleton<IRepositoryContentsClient>(provider =>
+                {
+                    var service = provider.GetService<IGitHubClient>();
+
+                    if (service is null)
+                    {
+                        throw new InvalidOperationException($"The service '{nameof(IGitHubClient)}' cannot be null when resolving dependencies.");
+                    }
+
+                    return service.Repository.Content;
+                });
                 services.AddSingleton<IAppService, AppService>();
                 services.AddSingleton<IHttpClient, MinerHttpClient>();
                 services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
@@ -40,7 +51,7 @@ public static class Program
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
                 services.AddSingleton<IGitHubAction, GitHubAction>();
                 services.AddSingleton<IEnvVarService, EnvVarService>();
-                services.AddSingleton(fileSystem.File);
+                services.AddSingleton(FileSystem.File);
             }).Build();
 
         IAppService appService;

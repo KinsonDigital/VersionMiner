@@ -2,13 +2,12 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-using System.Net;
+using System.Text;
 using FluentAssertions;
 using Moq;
-using VersionMiner;
+using Octokit;
 using VersionMiner.Exceptions;
 using VersionMiner.Services;
-using VersionMinerTests.Helpers;
 
 namespace VersionMinerTests.Services;
 
@@ -17,17 +16,29 @@ namespace VersionMinerTests.Services;
 /// </summary>
 public class RepoFileDataServiceTests
 {
-    private const string BaseUrl = "https://api.github.com";
-    private readonly Mock<IHttpClient> mockClient;
+    private readonly Mock<IRepositoryContentsClient> mockRepoContentClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RepoFileDataServiceTests"/> class.
     /// </summary>
-    public RepoFileDataServiceTests()
+    public RepoFileDataServiceTests() => this.mockRepoContentClient = new Mock<IRepositoryContentsClient>();
+
+    #region Constructor Tests
+    [Fact]
+    public void Ctor_WithNullClientParam_ThrowsException()
     {
-        this.mockClient = new Mock<IHttpClient>();
-        this.mockClient.SetupGet(p => p.BaseUrl).Returns(BaseUrl);
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new RepoFileDataService(null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'client')");
     }
+    #endregion
 
     #region Prop Tests
     [Fact]
@@ -124,15 +135,24 @@ public class RepoFileDataServiceTests
     }
 
     [Fact]
-    public async void GetFileData_WhenHttpResponseIsNull_ThrowException()
+    public async void GetFileData_WhenContentIsNotFound_ThrowException()
     {
         // Arrange
         const string repoOwner = "test-owner";
         const string repoName = "test-repo";
         const string branchName = "test-branch";
         const string filePath = "invalid-path";
-        const string queryString = $"?ref={branchName}";
-        const string requestUri = $@"/repos/{repoOwner}/{repoName}/contents/{filePath}{queryString}";
+        const string expected = $"The file '{filePath}' in the repository '{repoName}' for the owner '{repoOwner}' was not found.";
+
+        var clientResult = Array.Empty<RepositoryContent>().AsReadOnly();
+
+        this.mockRepoContentClient
+            .Setup(m => m.GetAllContentsByRef(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()))
+            .ReturnsAsync(clientResult);
 
         var service = CreateService();
 
@@ -140,56 +160,8 @@ public class RepoFileDataServiceTests
         var act = () => service.GetFileData(repoOwner, repoName, branchName, filePath);
 
         // Assert
-        await act.Should().ThrowAsync<HttpRequestException>()
-            .WithMessage($"The response from '{this.mockClient.Object.BaseUrl}/{requestUri}' returned null.");
-    }
-
-    [Fact]
-    public async void GetFileData_WhenFileIsNotFound_ThrowsException()
-    {
-        // Arrange
-        const string repoOwner = "test-owner";
-        const string repoName = "test-repo";
-        const string branchName = "test-branch";
-        const string filePath = "invalid-path";
-
-        var expectedMsg =
-            $"Request failed with status code '{(int)HttpStatusCode.NotFound}({HttpStatusCode.NotFound})' for file 'invalid-path'.";
-
-        this.mockClient.Setup(m => m.ExecuteGetAsync(It.IsAny<string>()))
-            .ReturnsAsync(new HttpResponse { StatusCode = HttpStatusCode.NotFound });
-        var service = CreateService();
-
-        // Act
-        var act = () => service.GetFileData(repoOwner, repoName, branchName, filePath);
-
-        // Assert
-        await act.Should().ThrowAsync<FileNotFoundException>()
-            .WithMessage(expectedMsg);
-    }
-
-    [Fact]
-    public async void GetFileData_WhenOtherHttpError_ThrowsException()
-    {
-        // Arrange
-        const string repoOwner = "test-owner";
-        const string repoName = "test-repo";
-        const string branchName = "test-branch";
-        const string filePath = "invalid-path";
-
-        var expectedMsg =
-            $"Request failed with status code '{(int)HttpStatusCode.Forbidden}({HttpStatusCode.Forbidden})'.";
-
-        this.mockClient.Setup(m => m.ExecuteGetAsync(It.IsAny<string>()))
-            .ReturnsAsync(new HttpResponse { StatusCode = HttpStatusCode.Forbidden });
-        var service = CreateService();
-
-        // Act
-        var act = () => service.GetFileData(repoOwner, repoName, branchName, filePath);
-
-        // Assert
-        await act.Should().ThrowAsync<HttpRequestException>()
-            .WithMessage(expectedMsg);
+        await act.Should().ThrowAsync<NotFoundException>()
+            .WithMessage(expected);
     }
 
     [Fact]
@@ -200,12 +172,20 @@ public class RepoFileDataServiceTests
         const string repoName = "test-repo";
         const string branchName = "test-branch";
         const string filePath = "invalid-path";
-        const string queryString = $"?ref={branchName}";
-        const string requestUri = $@"/repos/{repoOwner}/{repoName}/contents/{filePath}{queryString}";
         const string expectedFileData = "test-data";
 
-        this.mockClient.Setup(m => m.ExecuteGetAsync(requestUri))
-            .ReturnsAsync(new HttpResponse { Content = expectedFileData, StatusCode = HttpStatusCode.OK });
+        var expected = new[]
+        {
+            CreateRepositoryContent(filePath, expectedFileData),
+        }.AsReadOnly();
+
+        this.mockRepoContentClient
+            .Setup(m => m.GetAllContentsByRef(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()))
+            .ReturnsAsync(expected);
 
         var service = CreateService();
 
@@ -221,25 +201,35 @@ public class RepoFileDataServiceTests
         actual.Should().NotBeNullOrEmpty();
         actual.Should().Be(expectedFileData);
     }
-
-    [Fact]
-    public void Dispose_WhenInvoked_DisposesOfService()
-    {
-        // Arrange
-        var service = CreateService();
-
-        // Act
-        service.Dispose();
-        service.Dispose();
-
-        // Assert
-        this.mockClient.VerifyOnce(m => m.Dispose());
-    }
     #endregion
+
+    /// <summary>
+    /// Creates a new <see cref="RepositoryContent"/> object for the purpose of testing.
+    /// </summary>
+    /// <param name="path">The path to the content relative to the root of the repository.</param>
+    /// <param name="encodedContent">The encoded content of the file.</param>
+    /// <returns>The repository content.</returns>
+    private static RepositoryContent CreateRepositoryContent(string path, string encodedContent)
+    {
+        return new RepositoryContent(
+            name: string.Empty, // string
+            path: path, // string
+            sha: string.Empty, // string
+            size: 0, // int
+            type: ContentType.File, // ContentType
+            downloadUrl: string.Empty, // string
+            url: string.Empty, // string
+            gitUrl: string.Empty, // string
+            htmlUrl: string.Empty, // string
+            encoding: "base64", // string
+            encodedContent: Convert.ToBase64String(Encoding.ASCII.GetBytes(encodedContent)), // string
+            target: string.Empty, // string
+            submoduleGitUrl: string.Empty); // string
+    }
 
     /// <summary>
     /// Creates a new instance of <see cref="RepoFileDataService"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private RepoFileDataService CreateService() => new (this.mockClient.Object);
+    private RepoFileDataService CreateService() => new (this.mockRepoContentClient.Object);
 }
