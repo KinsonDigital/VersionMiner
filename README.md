@@ -277,6 +277,13 @@ Result:
 
 ---
 
+<h2 style="font-weight:bold;border:0" align="center">🔧Maintainers</h2>
+
+- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
+- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
+
+<div align="right">
+
 <div align="center">
 
 ## **Other Info**
@@ -284,21 +291,14 @@ Result:
 
 <div align="left">
 
-### License
-- [MIT License - VersionMiner](https://github.com/KinsonDigital/VersionMiner/blob/preview/v1.0.0-preview.2/LICENSE)
+- [MIT License](https://github.com/KinsonDigital/VersionMiner/blob/preview/v1.0.0-preview.2/LICENSE)
 </div>
 
-- Click [here](https://github.com/KinsonDigital/VersionMiner/issues/new/choose) to report any issues for this GitHub action!!
 <div align="left">
 
-</div>
-
-<h2 style="font-weight:bold;border:0" align="center">🔧Maintainers</h2>
-
-### Project Maintainers:
-- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/VersionMiner/release/v1.0.0/Documentation/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
-- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/VersionMiner/release/v1.0.0/Documentation/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
+- Click [here](https://github.com/KinsonDigital/VersionMiner/issues/new/choose) to report any issues for this GitHub action!!
 
 <div align="right">
+
 <a href="#what-is-it">Back to the top!👆🏼</a>
 </div>
