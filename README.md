@@ -137,15 +137,7 @@ If the XML file had the contents below, the workflow above would print the value
 ## **🪧 More Examples 🪧**
 </div>
 
-<div align="center">
-
-### **Example 1 - (Pass When Version Is Not Found)**
-</div>
-
-Requirements:
-- Searches for a version but does not fail the workflow if no version is found.
-
-📒Quick Note: The action input `fail-when-version-not-found` is not required and has a default value of `true`.  If you do not want the action to fail when the version is not found, you must explicitly use the input with a value of `false`.
+  Searches for a version but does not fail the workflow if no version is found:
 
 ``` yml
 #Example 1 Workflow
@@ -172,19 +164,8 @@ Requirements:
 </Project>
 ```
 
-<div align="center">
-
-### **Example 2 - (Multiple Key Searching)**
-</div>
-
-Requirements:
-- Searches multiple keys for the version.
-- The job fails if no version is found in the keys.
-
-Result:  
-- The example below will use the value of ***4.5.6*** as the action output.
-
-📒Quick Note: Since the `fail-when-version-not-found` input is not explicitly used in the YAML, the default value of `true` will be used and the job will fail if the version was not found.
+<div align="left">
+Searches multiple keys for the version. The job fails if no version is found in the keys:
 
 ``` yml
 #Example 2 Workflow
@@ -211,16 +192,8 @@ Result:
 </Project>
 ```
 
-<div align="center">
-
-### **Example 3 - (Key Case Sensitivity)**
-</div>
-
-Requirements:
-- Search for a key without using case-sensitivity
-
-Result:  
-- The example below will use the value of ***1.2.3*** as the action output.
+<div align="left">
+Search for a key without using case-sensitivity:
 
 ``` yml
 #Example 3 Workflow
@@ -247,17 +220,9 @@ Result:
 </Project>
 ```
 
-<div align="center">
+<div align="left">
 
-### **Example 4 - (Branch Trimming)**
-</div>
-
-Requirements:
-- Need to trim the value 'refs/heads/' from the beginning of the branch.
-
-Result:  
-- The example below will use the value of ***1.2.3*** as the action output.
-- Click [here](https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables) to get more information about the default variable used in the example below.
+Need to trim the value 'refs/heads/' from the beginning of the branch. Click [here](https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables) to get more information about the default variable `github.ref` used in the example below:
 
 ``` yml
 #Example 4 Workflow
