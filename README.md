@@ -215,7 +215,7 @@ Searches for a key without using case-sensitivity:
 
 <div align="left">
 
-Trims the value 'refs/heads/' from the beginning of the branch.
+Trims the value `refs/heads/` from the beginning of the branch.
 
 > **Note** Click [here](https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables) to get more information about the default variable `github.ref` used in the example below:
 
