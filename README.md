@@ -134,7 +134,7 @@ If the XML file had the contents below, the workflow above would print the value
 
 <div align="center" style="font-weight:bold">
 
-## **Examples**
+## **🪧 More Examples 🪧**
 </div>
 
 <div align="center">
@@ -276,28 +276,28 @@ Result:
 
 ---
 
-<h2 style="font-weight:bold;border:0" align="center">🔧Maintainers</h2>
+<h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 
-- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
-- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
-
-<div align="right">
+Interested in contributing? If so, click [here](https://github.com/KinsonDigital/.github/blob/master/docs/CONTRIBUTING.md) to learn how to contribute your time or [here](https://github.com/sponsors/KinsonDigital) if you are interested in contributing your funds via one-time or recurring donation.
 
 <div align="center">
 
-## **Other Info**
+## **🔧 Maintainers 🔧**
 </div>
 
-<div align="left">
+  [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
+  
+  [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Project Management, Documentation, Tester)
+ 
+<br>
 
-- [MIT License](https://github.com/KinsonDigital/VersionMiner/blob/preview/v1.0.0-preview.2/LICENSE)
+<h2 style="font-weight:bold;" align="center">🚔 Licensing And Governance 🚔</h2>
+
+<div align="center">
+
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
+![GitHub](https://img.shields.io/github/license/kinsondigital/gotnuget)
 </div>
 
-<div align="left">
-
-- Click [here](https://github.com/KinsonDigital/VersionMiner/issues/new/choose) to report any issues for this GitHub action!!
-
-<div align="right">
-
-<a href="#what-is-it">Back to the top!👆🏼</a>
-</div>
+This software is distributed under the very permissive [MIT license](https://github.com/KinsonDigital/GotNuget/blob/preview/v1.0.0-preview.1/LICENSE.md) and all dependencies are distributed under MIT-compatible licenses.
+This project has adopted the code of conduct defined by the **Contributor Covenant** to clarify expected behavior in our community.
