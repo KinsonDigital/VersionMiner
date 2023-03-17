@@ -24,6 +24,30 @@
 		],
 		"description": "Link to the issue"
 	},
+	"Issue Dependency Update": {
+		"scope": "markdown",
+		"prefix": "issue-dep-update",
+		"body": [
+			"[#${1:PR #}](https://github.com/KinsonDigital/VersionMiner/pull/${1:PR #}) - Updated **${2:packge name}** from _**v${3:from version}**_ to _**v${4:to version}**_"
+		],
+		"description": "Link to a pull request for a dependency update."
+	},
+	"PR Link": {
+		"scope": "markdown",
+		"prefix": "pr-link",
+		"body": [
+			"[#${1:PR #}](https://github.com/KinsonDigital/VersionMiner/pull/${1:PR #}) - "
+		],
+		"description": "Link to a pull request"
+	},
+	"PR Dependency Update": {
+		"scope": "markdown",
+		"prefix": "pr-dep-update",
+		"body": [
+			"[#${1:PR #}](https://github.com/KinsonDigital/VersionMiner/pull/${1:PR #}) - Updated **${2:packge name}** from _**v${3:from version}**_ to _**v${4:to version}**_"
+		],
+		"description": "Link to a pull request for a dependency update."
+	},
 	"Issue Link (Outside Contributor)": {
 		"scope": "markdown",
 		"prefix": "issue-link-oc",
