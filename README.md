@@ -50,7 +50,7 @@ which has the name `version`, so you can use it in the rest of your workflow.
 
 <br/>
 
->**Note** VersionMiner is built using C#/NET and runs in a docker container.  If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**.  You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into it's own job.  You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow.  
+>**Note** VersionMiner is built using C#/NET and runs in a docker container.  If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**.  You can split up your jobs to fulfill the `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into its job.  You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow.  
 For more information on step and job outputs, refer to the GitHub documentation links below:
 >- [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
 >- [Setting a step action output parameter](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
@@ -107,13 +107,13 @@ If the XML file had the contents below, the workflow above would print the value
 
 | Input Name | Description | Required | Default Value |
 |:---|:---|:---:|:---:|
-| `repo-owner` | The owner of the repository. This is _**NOT**_ case sensitive. | yes | N/A |
-| `repo-name` | The name of the repository. This is _**NOT**_ case sensitive. | yes | N/A |
+| `repo-owner` | The owner of the repository. This is _**NOT**_ case-sensitive. | yes | N/A |
+| `repo-name` | The name of the repository. This is _**NOT**_ case-sensitive. | yes | N/A |
 | `repo-token` | The repository or PAT token to use for authorized requests. | yes | empty |
 | `branch-name` | The name of the branch where the file lives. This _**IS**_ case sensitive. | yes | N/A |
-| `file-format` | A non case-sensitive value representing the data format of the file that contains the version. Currently, the only supported value is `xml` for a file format. | yes | N/A |
+| `file-format` | A non-case-sensitive value representing the data format of the file that contains the version. Currently, the only supported value is `xml` for a file format. | yes | N/A |
 | `file-path` | The path to the file relative to the root of the repository. | yes | N/A |
-| `version-keys` | A comma delimited list of keys that hold the version value. Spaces around commas are ignored.  Values must be wrapped with single or double quotes to be processed properly if more than one key exists.  The search for keys will stop once the first occurrence of a key that contains a value is found.  | yes | N/A |
+| `version-keys` | A comma-delimited list of keys that hold the version value. Spaces around commas are ignored.  Values must be wrapped with single or double quotes to be processed properly if more than one key exists.  The search for keys will stop once the first occurrence of a key that contains a value is found.  | yes | N/A |
 | `case-sensitive-keys` | If true, key searching will be case-sensitive. | no | `true` |
 | `trim-start-from-branch` | Will trim the given value from the beginning of the `branch-name` input. | no | empty |
 | `fail-on-key-value-mismatch` | If true, the action will fail, if all of the key values listed in the `version-keys` input do not match.  Other failure inputs will not affect this input. | no | `false` |
