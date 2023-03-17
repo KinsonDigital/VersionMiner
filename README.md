@@ -29,7 +29,7 @@
 This **GitHub Action** makes it easy to pull versions from XML files.
 It can be used in your workflows for other uses such as version validation, version tag management, and more!!
 
-<details closed><summary>TLDR - Additional Info</summary>
+<details closed><summary><b>TLDR</b> - Additional Info</summary>
 
 In a nutshell, VersionMiner pulls versions out of XML data files for use in workflows.
 Just tell the action which repo, branch, and file contains the version, and it will search through the file for the `version-keys` and pull out the value of that key. This value is used as the value of the action's output,
@@ -40,7 +40,7 @@ If the value of the `version-keys` input was ***"Version,FileVersion"***, then i
 the XML for any XML elements that match the name ***"Version"*** or ***"FileVersion"***.  The first element that has a value will be the value returned.  So if the XML element ***"Version"*** had a value of ***1.2.3***, then it would simply return the value of the ***"Version"*** element and stop looking for values in any other XML elements.
 </details>
 
-<details closed><summary>TLDR - Use Cases</summary>
+<details closed><summary><b>TLDR</b> - Use Cases</summary>
 
 - Create tags automatically with the version, during the release process.
 - Validate the version syntax to help enforce version syntax.
