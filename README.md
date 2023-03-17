@@ -9,10 +9,10 @@
 
 <div align="center">
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/VersionMiner/prod-release-pr-status-check.yml?color=2F8840&label=Prod%20CI%20Build&logo=GitHub)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/VersionMiner/prev-release-pr-status-check.yml?color=2F8840&label=Preview%20CI%20Build&logo=GitHub)
+[![Prod Release Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/VersionMiner/prod-release-pr-status-check.yml?color=2F8840&label=Prod%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/VersionMiner/actions/workflows/prev-release-pr-status-check.yml)
+[![Prev Release Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/VersionMiner/prev-release-pr-status-check.yml?color=2F8840&label=Preview%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/VersionMiner/actions/workflows/prev-release-pr-status-check.yml)
 
-![Codecov](https://img.shields.io/codecov/c/github/KinsonDigital/VersionMiner?color=2F8840&label=Code%20Coverage&logo=codecov)
+[![Codecov](https://img.shields.io/codecov/c/github/KinsonDigital/VersionMiner?color=2F8840&label=Code%20Coverage&logo=codecov)](https://app.codecov.io/gh/KinsonDigital/VersionMiner/tree/release%2Fv1.0.0)
 
 [![Good First GitHub Issues](https://img.shields.io/github/issues/kinsondigital/VersionMiner/good%20first%20issue?color=7057ff&label=Good%20First%20Issues)](https://github.com/KinsonDigital/VersionMiner/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 [![Discord](https://img.shields.io/discord/481597721199902720?color=%23575CCB&label=chat%20on%20discord&logo=discord&logoColor=white)](https://discord.gg/qewu6fNgv7)
