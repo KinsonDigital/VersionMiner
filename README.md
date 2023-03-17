@@ -110,7 +110,7 @@ If the XML file had the contents below, the workflow above would print the value
 </div>
 
 | Input Name | Description | Required | Default Value |
-|---|:---|:---:|---|
+|---|:---|:---:|:---:|
 | `repo-owner` | The owner of the repository. This is **NOT** case sensitive. | yes | N/A |
 | `repo-name` | The name of the repository. This is **NOT** case sensitive. | yes | N/A |
 | `repo-token` | The repository or PAT token to use for authorized requests. This action uses [Octokit](https://github.com/octokit/octokit.net) and the [GitHub API](https://docs.github.com/en/rest) to do its job. | yes | empty |
