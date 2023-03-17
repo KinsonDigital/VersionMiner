@@ -18,6 +18,7 @@
 [![Discord](https://img.shields.io/discord/481597721199902720?color=%23575CCB&label=chat%20on%20discord&logo=discord&logoColor=white)](https://discord.gg/qewu6fNgv7)
 </div>
 
+<br>
 
 <div align="center">
 
@@ -30,7 +31,7 @@ It can be used in your workflows for other uses such as version validation, vers
 
 <details closed><summary>TLDR</summary>
 
-In a nutshell, this pulls versions out of XML data files for use in workflows.
+In a nutshell, VersionMiner pulls versions out of XML data files for use in workflows.
 Just tell the action which repo, branch, and file contains the version, and it will search through the file for the `version-keys` and pull out the value of that key. This value is used as the value of the action's output,
 which has the name `version`, so you can use it in the rest of your workflow.
 
@@ -47,7 +48,7 @@ the XML for any XML elements that match the name ***"Version"*** or ***"FileVers
 >- [Setting a step action output parameter](https://docs.github.com/en/actions/>using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
 
 
-<div align="center"><h2 style="font-weight:bold">Use Cases</h2></div>
+<div align="center"><h2 style="font-weight:bold">💡 Use Cases 💡</h2></div>
 <details closed><summary>TLDR</summary>
 
 - Create tags automatically with the version, during the release process.
