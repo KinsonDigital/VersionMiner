@@ -87,15 +87,16 @@ jobs:
 
 If the XML file had the contents below, the workflow above would print the value ***1.2.3*** to the GitHub console.
 
-``` xml
+```xml
 <!--Quick Example - C# Project File-->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>10.0</LangVersion>
-    <Version>1.2.3</Version>
+    <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>11.0</LangVersion>
+    <Version>1.2.3</Version> <!--The version that would be discovered-->
     <FileVersion>0.1.0</FileVersion>
+  </PropertyGroup>
 </Project>
 ```
 ---
@@ -150,14 +151,15 @@ The action output is a single `string` value with the name _**version**_. Click 
         version-keys: Version
         fail-when-version-not-found: false
 ```
-``` xml
+```xml
 <!--Example 1 - C# Project File-->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>10.0</LangVersion>
+    <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>11.0</LangVersion>
     <Version></Version> <!--No value.  Does not fail workflow.-->
+  </PropertyGroup>
 </Project>
 ```
 
@@ -177,15 +179,16 @@ Searches multiple keys for the version. The job fails if no version is found in 
         file-path: "MyProject/MyProject.csproj"
         version-keys: "Version,FileVersion"
 ```
-``` xml
+```xml
 <!--Example 2 - C# Project File-->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>10.0</LangVersion>
-    <Version></Version> <!--No value. Search continues using the FileVersion key-->
-    <FileVersion>4.5.6</FileVersion> <!--Key exists so this value is returned-->
+    <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>11.0</LangVersion>
+    <Version></Version> <!--No value. Search continues for the FileVersion key-->
+    <FileVersion>4.5.6</FileVersion> <!--Key with a value exists so this value is returned-->
+  </PropertyGroup>
 </Project>
 ```
 
@@ -206,14 +209,15 @@ Searches for a key without using case-sensitivity:
         version-keys: VeRSion # Different casing as the XML key below.
         case-sensitive-keys: false # Not required and has a default value of true.
 ```
-``` xml
+```xml
 <!--Example 3 - C# Project File-->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>10.0</LangVersion>
-    <version>1.2.3</version> <!--Spelling matches "VeRSion" but is still discovered.-->
+    <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>11.0</LangVersion>
+    <version>1.2.3</version> <!--Casing does not match but key is still used.-->
+  </PropertyGroup>
 </Project>
 ```
 
