@@ -57,7 +57,7 @@ For more information on step and job outputs, refer to the GitHub documentation 
 >- [Setting a step action output parameter](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
 
 
-<div align="center"><h2 style="font-weight:bold">🪧 Example 🪧</h2></div>
+<div id="output-example" align="center"><h2 style="font-weight:bold">🪧 Example 🪧</h2></div>
 
 ```yaml
 name: Get Version Example
@@ -118,6 +118,14 @@ If the XML file had the contents below, the workflow above would print the value
 | `trim-start-from-branch` | Will trim the given value from the beginning of the `branch-name` input. | no | empty |
 | `fail-on-key-value-mismatch` | If true, the action will fail, if all of the key values listed in the `version-keys` input do not match.  Other failure inputs will not affect this input. | no | `false` |
 | `fail-when-version-not-found` | If true, the action will fail, if no version exists.   Other failure inputs will not affect this input. | no | `true` |
+
+
+<div align="center">
+
+## **⬅️ Action Output ➡️**
+</div>
+
+The action output is a single `string` value with the name _**version**_. Click <a href="#output-example">here</a> to see an example of how to use the output of the action.
 
 ---
 
