@@ -34,10 +34,6 @@ It can be used in your workflows for other uses such as version validation, vers
 In a nutshell, VersionMiner pulls versions out of XML data files for use in workflows.
 Just tell the action which repo, branch, and file contains the version, and it will search through the file for the `version-keys` and pull out the value of that key. This value is used as the value of the action's output,
 which has the name `version`, so you can use it in the rest of your workflow.
-
-Example:  
-If the value of the `version-keys` input was ***"Version,FileVersion"***, then it would search
-the XML for any XML elements that match the name ***"Version"*** or ***"FileVersion"***.  The first element that has a value will be the value returned.  So if the XML element ***"Version"*** had a value of ***1.2.3***, then it would simply return the value of the ***"Version"*** element and stop looking for values in any other XML elements.
 </details>
 
 <details closed><summary><b>TLDR</b> - Use Cases</summary>
@@ -117,7 +113,7 @@ If the XML file had the contents below, the workflow above would print the value
 | `branch-name` | The name of the branch where the file lives. This **IS** case sensitive. | yes | N/A |
 | `file-format` | A non case-sensitive value representing the data format of the file that contains the version. Currently, the only supported value is `xml` for a file format. | yes | N/A |
 | `file-path` | The path to the file relative to the root of the repository. | yes | N/A |
-| `version-keys` | A comma delimited list of keys that hold the version value. Spaces around commas are ignored.  Keys must be wrapped with single or double quotes to be processed properly if more than one key exists. | yes | N/A |
+| `version-keys` | A comma delimited list of keys that hold the version value. Spaces around commas are ignored.  Values must be wrapped with single or double quotes to be processed properly if more than one key exists.  The search for keys will stop once the first occurrence of a key that contains a value is found.  | yes | N/A |
 | `case-sensitive-keys` | If true, key searching will be case-sensitive. | no | `true` |
 | `trim-start-from-branch` | Will trim the given value from the beginning of the `branch-name` input. | no | empty |
 | `fail-on-key-value-mismatch` | If true, the action will fail, if all of the key values listed in the `version-keys` input do not match.  Other failure inputs will not affect this input. | no | `false` |
