@@ -29,27 +29,18 @@
 This **GitHub Action** makes it easy to pull versions from XML files.
 It can be used in your workflows for other uses such as version validation, version tag management, and more!!
 
-<details closed><summary>TLDR</summary>
+<details closed><summary>TLDR - Additional Info</summary>
 
 In a nutshell, VersionMiner pulls versions out of XML data files for use in workflows.
 Just tell the action which repo, branch, and file contains the version, and it will search through the file for the `version-keys` and pull out the value of that key. This value is used as the value of the action's output,
 which has the name `version`, so you can use it in the rest of your workflow.
 
-The `version-keys` input is just a comma delimited list of XML keys to search for in the XML file.  
 Example:  
 If the value of the `version-keys` input was ***"Version,FileVersion"***, then it would search
 the XML for any XML elements that match the name ***"Version"*** or ***"FileVersion"***.  The first element that has a value will be the value returned.  So if the XML element ***"Version"*** had a value of ***1.2.3***, then it would simply return the value of the ***"Version"*** element and stop looking for values in any other XML elements.
 </details>
 
-<br>
-
->**Note** This GitHub action is built using C#/NET and runs in a docker container.  If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**.  You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into it's own job.  You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow. For more information on step and job outputs, refer to the GitHub documentation links below:
->- [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/>defining-outputs-for-jobs)
->- [Setting a step action output parameter](https://docs.github.com/en/actions/>using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
-
-
-<div align="center"><h2 style="font-weight:bold">💡 Use Cases 💡</h2></div>
-<details closed><summary>TLDR</summary>
+<details closed><summary>TLDR - Use Cases</summary>
 
 - Create tags automatically with the version, during the release process.
 - Validate the version syntax to help enforce version syntax.
@@ -61,7 +52,14 @@ the XML for any XML elements that match the name ***"Version"*** or ***"FileVers
 - Use status check workflows to verify versions before a pull request can be completed.
 - Whatever your imagination comes up with!!
 </details>
-<br>
+
+<br/>
+
+>**Note** VersionMiner is built using C#/NET and runs in a docker container.  If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**.  You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into it's own job.  You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow.  
+For more information on step and job outputs, refer to the GitHub documentation links below:
+>- [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
+>- [Setting a step action output parameter](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
+
 
 <div align="center"><h2 style="font-weight:bold">🪧 Example 🪧</h2></div>
 
@@ -104,16 +102,11 @@ If the XML file had the contents below, the workflow above would print the value
     <FileVersion>0.1.0</FileVersion>
 </Project>
 ```
-
-<div align="right">
-<a href="#examples">More Examples Below!! 👇🏼</a>
-</div>
-
 ---
 
 <div align="center">
 
-## **Action Inputs**
+## **➡️ Action Inputs ⬅️**
 </div>
 
 | Input Name | Description | Required | Default Value |
@@ -193,7 +186,7 @@ Searches multiple keys for the version. The job fails if no version is found in 
 ```
 
 <div align="left">
-Search for a key without using case-sensitivity:
+Searches for a key without using case-sensitivity:
 
 ``` yml
 #Example 3 Workflow
@@ -222,7 +215,9 @@ Search for a key without using case-sensitivity:
 
 <div align="left">
 
-Need to trim the value 'refs/heads/' from the beginning of the branch. Click [here](https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables) to get more information about the default variable `github.ref` used in the example below:
+Trims the value 'refs/heads/' from the beginning of the branch.
+
+> **Note** Click [here](https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables) to get more information about the default variable `github.ref` used in the example below:
 
 ``` yml
 #Example 4 Workflow
@@ -261,8 +256,8 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 <div align="center">
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
-![GitHub](https://img.shields.io/github/license/kinsondigital/gotnuget)
+[![GitHub](https://img.shields.io/github/license/kinsondigital/gotnuget)](https://github.com/KinsonDigital/VersionMiner/blob/release/v1.0.0/LICENSE.md)
 </div>
 
-This software is distributed under the very permissive [MIT license](https://github.com/KinsonDigital/GotNuget/blob/preview/v1.0.0-preview.1/LICENSE.md) and all dependencies are distributed under MIT-compatible licenses.
+This software is distributed under the very permissive MIT license and all dependencies are distributed under MIT-compatible licenses.
 This project has adopted the code of conduct defined by the **Contributor Covenant** to clarify expected behavior in our community.
