@@ -31,7 +31,7 @@ It can be used in your workflows for other uses such as version validation, vers
 
 <details closed><summary><b>TLDR</b> - Additional Info</summary>
 
-In a nutshell, VersionMiner pulls versions out of XML data files for use in workflows.
+In a nutshell, _**VersionMiner**_ pulls versions out of XML data files for use in workflows.
 Just tell the action which repo, branch, and file contains the version, and it will search through the file for the `version-keys` and pull out the value of that key. This value is used as the value of the action's output,
 which has the name `version`, so you can use it in the rest of your workflow.
 </details>
@@ -46,7 +46,6 @@ which has the name `version`, so you can use it in the rest of your workflow.
 - Release announcements.
   - Example: Use the version in a release announcement on Twitter.
 - Use status check workflows to verify versions before a pull request can be completed.
-- Whatever your imagination comes up with!!
 </details>
 
 <br/>
@@ -108,10 +107,10 @@ If the XML file had the contents below, the workflow above would print the value
 
 | Input Name | Description | Required | Default Value |
 |:---|:---|:---:|:---:|
-| `repo-owner` | The owner of the repository. This is **NOT** case sensitive. | yes | N/A |
-| `repo-name` | The name of the repository. This is **NOT** case sensitive. | yes | N/A |
+| `repo-owner` | The owner of the repository. This is _**NOT**_ case sensitive. | yes | N/A |
+| `repo-name` | The name of the repository. This is _**NOT**_ case sensitive. | yes | N/A |
 | `repo-token` | The repository or PAT token to use for authorized requests. | yes | empty |
-| `branch-name` | The name of the branch where the file lives. This **IS** case sensitive. | yes | N/A |
+| `branch-name` | The name of the branch where the file lives. This _**IS**_ case sensitive. | yes | N/A |
 | `file-format` | A non case-sensitive value representing the data format of the file that contains the version. Currently, the only supported value is `xml` for a file format. | yes | N/A |
 | `file-path` | The path to the file relative to the root of the repository. | yes | N/A |
 | `version-keys` | A comma delimited list of keys that hold the version value. Spaces around commas are ignored.  Values must be wrapped with single or double quotes to be processed properly if more than one key exists.  The search for keys will stop once the first occurrence of a key that contains a value is found.  | yes | N/A |
@@ -253,9 +252,9 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 ## **🔧 Maintainers 🔧**
 </div>
 
-  [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
+[![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
   
-  [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Project Management, Documentation, Tester)
+[![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Project Management, Documentation, Tester)
  
 <br>
 
