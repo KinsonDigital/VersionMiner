@@ -1,0 +1,11 @@
+﻿<Parent>
+    <GroupA>
+        <Item1>Item1Value</Item1>
+        <Item2>Item2Value</Item2>
+    </GroupA>
+
+    <GroupB>
+        <Item3>Item3Value</Item3>
+        <Item4>Item4Value</Item4>
+    </GroupB>
+</Parent>

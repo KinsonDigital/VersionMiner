@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>11.0</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>VersionMiner</RootNamespace>
+
+    <!--Update this for production and preview releases-->
+    <Version>1.0.0-preview.4</Version>
+
+    <!--Update this for production and preview releases-->
+    <FileVersion>1.0.0-preview.4</FileVersion>
+
+    <!--
+      DO NOT UPDATE THIS FOR PREVIEW RELEASES!!
+      Visual Studio does not allow the preview syntax for this tag
+      Example: v1.2.3.preview.1 is not allowed
+    -->
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <Authors>Calvin Wilkinson</Authors>
+    <Company>Kinson Digital</Company>
+    <Product>VersionMiner</Product>
+    <Description>Custom GitHub action used to scan GitHub issues for information.</Description>
+    <Copyright>Copyright ©2022 Kinson Digital</Copyright>
+    <NoWarn>CS7035</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName)Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="RestSharp" Version="108.0.3" />
+    <PackageReference Include="Octokit" Version="5.0.2" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.IO.Abstractions" Version="19.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="stylecop.json" />
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+</Project>
