@@ -24,7 +24,7 @@
     <Company>Kinson Digital</Company>
     <Product>VersionMiner</Product>
     <Description>Custom GitHub action used to scan GitHub issues for information.</Description>
-    <Copyright>Copyright ©2022 Kinson Digital</Copyright>
+    <Copyright>Copyright ©2023 Kinson Digital</Copyright>
     <NoWarn>CS7035</NoWarn>
   </PropertyGroup>
 
