@@ -29,7 +29,7 @@ jobs:
   # Build Main Projects
   build_project:
     name: Build Project
-    needs: [determine_build_config, get_sdk_version]
+    needs: [determine_build_config]
     uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v3.0.2
     with:
       project-name: "VersionMiner"
@@ -38,7 +38,7 @@ jobs:
 
   build_tests_project:
     name: Build Tests Project
-    needs: [determine_build_config, get_sdk_version]
+    needs: [determine_build_config]
     uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v3.0.2
     with:
       project-name: "VersionMinerTests"
