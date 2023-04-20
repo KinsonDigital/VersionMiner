@@ -5,10 +5,7 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-    - develop
     - master
-    - release/v*.*.*
-    - preview/v*.*.*-preview.*
 
 
 jobs:
@@ -37,4 +34,4 @@ jobs:
     with:
       project-name: "VersionMinerTests"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
-      net-sdk-version: 7.0.101
+      net-sdk-version: 7.0.203

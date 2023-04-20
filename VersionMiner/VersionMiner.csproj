@@ -9,10 +9,10 @@
     <RootNamespace>VersionMiner</RootNamespace>
 
     <!--Update this for production and preview releases-->
-    <Version>1.0.0-preview.4</Version>
+    <Version>1.0.0-preview.5</Version>
 
     <!--Update this for production and preview releases-->
-    <FileVersion>1.0.0-preview.4</FileVersion>
+    <FileVersion>1.0.0-preview.5</FileVersion>
 
     <!--
       DO NOT UPDATE THIS FOR PREVIEW RELEASES!!
@@ -24,7 +24,7 @@
     <Company>Kinson Digital</Company>
     <Product>VersionMiner</Product>
     <Description>Custom GitHub action used to scan GitHub issues for information.</Description>
-    <Copyright>Copyright ©2022 Kinson Digital</Copyright>
+    <Copyright>Copyright ©2023 Kinson Digital</Copyright>
     <NoWarn>CS7035</NoWarn>
   </PropertyGroup>
 
