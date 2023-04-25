@@ -10,5 +10,6 @@
         "typeparam",
         "versionminer",
         "Xunit"
-    ]
+    ],
+    "deno.enable": true
 }
