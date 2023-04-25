@@ -23,14 +23,14 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-    # - name: Validate Branch
-    #   run: |
-    #     $branch = "${{ github.ref }}";
+    - name: Validate Branch
+      run: |
+        $branch = "${{ github.ref }}";
 
-    #     if ($branch -ne "refs/heads/master") {
-    #       Write-Host "::error::Release workflow can only run on the $branch branch";
-    #       exit 1;
-    #     }
+        if ($branch -ne "refs/heads/master") {
+          Write-Host "::error::Release workflow can only run on the $branch branch";
+          exit 1;
+        }
 
     - name: Checkout
       uses: actions/checkout@v3 
