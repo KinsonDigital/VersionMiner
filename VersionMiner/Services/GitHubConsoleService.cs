@@ -1,8 +1,9 @@
-// <copyright file="GitHubConsoleService.cs" company="KinsonDigital">
+﻿// <copyright file="GitHubConsoleService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace VersionMiner.Services;
 
@@ -32,11 +33,11 @@ public class GitHubConsoleService : IGitHubConsoleService
     /// <inheritdoc/>
     public void WriteLine(uint tabs, string value)
     {
-        var allTabs = string.Empty;
+        var allTabs = new StringBuilder();
 
         for (var i = 0; i < tabs; i++)
         {
-            allTabs += "\t";
+            allTabs.Append("\t");
         }
 
         Console.WriteLine($"{allTabs}{value}");

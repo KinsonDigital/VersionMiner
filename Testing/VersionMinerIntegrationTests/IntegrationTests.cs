@@ -2,6 +2,8 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+#pragma warning disable S107 // SonarLint - Methods should not have too many parameters
+
 using System.IO.Abstractions;
 using FluentAssertions;
 using Octokit;
@@ -13,10 +15,11 @@ namespace VersionMinerIntegrationTests;
 /// <summary>
 /// Performs various integration tests of the GitHub action.
 /// </summary>
-public class IntegrationTests : IntegrationTestsBase, IDisposable
+public sealed class IntegrationTests : IntegrationTestsBase, IDisposable
 {
     private const string RepoToken = "DO-NOT-COMMIT-TOKEN";
     private readonly GitHubAction action;
+    private bool isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationTests"/> class.
@@ -43,7 +46,7 @@ public class IntegrationTests : IntegrationTestsBase, IDisposable
     }
 
     [Fact]
-    public async void Run_WhenEverythingExists_ReturnsSuccess()
+    public async Task Run_WhenEverythingExists_ReturnsSuccess()
     {
         // Arrange
         Exception? possibleException = null;
@@ -61,13 +64,25 @@ public class IntegrationTests : IntegrationTestsBase, IDisposable
     }
 
     [Theory]
-    [InlineData(nameof(ActionInputs.RepoName), "does-not-exist-repo", "Not Found")]
-    [InlineData(nameof(ActionInputs.BranchName), "does-not-exist-branch", "Branch not found")]
-    [InlineData(nameof(ActionInputs.FilePath), "invalid-file-path", "The file 'invalid-file-path' in the repository 'ActionTestRepo' for the owner 'KinsonDigital' was not found.")]
-    [InlineData(nameof(ActionInputs.FileFormat), "invalid-format", "The 'file-format' value of 'invalid-format' is invalid.\r\nThe only file format currently supported is XML.")]
-    [InlineData(nameof(ActionInputs.FileFormat), "", "The 'file-format' value of '' is invalid.\r\nThe only file format currently supported is XML.")]
-    [InlineData(nameof(ActionInputs.VersionKeys), "", "No version keys supplied for the 'version-keys' input.")]
-    public async void Run_WithInvalidInputValue_ReturnsCorrectInvalidResult(
+    [InlineData(nameof(ActionInputs.RepoName),
+        "does-not-exist-repo",
+        "The repository owner 'KinsonDigital' and/or the repository 'does-not-exist-repo' does not exist.")]
+    [InlineData(nameof(ActionInputs.BranchName),
+        "does-not-exist-branch",
+        "Branch not found")]
+    [InlineData(nameof(ActionInputs.FilePath),
+        "invalid-file-path",
+        "The file 'invalid-file-path' in the repository 'ActionTestRepo' for the owner 'KinsonDigital' was not found.")]
+    [InlineData(nameof(ActionInputs.FileFormat),
+        "invalid-format",
+        "The 'file-format' value of 'invalid-format' is invalid.\r\nThe only file format currently supported is XML.")]
+    [InlineData(nameof(ActionInputs.FileFormat),
+        "",
+        "The 'file-format' value of '' is invalid.\r\nThe only file format currently supported is XML.")]
+    [InlineData(nameof(ActionInputs.VersionKeys),
+        "",
+        "No version keys supplied for the 'version-keys' input.")]
+    public async Task Run_WithInvalidInputValue_ReturnsCorrectInvalidResult(
         string inputName,
         string inputValue,
         string expectedExMessage)
@@ -95,12 +110,12 @@ public class IntegrationTests : IntegrationTestsBase, IDisposable
     }
 
     /// <inheritdoc/>
-    public void Dispose() => this.action.Dispose();
+    public void Dispose() => Dispose(true);
 
     /// <summary>
     /// Creates a new instance of <see cref="ActionInputs"/> with default values for the purpose of testing.
     /// </summary>
-    private ActionInputs CreateInputs(
+    private static ActionInputs CreateInputs(
         string repoOwner = "KinsonDigital",
         string repoName = "ActionTestRepo",
         string branchName = "version-miner-testing",
@@ -125,4 +140,23 @@ public class IntegrationTests : IntegrationTestsBase, IDisposable
             FailOnKeyValueMismatch = failOnKeyValueMismatch,
             FailWhenVersionNotFound = failWhenVersionNotFound,
         };
+
+    /// <summary>
+    /// <inheritdoc cref="IDisposable.Dispose"/>
+    /// </summary>
+    /// <param name="isDisposing">True to dispose of any managed resources.</param>
+    private void Dispose(bool isDisposing)
+    {
+        if (this.isDisposed)
+        {
+            return;
+        }
+
+        if (isDisposing)
+        {
+            this.action.Dispose();
+        }
+
+        this.isDisposed = true;
+    }
 }
