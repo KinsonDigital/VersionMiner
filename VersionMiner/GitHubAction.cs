@@ -88,7 +88,7 @@ public sealed class GitHubAction : IGitHubAction
 
             Repository? repo;
 
-            try
+            this.consoleService.Write("the repository exists.", true, 2);
             {
                 repo = await this.githubClient.Repository.Get(inputs.RepoOwner, inputs.RepoName);
 
@@ -120,9 +120,7 @@ public sealed class GitHubAction : IGitHubAction
                 throw new HttpRequestException($"The repository branch '{inputs.BranchName}' does not exist.");
             }
 
-            this.consoleService.Write("the branch exists.", true);
-            this.consoleService.BlankLine();
-
+            this.consoleService.Write("the branch exists.", true, 2);
             this.consoleService.Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ");
             this.repoFileDataService.AuthToken = inputs.RepoToken;
 
@@ -132,9 +130,7 @@ public sealed class GitHubAction : IGitHubAction
                 inputs.BranchName,
                 inputs.FilePath);
 
-            this.consoleService.Write("data retrieved", true);
-            this.consoleService.BlankLine();
-
+            this.consoleService.Write("data retrieved", true, 2);
             this.consoleService.Write("✔️️Validating version keys . . . ");
             var keyValues = new List<string>();
             var versionKeys = inputs.VersionKeys.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
@@ -143,9 +139,7 @@ public sealed class GitHubAction : IGitHubAction
                 throw new NoVersionFoundException("No version keys supplied for the 'version-keys' input.");
             }
 
-            this.consoleService.Write("version keys validated.", true);
-            this.consoleService.BlankLine();
-
+            this.consoleService.Write("version keys validated.", true, 2);
             this.consoleService.Write("✔️️Pulling version from file . . . ");
             foreach (var versionKey in versionKeys)
             {
@@ -157,8 +151,7 @@ public sealed class GitHubAction : IGitHubAction
                 keyValues.Add(keyValue);
             }
 
-            this.consoleService.Write("version pulled from file.", true);
-            this.consoleService.BlankLine();
+            this.consoleService.Write("version pulled from file.", true, 2);
 
             /* If the action should fail on key value mismatch,
              * collect all of the values for comparison.

@@ -1,4 +1,4 @@
-﻿// <copyright file="GitHubConsoleService.cs" company="KinsonDigital">
+// <copyright file="GitHubConsoleService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -11,11 +11,16 @@ namespace VersionMiner.Services;
 public class GitHubConsoleService : IGitHubConsoleService
 {
     /// <inheritdoc/>
-    public void Write(string value, bool newLineAfter)
+    public void Write(string value, bool newLineAfter = false, int totalLines = 1)
     {
         Console.Write($"{value}");
 
-        if (newLineAfter)
+        if (!newLineAfter)
+        {
+            return;
+        }
+
+        for (var i = 0; i < totalLines; i++)
         {
             Console.WriteLine();
         }

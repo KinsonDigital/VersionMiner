@@ -455,20 +455,25 @@ public class GitHubActionTests
         this.mockConsoleService.VerifyOnce(m => m.WriteLine($"version: {expectedVersion}"));
         this.mockConsoleService.VerifyOnce(m => m.EndGroup());
 
-        this.mockConsoleService.VerifyOnce(m => m.Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ", false));
-        this.mockConsoleService.VerifyOnce(m => m.Write("the repository exists.", true));
+        this.mockConsoleService.VerifyOnce(m => m
+            .Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("the repository exists.", true, 1));
 
-        this.mockConsoleService.VerifyOnce(m => m.Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ", false));
-        this.mockConsoleService.VerifyOnce(m => m.Write("the branch exists.", true));
+        this.mockConsoleService.VerifyOnce(m => m
+        .Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("the branch exists.", true, 1));
 
-        this.mockConsoleService.VerifyOnce(m => m.Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ", false));
-        this.mockConsoleService.VerifyOnce(m => m.Write("data retrieved", true));
+        this.mockConsoleService.VerifyOnce(m => m
+        .Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("data retrieved", true, 1));
 
-        this.mockConsoleService.VerifyOnce(m => m.Write("✔️️Validating version keys . . . ", false));
-        this.mockConsoleService.VerifyOnce(m => m.Write("version keys validated.", true));
+        this.mockConsoleService.VerifyOnce(m => m
+        .Write("✔️️Validating version keys . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("version keys validated.", true, 1));
 
-        this.mockConsoleService.VerifyOnce(m => m.Write("✔️️Pulling version from file . . . ", false));
-        this.mockConsoleService.VerifyOnce(m => m.Write("version pulled from file.", true));
+        this.mockConsoleService.VerifyOnce(m => m
+            .Write("✔️️Pulling version from file . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("version pulled from file.", true, 1));
 
         this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(8));
     }

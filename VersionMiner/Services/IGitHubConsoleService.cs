@@ -17,7 +17,8 @@ public interface IGitHubConsoleService
     ///     If <b>true</b>, the console will be moved down to the next line after
     ///     the <paramref name="value"/> has been written to the console.
     /// </param>
-    void Write(string value, bool newLineAfter = false);
+    /// <param name="totalLines">The total number of lines to add.</param>
+    void Write(string value, bool newLineAfter = false, int totalLines = 1);
 
     /// <summary>
     /// Writes the given <paramref name="value"/> to the console on its own line.
