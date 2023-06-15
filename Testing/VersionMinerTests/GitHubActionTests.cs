@@ -1,4 +1,4 @@
-// <copyright file="GitHubActionTests.cs" company="KinsonDigital">
+﻿// <copyright file="GitHubActionTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
