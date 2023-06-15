@@ -86,13 +86,26 @@ public sealed class GitHubAction : IGitHubAction
 
             this.consoleService.Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ");
 
-            var repo = (from r in await this.githubClient.Repository.GetAllForCurrent()
-                where !string.IsNullOrEmpty(r.Name) && r.Name.ToLower() == inputs.RepoName.ToLower()
-                select r).FirstOrDefault();
+            Repository? repo;
 
-            if (repo is null)
+            try
             {
-                throw new HttpRequestException($"The repository '{inputs.RepoName}' does not exist.");
+                repo = await this.githubClient.Repository.Get(inputs.RepoOwner, inputs.RepoName);
+
+                if (repo is null)
+                {
+                    throw new RepoDoesNotExistException($"The repository '{inputs.RepoName}' does not exist.");
+                }
+            }
+            catch (Exception ex) when (ex is AuthorizationException)
+            {
+                this.consoleService.WriteError($"{((AuthorizationException)ex).StatusCode} - {ex.Message}");
+                throw;
+            }
+            catch (Exception ex) when (ex is NotFoundException)
+            {
+                this.consoleService.WriteError($"The repository owner '${inputs.RepoOwner}' and/or the repository '{inputs.RepoName}' does not exist.");
+                throw;
             }
 
             this.consoleService.Write("the repository exists.", true);
