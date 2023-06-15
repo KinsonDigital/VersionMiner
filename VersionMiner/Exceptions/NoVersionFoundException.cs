@@ -2,12 +2,16 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Runtime.Serialization;
+using System.Security;
+
 namespace VersionMiner.Exceptions;
 
 /// <summary>
 /// Thrown if a version value has not been found.
 /// </summary>
-public class NoVersionFoundException : Exception
+[Serializable]
+public sealed class NoVersionFoundException : Exception
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="NoVersionFoundException"/> class.
@@ -35,6 +39,17 @@ public class NoVersionFoundException : Exception
     /// </param>
     public NoVersionFoundException(string message, Exception innerException)
         : base(message, innerException)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NoVersionFoundException"/> class.
+    /// </summary>
+    /// <param name="info">The <see cref="SerializationInfo"/> to populate the data.</param>
+    /// <param name="context">The destination (see <see cref="StreamingContext"/>) for this serialization.</param>
+    /// <exception cref="SecurityException">The caller does not have the required permissions.</exception>
+    private NoVersionFoundException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
     {
     }
 }

@@ -32,9 +32,9 @@ public static class TestDataLoader
     {
         var fullFilePath = $@"{BasePath}/{TestDataDirName}/{fileName}";
 
-        if (FileData.ContainsKey(fullFilePath))
+        if (FileData.TryGetValue(fullFilePath, out var data))
         {
-            return FileData[fullFilePath];
+            return data;
         }
 
         if (File.Exists(fullFilePath) is false)

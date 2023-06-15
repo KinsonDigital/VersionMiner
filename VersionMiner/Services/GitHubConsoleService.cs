@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace VersionMiner.Services;
 
@@ -11,11 +12,16 @@ namespace VersionMiner.Services;
 public class GitHubConsoleService : IGitHubConsoleService
 {
     /// <inheritdoc/>
-    public void Write(string value, bool newLineAfter)
+    public void Write(string value, bool newLineAfter = false, int totalLines = 1)
     {
         Console.Write($"{value}");
 
-        if (newLineAfter)
+        if (!newLineAfter)
+        {
+            return;
+        }
+
+        for (var i = 0; i < totalLines; i++)
         {
             Console.WriteLine();
         }
@@ -27,11 +33,11 @@ public class GitHubConsoleService : IGitHubConsoleService
     /// <inheritdoc/>
     public void WriteLine(uint tabs, string value)
     {
-        var allTabs = string.Empty;
+        var allTabs = new StringBuilder();
 
         for (var i = 0; i < tabs; i++)
         {
-            allTabs += "\t";
+            allTabs.Append("\t");
         }
 
         Console.WriteLine($"{allTabs}{value}");

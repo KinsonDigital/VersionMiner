@@ -2,6 +2,9 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+#pragma warning disable S107 // SonarLint - Methods should not have too many parameters
+
+using System.Net;
 using FluentAssertions;
 using Moq;
 using Octokit;
@@ -19,6 +22,7 @@ public class GitHubActionTests
 {
     private const long RepoId = 123456789;
     private const string AuthToken = "test-token";
+    private const string RepoOwner = "test-owner";
     private const string RepoName = "test-repo";
     private const string BranchName = "test-branch";
     private const string VersionOutputName = "version";
@@ -26,6 +30,7 @@ public class GitHubActionTests
     private const string XMLFileVersionTagName = "FileVersion";
     private const string XMLFileFormat = "xml";
     private readonly Mock<IGitHubClient> mockGitHubClient;
+    private readonly Mock<IRepositoriesClient> mockReposClient;
     private readonly Mock<IGitHubConsoleService> mockConsoleService;
     private readonly Mock<IRepositoryBranchesClient> mockRepoBranchesClient;
     private readonly Mock<IRepoFileDataService> mockRepoFileDataService;
@@ -40,21 +45,21 @@ public class GitHubActionTests
         this.mockRepoBranchesClient = new Mock<IRepositoryBranchesClient>();
         this.mockRepoBranchesClient.Setup(m => m.Get(It.IsAny<long>(), It.IsAny<string>()))
             .ReturnsAsync(new Branch());
-        var mockReposClient = new Mock<IRepositoriesClient>();
-        mockReposClient.SetupGet(p => p.Branch).Returns(this.mockRepoBranchesClient.Object);
+        this.mockReposClient = new Mock<IRepositoriesClient>();
+        this.mockReposClient.SetupGet(p => p.Branch).Returns(this.mockRepoBranchesClient.Object);
 
         var repo = new Repository();
         repo.SetPropValue(nameof(repo.Name), RepoName);
         repo.SetPropValue(nameof(repo.Id), RepoId);
 
-        mockReposClient.Setup(m => m.GetAllForCurrent())
-            .ReturnsAsync(new[] { repo });
+        this.mockReposClient.Setup(m => m.Get(RepoOwner, RepoName))
+            .ReturnsAsync(repo);
 
         var mockConnection = new Mock<IConnection>();
         mockConnection.SetupProperty(p => p.Credentials);
 
         this.mockGitHubClient = new Mock<IGitHubClient>();
-        this.mockGitHubClient.Setup(m => m.Repository).Returns(mockReposClient.Object);
+        this.mockGitHubClient.Setup(m => m.Repository).Returns(this.mockReposClient.Object);
         this.mockGitHubClient.SetupGet(p => p.Connection).Returns(mockConnection.Object);
 
         this.mockConsoleService = new Mock<IGitHubConsoleService>();
@@ -172,7 +177,7 @@ public class GitHubActionTests
 
     #region Method Tests
     [Fact]
-    public async void Run_WhenInvoked_ShowsWelcomeMessage()
+    public async Task Run_WhenInvoked_ShowsWelcomeMessage()
     {
         // Arrange
         var expectedUrl = "https://github.com/KinsonDigital/VersionMiner/issues/new/choose";
@@ -190,7 +195,7 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WhenInvoked_ShowsWelcomeMessageInCorrectOrder()
+    public async Task Run_WhenInvoked_ShowsWelcomeMessageInCorrectOrder()
     {
         // Arrange
         var expectedOrder = new List<string>
@@ -222,7 +227,7 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WithTrimStartFromBranchSetToValue_TrimsBranchName()
+    public async Task Run_WithTrimStartFromBranchSetToValue_TrimsBranchName()
     {
         // Arrange
         const string branchBeforeTrim = "refs/heads/test-branch";
@@ -241,13 +246,12 @@ public class GitHubActionTests
         this.mockConsoleService.VerifyOnce(m
             => m.WriteLine($"The text '{inputs.TrimStartFromBranch}' has been trimmed from the branch name."));
         this.mockConsoleService.VerifyOnce(m => m.WriteLine($"Branch After Trimming: {branchAfterTrim}"));
-        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(8));
     }
 
     [Theory]
     [InlineData("xml")]
     [InlineData("XML")]
-    public async void Run_WithInvalidFileFormat_ThrowsException(string fileFormat)
+    public async Task Run_WithInvalidFileFormat_ThrowsException(string fileFormat)
     {
         // Arrange
         var inputs = CreateInputs(versionKeys: "Version", fileFormat: fileFormat);
@@ -268,9 +272,12 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WhenRepoNameDoesNotExist_ThrowsException()
+    public async Task Run_WhenRepoNameDoesNotExist_ThrowsException()
     {
         // Arrange
+        this.mockReposClient.Setup(m => m.Get(It.IsAny<string>(), It.IsAny<string>()))
+            .Throws(() => new NotFoundException("not found", HttpStatusCode.NotFound));
+
         var inputs = CreateInputs(repoName: "other-repo");
         var action = CreateAction();
 
@@ -279,23 +286,18 @@ public class GitHubActionTests
 
         // Assert
         await act.Should()
-            .ThrowAsync<HttpRequestException>()
-            .WithMessage("The repository 'other-repo' does not exist.");
+            .ThrowAsync<RepoDoesNotExistException>()
+            .WithMessage("The repository owner 'test-owner' and/or the repository 'other-repo' does not exist.");
     }
 
     [Fact]
-    public async void Run_WhenBranchNameDoesNotExist_ThrowsException()
+    public async Task Run_WhenBranchNameDoesNotExist_ThrowsException()
     {
         // Arrange
-        // this.mockReposClient.Setup(m => m.GetAllForCurrent())
-        //     .ReturnsAsync(() =>
-        //     {
-        //         return new[] { new Repository(RepoId) };
-        //     });
         this.mockRepoBranchesClient.Setup(m => m.Get(RepoId, BranchName))
             .ReturnsAsync(null as Branch);
 
-        var inputs = CreateInputs(It.IsAny<string>());
+        var inputs = CreateInputs();
         var action = CreateAction();
 
         // Act
@@ -308,7 +310,7 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WhenAllTagValuesDoNotMatch_ThrowsException()
+    public async Task Run_WhenAllTagValuesDoNotMatch_ThrowsException()
     {
         // Arrange
         var expectedExceptionMsg = "All values must match.";
@@ -346,7 +348,7 @@ public class GitHubActionTests
     [Theory]
     [InlineData(false)]
     [InlineData(null)]
-    public async void Run_WhenInputFailOnKeyValueMisMatchIsFalseOrNull_DoesNotThrowException(bool? failOnKeyValueMismatch)
+    public async Task Run_WhenInputFailOnKeyValueMisMatchIsFalseOrNull_DoesNotThrowException(bool? failOnKeyValueMismatch)
     {
         // Arrange
         var inputs = CreateInputs(versionKeys: "Version,FileVersion", failOnKeyValueMismatch: failOnKeyValueMismatch);
@@ -365,7 +367,7 @@ public class GitHubActionTests
     [InlineData(" ,")]
     [InlineData(", ")]
     [InlineData("  ")]
-    public async void Run_WhenNoVersionKeysParsed_ThrowsException(string versionKeys)
+    public async Task Run_WhenNoVersionKeysParsed_ThrowsException(string versionKeys)
     {
         // Arrange
         this.mockRepoFileDataService.Setup(m
@@ -397,7 +399,7 @@ public class GitHubActionTests
     [InlineData("Version", true)]
     [InlineData("version", false)]
     [InlineData("version", null)]
-    public async void Run_WithDifferentVersionKeys_ProperlyParsesKeys(
+    public async Task Run_WithDifferentVersionKeys_ProperlyParsesKeys(
         string versionKeys,
         bool? isCaseSensitive)
     {
@@ -421,7 +423,7 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WithVersionTagIsEmptyAndFileVersionTagIsNotEmpty_GetsFileVersionTagValue()
+    public async Task Run_WithVersionTagIsEmptyAndFileVersionTagIsNotEmpty_GetsFileVersionTagValue()
     {
         // Arrange
         const string expectedVersion = "1.2.3";
@@ -454,26 +456,29 @@ public class GitHubActionTests
         this.mockConsoleService.VerifyOnce(m => m.WriteLine($"version: {expectedVersion}"));
         this.mockConsoleService.VerifyOnce(m => m.EndGroup());
 
-        this.mockConsoleService.VerifyOnce(m => m.Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ", false));
-        this.mockConsoleService.VerifyOnce(m => m.Write("the repository exists.", true));
+        this.mockConsoleService.VerifyOnce(m => m
+            .Write($"✅️Verifying if the repository '{inputs.RepoName}' exists . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("the repository exists.", true, 2));
 
-        this.mockConsoleService.VerifyOnce(m => m.Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ", false));
-        this.mockConsoleService.VerifyOnce(m => m.Write("the branch exists.", true));
+        this.mockConsoleService.VerifyOnce(m => m
+        .Write($"✅️Verifying if the repository branch '{inputs.BranchName}' exists . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("the branch exists.", true, 2));
 
-        this.mockConsoleService.VerifyOnce(m => m.Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ", false));
-        this.mockConsoleService.VerifyOnce(m => m.Write("data retrieved", true));
+        this.mockConsoleService.VerifyOnce(m => m
+        .Write($"✅️Getting data for file '{inputs.FilePath}' . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("data retrieved", true, 2));
 
-        this.mockConsoleService.VerifyOnce(m => m.Write("✔️️Validating version keys . . . ", false));
-        this.mockConsoleService.VerifyOnce(m => m.Write("version keys validated.", true));
+        this.mockConsoleService.VerifyOnce(m => m
+        .Write("✅️Validating version keys . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("version keys validated.", true, 2));
 
-        this.mockConsoleService.VerifyOnce(m => m.Write("✔️️Pulling version from file . . . ", false));
-        this.mockConsoleService.VerifyOnce(m => m.Write("version pulled from file.", true));
-
-        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(8));
+        this.mockConsoleService.VerifyOnce(m => m
+            .Write("✅️Pulling version from file . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("version pulled from file.", true, 2));
     }
 
     [Fact]
-    public async void Run_WhenNoVersionExists_AND_WhenInputFailWhenVersionNotFoundIsSetToTrue_ThrowsException()
+    public async Task Run_WhenNoVersionExists_AND_WhenInputFailWhenVersionNotFoundIsSetToTrue_ThrowsException()
     {
         // Arrange
         var expectedExceptionMsg = "No version value was found.";
@@ -500,7 +505,7 @@ public class GitHubActionTests
     [Theory]
     [InlineData(false)]
     [InlineData(null)]
-    public async void Run_WhenNoVersionExists_AND_WhenInputFailWhenVersionNotFoundIsSetToNullOrFalse_DoesNotThrowException(
+    public async Task Run_WhenNoVersionExists_AND_WhenInputFailWhenVersionNotFoundIsSetToNullOrFalse_DoesNotThrowException(
         bool? failWhenVersionNotFoundInput)
     {
         // Arrange
@@ -521,7 +526,7 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WhenAllKeysExistButAreEmptyForOnKeyValueMismatchInput_DoesNotFail()
+    public async Task Run_WhenAllKeysExistButAreEmptyForOnKeyValueMismatchInput_DoesNotFail()
     {
         // Arrange
         this.mockXMLParserService.Setup(m => m.KeyExists(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
@@ -547,7 +552,7 @@ public class GitHubActionTests
     /// </summary>
     /// <returns>The instance to test.</returns>
     private static ActionInputs CreateInputs(
-        string repoOwner = "test-owner",
+        string repoOwner = RepoOwner,
         string repoName = RepoName,
         string repoToken = AuthToken,
         string filePath = "test-path",

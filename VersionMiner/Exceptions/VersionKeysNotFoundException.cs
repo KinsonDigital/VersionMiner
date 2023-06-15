@@ -2,12 +2,16 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Runtime.Serialization;
+using System.Security;
+
 namespace VersionMiner.Exceptions;
 
 /// <summary>
 /// Thrown if no version keys were supplied or could not be parsed.
 /// </summary>
-public class VersionKeysNotFoundException : Exception
+[Serializable]
+public sealed class VersionKeysNotFoundException : Exception
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="VersionKeysNotFoundException"/> class.
@@ -35,6 +39,17 @@ public class VersionKeysNotFoundException : Exception
     /// </param>
     public VersionKeysNotFoundException(string message, Exception innerException)
         : base(message, innerException)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="VersionKeysNotFoundException"/> class.
+    /// </summary>
+    /// <param name="info">The <see cref="SerializationInfo"/> to populate the data.</param>
+    /// <param name="context">The destination (see <see cref="StreamingContext"/>) for this serialization.</param>
+    /// <exception cref="SecurityException">The caller does not have the required permissions.</exception>
+    private VersionKeysNotFoundException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
     {
     }
 }

@@ -6,6 +6,8 @@ using System.Text;
 using System.Xml.Linq;
 using VersionMiner.Exceptions;
 
+#pragma warning disable S101 // SonarLint - Types should be named in PascalCase
+
 namespace VersionMiner.Services;
 
 /// <summary>

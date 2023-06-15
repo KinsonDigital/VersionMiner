@@ -2,12 +2,16 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Runtime.Serialization;
+using System.Security;
+
 namespace VersionMiner.Exceptions;
 
 /// <summary>
 /// Occurs when a string is null or empty.
 /// </summary>
-public class NullOrEmptyStringException : Exception
+[Serializable]
+public sealed class NullOrEmptyStringException : Exception
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="NullOrEmptyStringException"/> class.
@@ -35,6 +39,17 @@ public class NullOrEmptyStringException : Exception
     /// </param>
     public NullOrEmptyStringException(string message, Exception innerException)
         : base(message, innerException)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NullOrEmptyStringException"/> class.
+    /// </summary>
+    /// <param name="info">The <see cref="SerializationInfo"/> to populate the data.</param>
+    /// <param name="context">The destination (see <see cref="StreamingContext"/>) for this serialization.</param>
+    /// <exception cref="SecurityException">The caller does not have the required permissions.</exception>
+    private NullOrEmptyStringException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
     {
     }
 }
