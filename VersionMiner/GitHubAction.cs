@@ -54,19 +54,7 @@ public sealed class GitHubAction : IGitHubAction
     {
         ShowWelcomeMessage();
 
-        var branchNeedsTrimming = string.IsNullOrEmpty(inputs.TrimStartFromBranch) is false &&
-                                  inputs.BranchName.ToLower().StartsWith(inputs.TrimStartFromBranch.ToLower());
-
-        if (branchNeedsTrimming)
-        {
-            this.consoleService.WriteLine($"Branch Before Trimming: {inputs.BranchName}");
-
-            inputs.BranchName = inputs.BranchName.TrimStart(inputs.TrimStartFromBranch);
-
-            this.consoleService.WriteLine($"The text '{inputs.TrimStartFromBranch}' has been trimmed from the branch name.");
-            this.consoleService.WriteLine($"Branch After Trimming: {inputs.BranchName}");
-            this.consoleService.BlankLine();
-        }
+        LogIfBranchNeedsTrimming(inputs);
 
         try
         {
@@ -77,40 +65,13 @@ public sealed class GitHubAction : IGitHubAction
                 throw new InvalidFileFormatException(exMsg);
             }
 
-            // If a repo token exists
-            if (string.IsNullOrEmpty(inputs.RepoToken) is false)
-            {
-                var tokenAuth = new Credentials(inputs.RepoToken);
-                this.githubClient.Connection.Credentials = tokenAuth;
-            }
+            SetupToken(inputs.RepoToken);
 
             this.consoleService.Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ");
 
-            Repository? repo;
+            var repo = await GetIfRepoExists(inputs.RepoOwner, inputs.RepoName);
 
             this.consoleService.Write("the repository exists.", true, 2);
-            {
-                repo = await this.githubClient.Repository.Get(inputs.RepoOwner, inputs.RepoName);
-
-                if (repo is null)
-                {
-                    throw new RepoDoesNotExistException($"The repository '{inputs.RepoName}' does not exist.");
-                }
-            }
-            catch (Exception ex) when (ex is AuthorizationException)
-            {
-                this.consoleService.WriteError($"{((AuthorizationException)ex).StatusCode} - {ex.Message}");
-                throw;
-            }
-            catch (Exception ex) when (ex is NotFoundException)
-            {
-                this.consoleService.WriteError($"The repository owner '${inputs.RepoOwner}' and/or the repository '{inputs.RepoName}' does not exist.");
-                throw;
-            }
-
-            this.consoleService.Write("the repository exists.", true);
-            this.consoleService.BlankLine();
-
             this.consoleService.Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ");
 
             var branch = await this.githubClient.Repository.Branch.Get(repo.Id, inputs.BranchName);
@@ -141,6 +102,7 @@ public sealed class GitHubAction : IGitHubAction
 
             this.consoleService.Write("version keys validated.", true, 2);
             this.consoleService.Write("✔️️Pulling version from file . . . ");
+
             foreach (var versionKey in versionKeys)
             {
                 var keyExists = this.xmlParserService.KeyExists(fileData, versionKey, inputs.CaseSensitiveKeys ?? false);
@@ -153,19 +115,7 @@ public sealed class GitHubAction : IGitHubAction
 
             this.consoleService.Write("version pulled from file.", true, 2);
 
-            /* If the action should fail on key value mismatch,
-             * collect all of the values for comparison.
-            */
-            if (inputs.FailOnKeyValueMismatch ?? false)
-            {
-                if (keyValues.TrueForAll(v => v == keyValues[0]) is false)
-                {
-                    var exceptionMsg = "All values must match.";
-                    exceptionMsg += "This failure only occurs if the 'fail-on-key-value-mismatch' action input is set to 'true'.";
-
-                    throw new ValuesMismatchException(exceptionMsg);
-                }
-            }
+            FailIfMismatch(inputs.FailOnKeyValueMismatch, keyValues);
 
             // Just get the first value that is not empty
             var version = keyValues.Find(v => !string.IsNullOrEmpty(v)) ?? string.Empty;
@@ -198,6 +148,93 @@ public sealed class GitHubAction : IGitHubAction
     [ExcludeFromCodeCoverage(Justification = "Nothing to dispose of.")]
     public void Dispose()
     {
+        // Enforced by interface but nothing to dispose of
+    }
+
+    /// <summary>
+    /// Fails the action if set to fail on key value mismatch, and if any of the key values do not match.
+    /// </summary>
+    /// <param name="failOnKeyValueMismatch">True to fail on mismatch.</param>
+    /// <param name="keyValues">The key values pulled from the file.</param>
+    /// <exception cref="ValuesMismatchException">
+    ///     Thrown if any of the values are a mismatch.
+    /// </exception>
+    private static void FailIfMismatch(bool? failOnKeyValueMismatch, List<string> keyValues)
+    {
+        // If the action should fail on key value mismatch
+        if (!(failOnKeyValueMismatch ?? false) || keyValues.TrueForAll(v => v == keyValues[0]))
+        {
+            return;
+        }
+
+        var exceptionMsg = "All values must match.";
+        exceptionMsg += "This failure only occurs if the 'fail-on-key-value-mismatch' action input is set to 'true'.";
+
+        throw new ValuesMismatchException(exceptionMsg);
+    }
+
+    /// <summary>
+    /// Sets up the token for authorized requests if a token exists.
+    /// </summary>
+    /// <param name="repoToken">The token to use for authorization.</param>
+    private void SetupToken(string? repoToken)
+    {
+        if (string.IsNullOrEmpty(repoToken))
+        {
+            return;
+        }
+
+        var tokenAuth = new Credentials(repoToken);
+        this.githubClient.Connection.Credentials = tokenAuth;
+    }
+
+    /// <summary>
+    /// Gets the repository if the repository exists and throws an exception if it does not.
+    /// </summary>
+    /// <param name="repoOwner">The owner of the repository.</param>
+    /// <param name="repoName">The name of the repository.</param>
+    /// <returns> The asynchronous result of the repository if it exists.</returns>
+    /// <exception cref="RepoDoesNotExistException">Thrown if not authorized to perform the request.</exception>
+    /// <exception cref="NotFoundException">Thrown if the repository does not exist.</exception>
+    private async Task<Repository> GetIfRepoExists(string repoOwner, string repoName)
+    {
+        try
+        {
+            return await this.githubClient.Repository.Get(repoOwner, repoName);
+        }
+        catch (Exception ex) when (ex is AuthorizationException exception)
+        {
+            this.consoleService.WriteError($"{exception.StatusCode} - {exception.Message}");
+            throw;
+        }
+        catch (Exception ex) when (ex is NotFoundException)
+        {
+            this.consoleService.WriteError($"The repository owner '${repoOwner}' and/or the repository '{repoName}' does not exist.");
+            throw new RepoDoesNotExistException($"The repository owner '{repoOwner}' and/or the repository '{repoName}' does not exist.");
+        }
+    }
+
+    /// <summary>
+    /// Logs to the console that the branch has been trimmed if the branch needs to be trimmed.
+    /// </summary>
+    /// <param name="inputs">The incoming action inputs.</param>
+    private void LogIfBranchNeedsTrimming(ActionInputs inputs)
+    {
+        var branchNeedsTrimming = string.IsNullOrEmpty(inputs.TrimStartFromBranch) is false &&
+                                  inputs.BranchName.ToLower().StartsWith(inputs.TrimStartFromBranch.ToLower());
+
+        if (!branchNeedsTrimming)
+        {
+            return;
+        }
+
+        this.consoleService.WriteLine($"Branch Before Trimming: {inputs.BranchName}");
+
+        inputs.BranchName = inputs.BranchName.TrimStart(inputs.TrimStartFromBranch);
+
+        this.consoleService.WriteLine($"The text '{inputs.TrimStartFromBranch}' has been trimmed from the branch name.");
+        this.consoleService.WriteLine($"Branch After Trimming: {inputs.BranchName}");
+        this.consoleService.BlankLine();
     }
 
     /// <summary>
