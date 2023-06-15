@@ -1,5 +1,5 @@
 <h1 align="center" style='color:mediumseagreen;font-weight:bold'>
-    VersionMiner Production Release Notes - [TODO: add-prod-release-here]
+    Version Miner Production Release Notes - [TODO: add-prod-release-here]
 </h1>
 
 <h2 style="font-weight:bold" align="center">New Features✨</h2>
