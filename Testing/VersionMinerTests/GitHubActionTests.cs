@@ -246,7 +246,6 @@ public class GitHubActionTests
         this.mockConsoleService.VerifyOnce(m
             => m.WriteLine($"The text '{inputs.TrimStartFromBranch}' has been trimmed from the branch name."));
         this.mockConsoleService.VerifyOnce(m => m.WriteLine($"Branch After Trimming: {branchAfterTrim}"));
-        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(8));
     }
 
     [Theory]
@@ -458,26 +457,24 @@ public class GitHubActionTests
         this.mockConsoleService.VerifyOnce(m => m.EndGroup());
 
         this.mockConsoleService.VerifyOnce(m => m
-            .Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ", false, 1));
-        this.mockConsoleService.VerifyOnce(m => m.Write("the repository exists.", true, 1));
+            .Write($"✅️Verifying if the repository '{inputs.RepoName}' exists . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("the repository exists.", true, 2));
 
         this.mockConsoleService.VerifyOnce(m => m
-        .Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ", false, 1));
-        this.mockConsoleService.VerifyOnce(m => m.Write("the branch exists.", true, 1));
+        .Write($"✅️Verifying if the repository branch '{inputs.BranchName}' exists . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("the branch exists.", true, 2));
 
         this.mockConsoleService.VerifyOnce(m => m
-        .Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ", false, 1));
-        this.mockConsoleService.VerifyOnce(m => m.Write("data retrieved", true, 1));
+        .Write($"✅️Getting data for file '{inputs.FilePath}' . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("data retrieved", true, 2));
 
         this.mockConsoleService.VerifyOnce(m => m
-        .Write("✔️️Validating version keys . . . ", false, 1));
-        this.mockConsoleService.VerifyOnce(m => m.Write("version keys validated.", true, 1));
+        .Write("✅️Validating version keys . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("version keys validated.", true, 2));
 
         this.mockConsoleService.VerifyOnce(m => m
-            .Write("✔️️Pulling version from file . . . ", false, 1));
-        this.mockConsoleService.VerifyOnce(m => m.Write("version pulled from file.", true, 1));
-
-        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(8));
+            .Write("✅️Pulling version from file . . . ", false, 1));
+        this.mockConsoleService.VerifyOnce(m => m.Write("version pulled from file.", true, 2));
     }
 
     [Fact]

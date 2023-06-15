@@ -67,12 +67,12 @@ public sealed class GitHubAction : IGitHubAction
 
             SetupToken(inputs.RepoToken);
 
-            this.consoleService.Write($"✔️️Verifying if the repository '{inputs.RepoName}' exists . . . ");
+            this.consoleService.Write($"✅️Verifying if the repository '{inputs.RepoName}' exists . . . ");
 
             var repo = await GetIfRepoExists(inputs.RepoOwner, inputs.RepoName);
 
             this.consoleService.Write("the repository exists.", true, 2);
-            this.consoleService.Write($"✔️️Verifying if the repository branch '{inputs.BranchName}' exists . . . ");
+            this.consoleService.Write($"✅️Verifying if the repository branch '{inputs.BranchName}' exists . . . ");
 
             var branch = await this.githubClient.Repository.Branch.Get(repo.Id, inputs.BranchName);
 
@@ -82,7 +82,7 @@ public sealed class GitHubAction : IGitHubAction
             }
 
             this.consoleService.Write("the branch exists.", true, 2);
-            this.consoleService.Write($"✔️️Getting data for file '{inputs.FilePath}' . . . ");
+            this.consoleService.Write($"✅️Getting data for file '{inputs.FilePath}' . . . ");
             this.repoFileDataService.AuthToken = inputs.RepoToken;
 
             var fileData = await this.repoFileDataService.GetFileData(
@@ -92,7 +92,7 @@ public sealed class GitHubAction : IGitHubAction
                 inputs.FilePath);
 
             this.consoleService.Write("data retrieved", true, 2);
-            this.consoleService.Write("✔️️Validating version keys . . . ");
+            this.consoleService.Write("✅️Validating version keys . . . ");
             var keyValues = new List<string>();
             var versionKeys = inputs.VersionKeys.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
             if (versionKeys.Length <= 0)
@@ -101,7 +101,7 @@ public sealed class GitHubAction : IGitHubAction
             }
 
             this.consoleService.Write("version keys validated.", true, 2);
-            this.consoleService.Write("✔️️Pulling version from file . . . ");
+            this.consoleService.Write("✅️Pulling version from file . . . ");
 
             foreach (var versionKey in versionKeys)
             {
