@@ -1,4 +1,4 @@
-﻿// <copyright file="GitHubActionTests.cs" company="KinsonDigital">
+// <copyright file="GitHubActionTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -19,6 +19,7 @@ public class GitHubActionTests
 {
     private const long RepoId = 123456789;
     private const string AuthToken = "test-token";
+    private const string RepoOwner = "test-owner";
     private const string RepoName = "test-repo";
     private const string BranchName = "test-branch";
     private const string VersionOutputName = "version";
@@ -47,8 +48,8 @@ public class GitHubActionTests
         repo.SetPropValue(nameof(repo.Name), RepoName);
         repo.SetPropValue(nameof(repo.Id), RepoId);
 
-        mockReposClient.Setup(m => m.GetAllForCurrent())
-            .ReturnsAsync(new[] { repo });
+        mockReposClient.Setup(m => m.Get(RepoOwner, RepoName))
+            .ReturnsAsync(repo);
 
         var mockConnection = new Mock<IConnection>();
         mockConnection.SetupProperty(p => p.Credentials);
@@ -279,7 +280,7 @@ public class GitHubActionTests
 
         // Assert
         await act.Should()
-            .ThrowAsync<HttpRequestException>()
+            .ThrowAsync<RepoDoesNotExistException>()
             .WithMessage("The repository 'other-repo' does not exist.");
     }
 
@@ -295,7 +296,7 @@ public class GitHubActionTests
         this.mockRepoBranchesClient.Setup(m => m.Get(RepoId, BranchName))
             .ReturnsAsync(null as Branch);
 
-        var inputs = CreateInputs(It.IsAny<string>());
+        var inputs = CreateInputs();
         var action = CreateAction();
 
         // Act
@@ -547,7 +548,7 @@ public class GitHubActionTests
     /// </summary>
     /// <returns>The instance to test.</returns>
     private static ActionInputs CreateInputs(
-        string repoOwner = "test-owner",
+        string repoOwner = RepoOwner,
         string repoName = RepoName,
         string repoToken = AuthToken,
         string filePath = "test-path",
