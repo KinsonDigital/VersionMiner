@@ -2,12 +2,16 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Runtime.Serialization;
+using System.Security;
+
 namespace VersionMiner.Exceptions;
 
 /// <summary>
 /// Thrown if an XML element does not contain a value.
 /// </summary>
-public class NoXMLElementException : Exception
+[Serializable]
+public sealed class NoXMLElementException : Exception
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="NoXMLElementException"/> class.
@@ -35,6 +39,17 @@ public class NoXMLElementException : Exception
     /// </param>
     public NoXMLElementException(string message, Exception innerException)
         : base(message, innerException)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NoXMLElementException"/> class.
+    /// </summary>
+    /// <param name="info">The <see cref="SerializationInfo"/> to populate the data.</param>
+    /// <param name="context">The destination (see <see cref="StreamingContext"/>) for this serialization.</param>
+    /// <exception cref="SecurityException">The caller does not have the required permissions.</exception>
+    private NoXMLElementException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
     {
     }
 }

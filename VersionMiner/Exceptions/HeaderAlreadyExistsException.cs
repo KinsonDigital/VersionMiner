@@ -7,7 +7,7 @@ namespace VersionMiner.Exceptions;
 /// <summary>
 /// Occurs when an HTTP header exists.
 /// </summary>
-public class HeaderAlreadyExistsException : Exception
+public sealed class HeaderAlreadyExistsException : Exception
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="HeaderAlreadyExistsException"/> class.
