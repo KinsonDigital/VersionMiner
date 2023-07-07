@@ -6,11 +6,10 @@
 
 </h1>
 
-
 <div align="center">
 
-[![Prod Release Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/VersionMiner/prod-release-pr-status-check.yml?color=2F8840&label=Prod%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/VersionMiner/actions/workflows/prev-release-pr-status-check.yml)
-[![Prev Release Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/VersionMiner/prev-release-pr-status-check.yml?color=2F8840&label=Preview%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/VersionMiner/actions/workflows/prev-release-pr-status-check.yml)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/kinsondigital/VersionMiner/build-status-check.yml?style=flat&label=%F0%9F%94%A7Build&color=2f8840)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/kinsondigital/VersionMiner/unit-testing-status-check.yml?style=flat&label=%F0%9F%A7%AATests&color=2f8840)
 
 [![Codecov](https://img.shields.io/codecov/c/github/KinsonDigital/VersionMiner?color=2F8840&label=Code%20Coverage&logo=codecov)](https://app.codecov.io/gh/KinsonDigital/VersionMiner/tree/release%2Fv1.0.0)
 
