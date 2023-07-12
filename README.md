@@ -73,7 +73,7 @@ jobs:
       repo-owner: JohnDoe
       repo-name: MyRepo
       repo-token: ${{ secrets.GITHUB_TOKEN }}
-      branch-name: master
+      branch-name: main
       file-format: xml # Not case sensitive
       file-path: "MyProject/MyProject.csproj"
       version-keys: Version
@@ -143,7 +143,7 @@ The action output is a single `string` value with the name _**version**_. Click 
         repo-owner: JohnDoe
         repo-name: MyRepo
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        branch-name: master
+        branch-name: main
         file-format: xml # Not case sensitive
         file-path: "MyProject/MyProject.csproj"
         version-keys: Version
@@ -172,7 +172,7 @@ Searches multiple keys for the version. The job fails if no version is found in 
         repo-owner: JohnDoe
         repo-name: MyRepo
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        branch-name: master
+        branch-name: main
         file-format: xml # Not case sensitive
         file-path: "MyProject/MyProject.csproj"
         version-keys: "Version,FileVersion"
@@ -201,7 +201,7 @@ Searches for a key without using case-sensitivity:
         repo-owner: JohnDoe
         repo-name: MyRepo
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        branch-name: master
+        branch-name: main
         file-format: xml # Not case sensitive
         file-path: "MyProject/MyProject.csproj"
         version-keys: VeRSion # Different casing as the XML key below.
