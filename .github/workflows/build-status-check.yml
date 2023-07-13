@@ -1,4 +1,5 @@
 name: ✅Build Status Check
+run-name: ✅Build Status Check ${{ github.base_ref == 'main' && '(Release Build)' || '(Debug Build)' }}
 
 
 on:

@@ -1,4 +1,5 @@
 name: ✅Unit Testing Status Check
+run-name: ✅Unit Testing Status Check ${{ github.base_ref == 'main' && '(Release Build)' || '(Debug Build)' }}
 
 
 on:
