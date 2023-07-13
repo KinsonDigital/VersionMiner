@@ -25,10 +25,11 @@ jobs:
             "build-config=Debug" >> $env:GITHUB_OUTPUT;
           }
 
+
   build_project:
     name: Build Project
     needs: [determine_build_config]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v3.0.2
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v8.1.0
     with:
       project-name: ${{ vars.PROJECT_NAME }}
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
