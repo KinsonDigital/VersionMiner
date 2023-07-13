@@ -31,6 +31,6 @@ jobs:
     needs: determine_build_config
     uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v3.0.2
     with:
-      project-name: "VersionMinerTests"
+      project-name: ${{ vars.PROJECT_NAME }}Tests
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
-      net-sdk-version: 7.0.203
+      net-sdk-version: ${{ vars.NET_SDK_VERSION }}
