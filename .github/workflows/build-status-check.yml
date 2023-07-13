@@ -28,7 +28,7 @@ jobs:
 
 
   build_project:
-    name: Build Project
+    name: Build Status Check
     needs: [determine_build_config]
     uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v8.1.0
     with:

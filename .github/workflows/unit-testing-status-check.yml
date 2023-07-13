@@ -28,7 +28,7 @@ jobs:
 
 
   run_tests:
-    name: Run Tests
+    name: Unit Test Status Check
     needs: determine_build_config
     uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v8.1.0
     with:
