@@ -7,6 +7,10 @@ defaults:
     shell: pwsh
 
 
+env:
+  runs-on: ubuntu-latest
+
+
 on:
   workflow_dispatch:
     inputs:
@@ -15,6 +19,12 @@ on:
         required: true
         type: choice
         options: [Preview, Production]
+      runs-on:
+        description: The type of runner to run the workflow on.
+        required: false
+        type: choice
+        options: [ubuntu-latest, windows-latest, macos-latest]
+        default: ubuntu-latest
       dry-run:
         required: false
         description: If true, the release will not be created.
@@ -25,7 +35,7 @@ on:
 jobs:
   determine_build_config:
     name: Determine Build Configuration
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs-on }}
     outputs:
       build-config: "${{ steps.get-build-config.outputs.build-config }}"
     steps:
@@ -45,7 +55,7 @@ jobs:
   perform_release:
     name: Performing ${{ inputs.release_type }} Release of ${{ vars.PROJECT_NAME }} (${{ needs.determine_build_config.outputs.build-config }})
     needs: determine_build_config
-    uses: KinsonDigital/Infrastructure/.github/workflows/dotnet-action-release.yml@v8.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/dotnet-action-release.yml@v8.1.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       release-type: "${{ inputs.release_type }}"
@@ -56,4 +66,5 @@ jobs:
       build-config: "${{ needs.determine_build_config.outputs.build-config }}"
       cicd-scripts-version: "${{ vars.CICD_SCRIPTS_VERSION}}"
       pr-include-notes-label: "${{ vars.PR_INCLUDE_NOTES_LABEL }}"
+      runs-on: ${{ inputs.runs-on }}
       dry-run: ${{ inputs.dry-run }}
