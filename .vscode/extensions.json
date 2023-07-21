@@ -3,6 +3,6 @@
 		"humao.rest-client",
 		"ms-dotnettools.vscodeintellicode-csharp",
 		"ms-dotnettools.csdevkit",
-		"ms-dotnettools.csharp"
+		"ms-dotnettools.vscode-dotnet-runtime"
 	]
 }
