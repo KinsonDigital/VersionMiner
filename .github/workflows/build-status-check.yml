@@ -5,13 +5,13 @@ run-name: ✅Build Status Check ${{ github.base_ref == 'main' && '(Release Build
 on:
   workflow_dispatch:
   pull_request:
-    branches: main
+    branches: [main, preview]
 
 
 jobs:
   build_project:
-    name: Build Status Check
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v8.1.0
+    name: ${{ vars.PROJECT_NAME }} Build Status Check
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.0
     with:
       project-name: ${{ vars.PROJECT_NAME }}
       build-config: "Debug"
