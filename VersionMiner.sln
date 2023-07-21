@@ -11,11 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		action.yml = action.yml
 		Dockerfile = Dockerfile
-		LICENSE = LICENSE
 		README.md = README.md
 		.editorconfig = .editorconfig
 		codecov.yml = codecov.yml
-		code_of_conduct.md = code_of_conduct.md
+		renovate.json = renovate.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionMinerTests", "Testing\VersionMinerTests\VersionMinerTests.csproj", "{77B96B49-4D77-456B-A787-E852E9842B60}"
@@ -27,15 +26,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{0D64
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{5010ECCD-3BCC-475D-87EE-31E289E24571}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\build-pr-status-check.yml = .github\workflows\build-pr-status-check.yml
-		.github\workflows\feature-pr-status-check.yml = .github\workflows\feature-pr-status-check.yml
-		.github\workflows\hotfix-pr-status-check.yml = .github\workflows\hotfix-pr-status-check.yml
-		.github\workflows\prev-feature-pr-status-check.yml = .github\workflows\prev-feature-pr-status-check.yml
-		.github\workflows\prev-release.yml = .github\workflows\prev-release.yml
-		.github\workflows\prev-release-pr-status-check.yml = .github\workflows\prev-release-pr-status-check.yml
-		.github\workflows\prod-release.yml = .github\workflows\prod-release.yml
-		.github\workflows\prod-release-pr-status-check.yml = .github\workflows\prod-release-pr-status-check.yml
-		.github\workflows\unit-test-pr-status-check.yml = .github\workflows\unit-test-pr-status-check.yml
+		.github\workflows\add-new-issue-to-project.yml = .github\workflows\add-new-issue-to-project.yml
+		.github\workflows\build-status-check.yml = .github\workflows\build-status-check.yml
+		.github\workflows\prepare-release.yml = .github\workflows\prepare-release.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\sync-bot.yml = .github\workflows\sync-bot.yml
+		.github\workflows\sync-issue-to-pr.yml = .github\workflows\sync-issue-to-pr.yml
+		.github\workflows\sync-status-check.yml = .github\workflows\sync-status-check.yml
+		.github\workflows\unit-test-status-check.yml = .github\workflows\unit-test-status-check.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionMinerIntegrationTests", "Testing\VersionMinerIntegrationTests\VersionMinerIntegrationTests.csproj", "{AA5FFACB-335D-49DB-A25B-AE0ED088F9B0}"

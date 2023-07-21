@@ -9,7 +9,7 @@
 <div align="center">
 
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/kinsondigital/VersionMiner/build-status-check.yml?style=flat&label=%F0%9F%94%A7Build&color=2f8840)
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/kinsondigital/VersionMiner/unit-testing-status-check.yml?style=flat&label=%F0%9F%A7%AATests&color=2f8840)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/kinsondigital/VersionMiner/unit-test-status-check.yml?style=flat&label=%F0%9F%A7%AATests&color=2f8840)
 
 [![Codecov](https://img.shields.io/codecov/c/github/KinsonDigital/VersionMiner?color=2F8840&label=Code%20Coverage&logo=codecov)](https://app.codecov.io/gh/KinsonDigital/VersionMiner/tree/release%2Fv1.0.0)
 
@@ -57,11 +57,11 @@ For more information on step and job outputs, refer to the GitHub documentation 
 
 <div id="output-example" align="center"><h2 style="font-weight:bold">🪧 Example 🪧</h2></div>
 
-```yaml
+```yml
 name: Get Version Example
 
 jobs:
-  Get_Version_Job:
+  get_version_job:
     runs-on: ubuntu-latest # Cannot use windows
     steps:
     - uses: actions/3
@@ -133,9 +133,9 @@ The action output is a single `string` value with the name _**version**_. Click 
 ## **🪧 More Examples 🪧**
 </div>
 
-  Searches for a version but does not fail the workflow if no version is found:
+Searches for a version but does not fail the workflow if no version is found:
 
-``` yml
+```yml
 #Example 1 Workflow
 - name: Get Version From C# Project File
     uses: KinsonDigital/VersionMiner@v1.0.0-preview.2
@@ -145,7 +145,7 @@ The action output is a single `string` value with the name _**version**_. Click 
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         branch-name: main
         file-format: xml # Not case sensitive
-        file-path: "MyProject/MyProject.csproj"
+        file-path: "${{ github.workspace }}/MyProject/MyProject.csproj"
         version-keys: Version
         fail-when-version-not-found: false
 ```
@@ -164,7 +164,7 @@ The action output is a single `string` value with the name _**version**_. Click 
 <div align="left">
 Searches multiple keys for the version. The job fails if no version is found in the keys:
 
-``` yml
+```yml
 #Example 2 Workflow
 - name: Get Version From C# Project File
     uses: KinsonDigital/VersionMiner@v1.0.0-preview.2
@@ -193,7 +193,7 @@ Searches multiple keys for the version. The job fails if no version is found in 
 <div align="left">
 Searches for a key without using case-sensitivity:
 
-``` yml
+```yml
 #Example 3 Workflow
 - name: Get Version From C# Project File
     uses: KinsonDigital/VersionMiner@v1.0.0-preview.2
@@ -225,7 +225,7 @@ Trims the value `refs/heads/` from the beginning of the branch.
 
 > **Note** Click [here](https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables) to get more information about the default variable `github.ref` used in the example below:
 
-``` yml
+```yml
 #Example 4 Workflow
 - name: Get Version From C# Project File
     uses: KinsonDigital/VersionMiner@v1.0.0-preview.2
@@ -262,7 +262,7 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 <div align="center">
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
-[![GitHub](https://img.shields.io/github/license/kinsondigital/gotnuget)](https://github.com/KinsonDigital/VersionMiner/blob/release/v1.0.0/LICENSE.md)
+[![GitHub](https://img.shields.io/github/license/kinsondigital/versionminer)](https://github.com/KinsonDigital/VersionMiner/blob/main/LICENSE.md)
 </div>
 
 This software is distributed under the very permissive MIT license and all dependencies are distributed under MIT-compatible licenses.
