@@ -13,5 +13,5 @@ jobs:
     uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v10.0.0
     with:
       project-name: ${{ vars.PROJECT_NAME }}Tests
-      build-config: "Debug"
+      build-config: Debug
       net-sdk-version: ${{ vars.NET_SDK_VERSION }}
