@@ -3,9 +3,10 @@
 // </copyright>
 
 using FluentAssertions;
-using Xunit.Sdk;
 
 namespace VersionMinerIntegrationTests;
+
+using FluentAssertions.Execution;
 
 /// <summary>
 /// Provides extension methods for the unit test project.
@@ -37,31 +38,31 @@ public static class ExtensionMethods
     {
         if (obj is null)
         {
-            throw new AssertActualExpectedException(
-                expected: "Not Null",
-                actual: "Is Null",
-                $"The '{nameof(obj)}' parameter must not be null for this assertion to be completed.");
+            var exMsg = "Expected: Not Null";
+            exMsg += "\nActual: Is Null";
+            exMsg += $"\nThe '{nameof(obj)}' parameter must not be null for this assertion to be completed.";
+            throw new AssertionFailedException(exMsg);
         }
 
         if (string.IsNullOrEmpty(propName))
         {
-            throw new AssertActualExpectedException(
-                expected: propName is null ? "Not Null" : "Not Empty",
-                actual: propName is null ? "Is Null" : "Is Empty",
-                $"The '{nameof(propName)}' parameter must not be null or empty for this assertion to be completed.");
+            var exMsg = $"Expected: {(propName is null ? "Not Null" : "Not Empty")}";
+            exMsg += $"Actual: {(propName is null ? "Is Null" : "Is Empty")}";
+            exMsg += $"pnThe '{nameof(propName)}' parameter must not be null or empty for this assertion to be completed.";
+
+            throw new AssertionFailedException(exMsg);
         }
 
         var foundProp = obj.GetType().Properties().FirstOrDefault(p => p.Name == propName && p.PropertyType == propValue.GetType());
 
         if (foundProp is null)
         {
-            var msg = $"The property '{propName}' on object '{obj.GetType().Name}' was not found or the property";
-            msg += " type does not match the parameter '{{nameof(propValue)}}' type.";
+            var exMsg = "Expected: Property to be found";
+            exMsg += "\nActual: Property was not found";
+            exMsg += $"\nThe property '{propName}' on object '{obj.GetType().Name}' was not found or the property";
+            exMsg += " type does not match the parameter '{{nameof(propValue)}}' type.";
 
-            throw new AssertActualExpectedException(
-                expected: "Property to be found",
-                actual: "Property was not found",
-                msg);
+            throw new AssertionFailedException(exMsg);
         }
 
         foundProp.SetValue(obj, propValue);
